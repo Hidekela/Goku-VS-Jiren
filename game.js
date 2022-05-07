@@ -15,17 +15,6 @@ document.getElementById('tuto').style = 'text-shadow: 0 0 2px white; font-size: 
     document.addEventListener('keydown', function(event){
     if(!boolk && !boolfin)
     {
-        // if(String.fromCharCode(event.keyCode) != 'S')
-        // {
-        //     document.getElementById('kamehamehaanim').style.opacity = '0';
-        //     document.getElementById('kamehamehacharge').style.opacity = '0';
-        //     k = 0;
-        //     document.querySelector('p').innerHTML = '';
-        // }
-        if(String.fromCharCode(event.keyCode) != 'Z')
-        {
-            boolp = false;
-        }
         switch(String.fromCharCode(event.keyCode))
         {
             case '&'://haut
@@ -48,14 +37,6 @@ document.getElementById('tuto').style = 'text-shadow: 0 0 2px white; font-size: 
                 break;
             case 'Z'://pouvoir
                 boolp = true;
-                if(y <= 0)
-                {
-                    goku.src = 'perso/'+position+'goku/'+etat+'pouvoir.png';
-                }
-                else
-                {
-                    goku.src = 'perso/'+position+'goku/'+etat+'airpouvoir.png';
-                }
                 break;
             case 'S'://kamehameha
                 kmhmh = true;
@@ -187,6 +168,17 @@ var game = setInterval(function(){
                 {
                     d = 1;
                 }
+        }
+        if(boolp)
+        {
+            if(y <= 0 && !left && !right)
+            {
+                goku.src = 'perso/'+position+'goku/'+etat+'pouvoir.png';
+            }
+            else
+            {
+                goku.src = 'perso/'+position+'goku/'+etat+'airpouvoir.png';
+            }
         }
         else if(kmhmh)//kamehameha
         {
@@ -493,12 +485,12 @@ if(!boolk && !boolfin)
                 if(x >= xj)
                 {
                     document.getElementById('pouvoir'+p).innerHTML = "@keyframes pouvoir"+p+"\n  {\n   0%{bottom:"+parseInt(y+85)+"px;left:"+(x >= 60 ?parseInt(x-60):'0')+"px;opacity:1;}\n   90%{opacity:1;}\n   100%{bottom:"+parseInt(y+85)+"px;left:"+((y+73) <= (yj+130) && (y+140) >= yj? (touchedj = true, xj+10) : "0")+"px;opacity:0;}\n  }";
-            document.getElementById('p'+p).style = 'animation: pouvoir'+p+' '+((y+73) <= (yj+130) && (y+140) >= yj? "0.5" : parseFloat((x/10+120)/120))+'s;';
+                    document.getElementById('p'+p).style = 'animation: pouvoir'+p+' '+((y+73) <= (yj+130) && (y+140) >= yj? "0.5" : parseFloat((x/10+120)/120))+'s;';
                 }
                 else
                 {
                     document.getElementById('pouvoir'+p).innerHTML = "@keyframes pouvoir"+p+"\n  {\n   0%{bottom:"+parseInt(y+85)+"px;left:"+(x <= 810 ?parseInt(x+120):'932')+"px;opacity:1;}\n   90%{opacity:1;}\n   100%{bottom:"+parseInt(y+85)+"px;left:"+((y+73) <= (yj+130) && (y+140) >= yj? (touchedj = true, xj+60) : "932")+"px;opacity:0;}\n  }";
-            document.getElementById('p'+p).style = 'animation: pouvoir'+p+' '+((y+73) <= (yj+130) && (y+140) >= yj? "0.5" : parseFloat(120/(x/10+120)))+'s;';
+                    document.getElementById('p'+p).style = 'animation: pouvoir'+p+' '+((y+73) <= (yj+130) && (y+140) >= yj? "0.5" : parseFloat(120/(x/10+120)))+'s;';
                 }
                 
                 energie_goku = baisse_energie('goku');
@@ -530,8 +522,7 @@ if(!boolk && !boolfin)
                                 (etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1)));
                                 vie('jiren');         
                             }
-                        },300
-                        );
+                        },300);
                     }
                 
                 var debuttime = new Date().getTime(), timeout_boolp = setTimeout(function(){
@@ -552,12 +543,13 @@ if(!boolk && !boolfin)
             document.getElementById('p'+p).style = '';
             }
             touchedj = false;
+            boolp = false;
             break;
         case 'S'://kamehameha
             kmhmh = false;
             document.getElementById('kamehamehaanim').style = 'opacity: 0;';
             kanim = 0;
-            if(k >= 50 && energie_goku >= 15)
+            if(k >= 50 && energie_goku >= 50)
             {
                 document.querySelector('p').innerHTML += 'HAAA!!!!';
                     boolk = true;
@@ -600,12 +592,12 @@ if(!boolk && !boolfin)
                         document.querySelector('p').innerHTML = '';
                         clearInterval(kamehameha);
                     boolk = false;
-                    up = false;
-                    down = false;
-                    left = false;
-                    right = false;
                     }
                 },100);
+                up = false;
+                down = false;
+                left = false;
+                right = false;
             }
             else
             {
