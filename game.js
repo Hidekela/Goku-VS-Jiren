@@ -15,13 +15,13 @@ document.getElementById('tuto').style = 'text-shadow: 0 0 2px white; font-size: 
     document.addEventListener('keydown', function(event){
     if(!boolk && !boolfin)
     {
-        if(String.fromCharCode(event.keyCode) != 'S')
-        {
-            document.getElementById('kamehamehaanim').style.opacity = '0';
-            document.getElementById('kamehamehacharge').style.opacity = '0';
-            k = 0;
-            document.querySelector('p').innerHTML = '';
-        }
+        // if(String.fromCharCode(event.keyCode) != 'S')
+        // {
+        //     document.getElementById('kamehamehaanim').style.opacity = '0';
+        //     document.getElementById('kamehamehacharge').style.opacity = '0';
+        //     k = 0;
+        //     document.querySelector('p').innerHTML = '';
+        // }
         if(String.fromCharCode(event.keyCode) != 'Z')
         {
             boolp = false;
@@ -224,9 +224,10 @@ var game = setInterval(function(){
             }
             else
             {
-                goku.src = 'perso/'+position+'goku/'+etat+'airkamehamehachargement.png';if(k < 30)
+                goku.src = 'perso/'+position+'goku/'+etat+'airkamehamehachargement.png';
+                if(k < 30)
                 {
-                    document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+112-(k/2))+'px; left: '+(x >= xj? parseFloat(x+119-(k/2)) : parseFloat(x+29-(k/2)))+'px; opacity: 0.9; width: '+k+'px';
+                    document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+112 -(k/2))+'px; left: '+(x >= xj? parseFloat(x+119-(k/2)) : parseFloat(x+29-(k/2)))+'px; opacity: 0.9; width: '+k+'px';
                 }
                 else
                 {
@@ -235,7 +236,7 @@ var game = setInterval(function(){
             }
             if(k > 25)
             {
-                if(y <= 0)
+                if(y <= 0 && !left && !right)
                 {
                     document.getElementById('kamehamehaanim').style = 'left: '+(x >= xj? parseInt(x-20) : parseInt(x-101))+'px;bottom:'+parseInt(y-35)+'px;opacity: 0.5;transform: rotate('+kanim+'deg);';
                 }
@@ -565,8 +566,7 @@ if(!boolk && !boolfin)
                 document.getElementById('kamehameha').style = 'animation: kamehameha 3s; opacity:1; bottom:'+y+'px; '+(x >= xj? 'right:'+parseInt(997-x):'left:'+parseInt(x+123))+'px;';/*(x >= xj? 'right:'+parseInt(952-x):'left:'+parseInt(x+123)) pour !(min-width:100%)*/
                 document.getElementById('kamehameha').src = 'pouvoir/kamehameha'+position+'.png';
                 document.getElementById('kamehamehastyle').innerHTML = '@keyframes kamehameha{0%{width:0px;height:238px}5%{width:'+(x >= xj? parseInt(x+30) : parseInt(900-x))+'px;height:238px}90%{width:'+(x >= xj? parseInt(x+30) : parseInt(900-x))+'px;opacity:1;height:238px}100%{width:'+(x >= xj? parseInt(x+30) : parseInt(900-x))+'px;height:238px;opacity:0}}';
-                y <= (yj+100) && (y+160) >= yj? ((yj <= (y+10) && yj >= (y-30)?jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png' : (yj < (y-30)?jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png' : (yj = y, jiren.src = 'perso/'+positionj+'jiren/initialtouchedbehind.png'))), document.getElementById('kamehamehatouched').innerHTML = '@keyframes kamehamehatouched{0%{left: '+xj+'px}60%{left: '+(x >= xj? '0' : '872')+'px}100%{left: '+(x >= xj? '0' : '872')+'px}}',x >= xj? xj = 0 : xj = 872, jiren.style = 'animation: kamehamehatouched 3s;left:'+xj+'px;bottom:'+yj+'px;', voan_ka = true
-            ) : '';
+                y <= (yj+100) && (y+160) >= yj? ((yj <= (y+10) && yj >= (y-30)?jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png' : (yj < (y-30)?jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png' : (yj = y, jiren.src = 'perso/'+positionj+'jiren/initialtouchedbehind.png'))), document.getElementById('kamehamehatouched').innerHTML = '@keyframes kamehamehatouched{0%{left: '+xj+'px}60%{left: '+(x >= xj? '0' : '872')+'px}100%{left: '+(x >= xj? '0' : '872')+'px}}',x >= xj? xj = 0 : xj = 872, jiren.style = 'animation: kamehamehatouched 3s;left:'+xj+'px;bottom:'+yj+'px;', voan_ka = true) : '';
                 energie_goku = baisse_energie('goku');
                 energie_goku = baisse_energie('goku');
                 energie_goku = baisse_energie('goku');
@@ -600,6 +600,10 @@ if(!boolk && !boolfin)
                         document.querySelector('p').innerHTML = '';
                         clearInterval(kamehameha);
                     boolk = false;
+                    up = false;
+                    down = false;
+                    left = false;
+                    right = false;
                     }
                 },100);
             }
