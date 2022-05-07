@@ -284,9 +284,10 @@
         <div id="tuto" style="display:block"></div>
         <div id="fin" style="display:none"></div>
         <div id="fight"></div>
-        <div id="c">fb: Fanaperantsoa®</div>
+        <div id="c">fb: Hidekela</div>
     </body>
     <script>
+        var up = false, down = false, left = false, right = false, toto = false, daka = false, kmhmh = false;
         var pres = false;
         var vie_goku = 100,energie_goku = 100, x = 0, y = 0, position = 'gauche', goku = document.getElementById('goku'), t = 1, d = 1, etat = 'initial', p = 1, k = 0, kanim = 0, boolp = false, can_p = true, boolk = false, transform = false;
         
@@ -299,19 +300,6 @@
         
         document.getElementById('tuto').innerHTML = '<h3 style:"text-align:center">Transformations</h3><br/> I: initiale (niveau 0)<br/> G: Super Sayen God<br/> B: Super Sayen Blue<br/><h3 style:"text-align:center">Attaque</h3><br/> T: coup de poing<br/> D: coup de pied<br/> P: pouvoir<br/> K: kamehameha (à maintenir pendant 3.5s au moins)<br/><h3 style:"text-align:center">Déplacement</h3><br/> ←: gauche<br/> →: droite<br/> ↑: haut<br/> ↓: bas<br/> <span style="color: white; text-shadow: none">(Cliquez pour commencer)</span>';
         document.getElementById('tuto').style = 'text-shadow: 0 0 2px white; font-size: 21px;color: #1259fa';
-        
-        document.addEventListener('keydown', function(event){
-            if(x >= xj)
-            {
-                position = 'droite';
-                positionj = 'gauche';
-            }
-            else
-            {
-                positionj = 'droite';
-                position = 'gauche';
-            }
-        },false);
         
             document.addEventListener('keydown', function(event){
             if(!boolk && !boolfin)
@@ -330,109 +318,22 @@
                 switch(String.fromCharCode(event.keyCode))
                 {
                     case '&'://haut
-                        if(y < 410)
-                        {
-                            y += 10;
-                            goku.src = 'perso/'+position+'goku/'+etat+'monte.png';
-                            goku.style = 'left: '+x+'px;bottom: '+y+'px;';
-                        }
+                        up = true;
                         break;
                     case '('://bas
-                        if(y > 0)
-                        {
-                            y -= 10;
-                            goku.src = 'perso/'+position+'goku/'+etat+'descend.png';
-                            goku.style = 'left: '+x+'px;bottom: '+y+'px;';
-                        }
-                        else if(y == 0)
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'.png';
-                        }
+                        down = true;
                         break;
                     case '%'://gauche
-                        if(x >= xj)
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'avance.png';
-                        }
-                        else
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'retour.png';
-                        }
-                        if(x >= 0)
-                        {
-                            x -= 10;
-                            goku.style = 'left: '+x+'px;bottom: '+y+'px;';
-                        }
+                        left = true;
                         break;
                     case '\''://droite
-                        if(x >= xj)
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'retour.png';
-                        }
-                        else
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'avance.png';
-                        }
-                        if(x < 870)
-                        {
-                            x += 10;
-                            goku.style = 'left: '+x+'px;bottom: '+y+'px;';
-                        }
+                        right = true;
                         break;
                     case 'T'://totondry
-                            goku.src = 'perso/'+position+'goku/'+etat+'totondry'+t+'.png';
-                            if(y-30 <= yj && yj <= y+20)//middle
-                            {
-                            x <= xj? (x+80 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+80?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
-                            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                            }
-                            else if(yj > y+20 && yj <= y+120)//bottom
-                            {
-                            x <= xj? (x+70 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+70?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
-                            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                            }
-                            else if(y-30 > yj && y-60 <= yj)//top
-                            {
-                            x <= xj? (x+50 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+50?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
-                            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                            }
-                            t++;
-                            if(t > 2)
-                            {
-                                t = 1;
-                            }
+                        toto = true;
                         break;
                     case 'D'://daka
-                        goku.src = 'perso/'+position+'goku/'+etat+'daka'+d+'.png';
-                        if(y-60 <= yj && yj <= y-10)//middle
-                            {
-                            x <= xj? (x+80 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+80?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
-                            }
-                            else if(yj > y-10 && yj <= y+80)//bottom
-                            {
-                            x <= xj? (x+70 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+70?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
-                            }
-                            else if(y-60 > yj && y-100 <= yj)//top
-                            {
-                            x <= xj? (x+50 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+50?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
-                            goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
-                            }
-                            d++;
-                            if(d > 3)
-                            {
-                                d = 1;
-                            }
+                        daka = true;
                         break;
                     case 'P'://pouvoir
                         boolp = true;
@@ -446,65 +347,197 @@
                         }
                         break;
                     case 'K'://kamehameha
-                        if(k == 1)
-                        {
-                            document.querySelector('p').innerHTML = 'KA';
-                        }
-                        else if(k == 16)
-                        {
-                            document.querySelector('p').innerHTML = 'KAME';
-                        }
-                        else if(k == 32)
-                        {
-                            document.querySelector('p').innerHTML = 'KAMEHA';
-                        }
-                        else if(k == 50)
-                        {
-                            document.querySelector('p').innerHTML = 'KAMEHAME';
-                        }
-                        if(k < 50)
-                        {
-                            k++;
-                        }
-                        if(y <= 0)
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'kamehamehachargement.png';
-                            if(k < 30)
-                            {
-                                document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+101-(k/2))+'px; left: '+(x >= xj? parseFloat(x+114-(k/2)) : parseFloat(x+34-(k/2)))+'px; opacity: 0.9; width: '+k+'px';
-                            }
-                            else
-                            {
-                                document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+86)+'px; left: '+(x >= xj? parseFloat(x+100) : parseFloat(x+19))+'px; opacity: 0.9; width: 30px';
-                            }
-                        }
-                        else
-                        {
-                            goku.src = 'perso/'+position+'goku/'+etat+'airkamehamehachargement.png';if(k < 30)
-                            {
-                                document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+112-(k/2))+'px; left: '+(x >= xj? parseFloat(x+119-(k/2)) : parseFloat(x+29-(k/2)))+'px; opacity: 0.9; width: '+k+'px';
-                            }
-                            else
-                            {
-                                document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+97)+'px; left: '+(x >= xj? parseFloat(x+105) : parseFloat(x+14))+'px; opacity: 0.9; width: 30px';
-                            }
-                        }
-                        if(k > 25)
-                        {
-                            if(y <= 0)
-                            {
-                                document.getElementById('kamehamehaanim').style = 'left: '+(x >= xj? parseInt(x-20) : parseInt(x-101))+'px;bottom:'+parseInt(y-35)+'px;opacity: 0.5;transform: rotate('+kanim+'deg);';
-                            }
-                            else
-                            {
-                                document.getElementById('kamehamehaanim').style = 'left: '+(x >= xj? parseInt(x-15) : parseInt(x-106))+'px;bottom:'+parseInt(y-24)+'px;opacity: 0.5;transform: rotate('+kanim+'deg);';
-                            }
-                            kanim ++;
-                        }
+                        kmhmh = true;
                         break;
                 }
             }
         }, false);
+
+        var game = setInterval(function(){
+            if(x >= xj)
+            {
+                position = 'droite';
+                positionj = 'gauche';
+            }
+            else
+            {
+                positionj = 'droite';
+                position = 'gauche';
+            }
+            if(!boolk)
+            {
+                if(up)//haut
+                {
+                    if(y < 410)
+                    {
+                        y += 10;
+                        goku.src = 'perso/'+position+'goku/'+etat+'monte.png';
+                        goku.style = 'left: '+x+'px;bottom: '+y+'px;';
+                    }
+                }
+                else if(down)//bas
+                {
+                    if(y > 0)
+                    {
+                        y -= 10;
+                        goku.src = 'perso/'+position+'goku/'+etat+'descend.png';
+                        goku.style = 'left: '+x+'px;bottom: '+y+'px;';
+                    }
+                    else if(y == 0)
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'.png';
+                    }
+                }
+                if(left)//gauche
+                {
+                    if(x >= xj)
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'avance.png';
+                    }
+                    else
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'retour.png';
+                    }
+                    if(x >= 0)
+                    {
+                        x -= 10;
+                        goku.style = 'left: '+x+'px;bottom: '+y+'px;';
+                    }
+                }
+                else if(right)//droite
+                {
+                    if(x >= xj)
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'retour.png';
+                    }
+                    else
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'avance.png';
+                    }
+                    if(x < 870)
+                    {
+                        x += 10;
+                        goku.style = 'left: '+x+'px;bottom: '+y+'px;';
+                    }
+                }
+                if(toto)//totondry
+                {
+                        goku.src = 'perso/'+position+'goku/'+etat+'totondry'+t+'.png';
+                        if(y-30 <= yj && yj <= y+20)//middle
+                        {
+                        x <= xj? (x+80 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+80?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
+                        jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                        }
+                        else if(yj > y+20 && yj <= y+120)//bottom
+                        {
+                        x <= xj? (x+70 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+70?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
+                        jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                        }
+                        else if(y-30 > yj && y-60 <= yj)//top
+                        {
+                        x <= xj? (x+50 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+50?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
+                        jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                        }
+                        t++;
+                        if(t > 2)
+                        {
+                            t = 1;
+                        }
+                    }
+                else if(daka)//daka
+                {
+                    goku.src = 'perso/'+position+'goku/'+etat+'daka'+d+'.png';
+                    if(y-60 <= yj && yj <= y-10)//middle
+                        {
+                        x <= xj? (x+80 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+80?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-60):(x <= xj+80?xj+60:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
+                        }
+                        else if(yj > y-10 && yj <= y+80)//bottom
+                        {
+                        x <= xj? (x+70 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+70?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-20):(x <= xj+70?xj+20:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
+                        }
+                        else if(y-60 > yj && y-100 <= yj)//top
+                        {
+                        x <= xj? (x+50 >= xj?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):''):(x <= xj+50?(jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png',
+                        goku.style = 'left: '+parseInt(x < xj?(xj-40):(x <= xj+50?xj+40:''))+'px;bottom: '+y+'px;',(etat == 'initial'? vie_jiren = touche('jiren', 0.3) : (etat == 'god'? vie_jiren = touche('jiren', 0.6) : vie_jiren = touche('jiren', 1))),vie('jiren')):'');
+                        }
+                        d++;
+                        if(d > 3)
+                        {
+                            d = 1;
+                        }
+                }
+                else if(kmhmh)//kamehameha
+                {
+                    if(k == 1)
+                    {
+                        document.querySelector('p').innerHTML = 'KA';
+                    }
+                    else if(k == 16)
+                    {
+                        document.querySelector('p').innerHTML = 'KAME';
+                    }
+                    else if(k == 32)
+                    {
+                        document.querySelector('p').innerHTML = 'KAMEHA';
+                    }
+                    else if(k == 50)
+                    {
+                        document.querySelector('p').innerHTML = 'KAMEHAME';
+                    }
+                    if(k < 50)
+                    {
+                        k++;
+                    }
+                    if(y <= 0)
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'kamehamehachargement.png';
+                        if(k < 30)
+                        {
+                            document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+101-(k/2))+'px; left: '+(x >= xj? parseFloat(x+114-(k/2)) : parseFloat(x+34-(k/2)))+'px; opacity: 0.9; width: '+k+'px';
+                        }
+                        else
+                        {
+                            document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+86)+'px; left: '+(x >= xj? parseFloat(x+100) : parseFloat(x+19))+'px; opacity: 0.9; width: 30px';
+                        }
+                    }
+                    else
+                    {
+                        goku.src = 'perso/'+position+'goku/'+etat+'airkamehamehachargement.png';if(k < 30)
+                        {
+                            document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+112-(k/2))+'px; left: '+(x >= xj? parseFloat(x+119-(k/2)) : parseFloat(x+29-(k/2)))+'px; opacity: 0.9; width: '+k+'px';
+                        }
+                        else
+                        {
+                            document.getElementById('kamehamehacharge').style = 'bottom: '+parseFloat(y+97)+'px; left: '+(x >= xj? parseFloat(x+105) : parseFloat(x+14))+'px; opacity: 0.9; width: 30px';
+                        }
+                    }
+                    if(k > 25)
+                    {
+                        if(y <= 0)
+                        {
+                            document.getElementById('kamehamehaanim').style = 'left: '+(x >= xj? parseInt(x-20) : parseInt(x-101))+'px;bottom:'+parseInt(y-35)+'px;opacity: 0.5;transform: rotate('+kanim+'deg);';
+                        }
+                        else
+                        {
+                            document.getElementById('kamehamehaanim').style = 'left: '+(x >= xj? parseInt(x-15) : parseInt(x-106))+'px;bottom:'+parseInt(y-24)+'px;opacity: 0.5;transform: rotate('+kanim+'deg);';
+                        }
+                        kanim ++;
+                    }
+                }
+            }
+        },25);
+
         document.addEventListener('keypress', function(event){
             switch(String.fromCharCode(event.keyCode))
             {
@@ -626,8 +659,17 @@
         {
             switch(String.fromCharCode(event.keyCode))
             {
-                
+                case 'D'://daka
+                    daka = false;
+                    break;
+                case 'T'://totondry
+                    toto = false;
+                    break;
+                case '&'://haut
+                    up = false;
+                    break;
                 case '%'://gauche
+                    left = false;
                     if(y <= 0)
                     {
                         goku.src = 'perso/'+position+'goku/'+etat+'.png';
@@ -638,6 +680,7 @@
                     }
                     break;
                 case '\''://droite
+                    right = false;
                     if(y <= 0)
                     {
                         goku.src = 'perso/'+position+'goku/'+etat+'.png';
@@ -648,6 +691,7 @@
                     }
                     break;
                 case '('://bas
+                    down = false;
                     if(y <= 0)
                     {
                         goku.src = 'perso/'+position+'goku/'+etat+'.png';
@@ -795,9 +839,10 @@
                     }
                     document.getElementById('p'+p).style = '';
                     }
-            touchedj = false;
+                    touchedj = false;
                     break;
                 case 'K'://kamehameha
+                    kmhmh = false;
                     document.getElementById('kamehamehaanim').style = 'opacity: 0;';
                     kanim = 0;
                     if(k >= 50 && energie_goku >= 15)
@@ -1484,6 +1529,7 @@ return Math.floor(Math.random() * (max - min + 1) + min);
                 clearInterval(jiren_action);
                 clearInterval(reconstitution_energie);
                 boolfin = true;
+                clearInterval(game);
             }
             else if(vie_jiren <= 0)
             {
@@ -1496,6 +1542,7 @@ return Math.floor(Math.random() * (max - min + 1) + min);
                 clearInterval(jiren_action);
                 clearInterval(reconstitution_energie);
                 boolfin = true;
+                clearInterval(game);
             }
         }
         
@@ -1526,8 +1573,8 @@ return Math.floor(Math.random() * (max - min + 1) + min);
         
         
         
-                                (etat == 'initial'? vie_jiren = touche('jiren', 0.1) : (etat == 'god'? vie_jiren = touche('jiren', 0.2) : vie_jiren = touche('jiren', 0.3)))
-                                                                                         (etat == 'initial'? (vie_goku = touche('goku', 5)) : (etat == 'god'? vie_goku = touche('goku', 4) : vie_goku = touche('goku', 3)))
+                                (etat == 'initial'? vie_jiren = touche('jiren', 0.1) : (etat == 'god'? vie_jiren = touche('jiren', 0.2) : vie_jiren = touche('jiren', 0.3)));
+                                                                                         (etat == 'initial'? (vie_goku = touche('goku', 5)) : (etat == 'god'? vie_goku = touche('goku', 4) : vie_goku = touche('goku', 3)));
                                                                                                                                                   
         //action de jiren en le controllant
         
