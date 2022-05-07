@@ -298,20 +298,20 @@
         
         var vie_jiren = 100, energie_jiren = 100, xj = 870, yj = 0, positionj = 'droite', jiren = document.getElementById('jiren'), tj = 1, pj = 1, boolpj = false, can_pj = true;
         
-        document.getElementById('tuto').innerHTML = '<h3 style:"text-align:center">Transformations</h3><br/> I: initiale (niveau 0)<br/> G: Super Sayen God<br/> B: Super Sayen Blue<br/><h3 style:"text-align:center">Attaque</h3><br/> T: coup de poing<br/> D: coup de pied<br/> P: pouvoir<br/> K: kamehameha (à maintenir pendant 3.5s au moins)<br/><h3 style:"text-align:center">Déplacement</h3><br/> ←: gauche<br/> →: droite<br/> ↑: haut<br/> ↓: bas<br/> <span style="color: white; text-shadow: none">(Cliquez pour commencer)</span>';
+        document.getElementById('tuto').innerHTML = '<h3 style:"text-align:center">Transformations</h3><br/> I: initiale (niveau 0)<br/> G: Super Sayen God<br/> B: Super Sayen Blue<br/><h3 style:"text-align:center">Attaque</h3><br/> Q: coup de poing<br/> D: coup de pied<br/> Z: pouvoir<br/> S: kamehameha (à maintenir pendant 3.5s au moins)<br/><h3 style:"text-align:center">Déplacement</h3><br/> ←: gauche<br/> →: droite<br/> ↑: haut<br/> ↓: bas<br/> <span style="color: white; text-shadow: none">(Cliquez pour commencer)</span>';
         document.getElementById('tuto').style = 'text-shadow: 0 0 2px white; font-size: 21px;color: #1259fa';
         
             document.addEventListener('keydown', function(event){
             if(!boolk && !boolfin)
             {
-                if(String.fromCharCode(event.keyCode) != 'K')
+                if(String.fromCharCode(event.keyCode) != 'S')
                 {
                     document.getElementById('kamehamehaanim').style.opacity = '0';
                     document.getElementById('kamehamehacharge').style.opacity = '0';
                     k = 0;
                     document.querySelector('p').innerHTML = '';
                 }
-                if(String.fromCharCode(event.keyCode) != 'P')
+                if(String.fromCharCode(event.keyCode) != 'Z')
                 {
                     boolp = false;
                 }
@@ -329,13 +329,13 @@
                     case '\''://droite
                         right = true;
                         break;
-                    case 'T'://totondry
+                    case 'Q'://totondry
                         toto = true;
                         break;
                     case 'D'://daka
                         daka = true;
                         break;
-                    case 'P'://pouvoir
+                    case 'Z'://pouvoir
                         boolp = true;
                         if(y <= 0)
                         {
@@ -346,7 +346,7 @@
                             goku.src = 'perso/'+position+'goku/'+etat+'airpouvoir.png';
                         }
                         break;
-                    case 'K'://kamehameha
+                    case 'S'://kamehameha
                         kmhmh = true;
                         break;
                 }
@@ -662,7 +662,7 @@
                 case 'D'://daka
                     daka = false;
                     break;
-                case 'T'://totondry
+                case 'Q'://totondry
                     toto = false;
                     break;
                 case '&'://haut
@@ -766,7 +766,7 @@
                         goku.src = 'perso/'+position+'goku/'+etat+'monte.png';
                     }
                     break;
-                case 'P'://pouvoir
+                case 'Z'://pouvoir
                     if(y <= 0)
                     {
                         goku.src = 'perso/'+position+'goku/'+etat+'.png';
@@ -841,7 +841,7 @@
                     }
                     touchedj = false;
                     break;
-                case 'K'://kamehameha
+                case 'S'://kamehameha
                     kmhmh = false;
                     document.getElementById('kamehamehaanim').style = 'opacity: 0;';
                     kanim = 0;
