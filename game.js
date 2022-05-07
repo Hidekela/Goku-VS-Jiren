@@ -36,10 +36,10 @@ document.getElementById('tuto').style = 'text-shadow: 0 0 2px white; font-size: 
                 daka = true;
                 break;
             case 'Z'://pouvoir
-                boolp = true;
+                boolp = can_p; // Si il peut l'envoyer 
                 break;
             case 'S'://kamehameha
-                kmhmh = true;
+                kmhmh = energie_goku >= 50;
                 break;
         }
     }
@@ -559,9 +559,10 @@ if(!boolk && !boolfin)
                 document.getElementById('kamehameha').src = 'pouvoir/kamehameha'+position+'.png';
                 document.getElementById('kamehamehastyle').innerHTML = '@keyframes kamehameha{0%{width:0px;height:238px}5%{width:'+(x >= xj? parseInt(x+30) : parseInt(900-x))+'px;height:238px}90%{width:'+(x >= xj? parseInt(x+30) : parseInt(900-x))+'px;opacity:1;height:238px}100%{width:'+(x >= xj? parseInt(x+30) : parseInt(900-x))+'px;height:238px;opacity:0}}';
                 y <= (yj+100) && (y+160) >= yj? ((yj <= (y+10) && yj >= (y-30)?jiren.src = 'perso/'+positionj+'jiren/initialtouchedmiddle.png' : (yj < (y-30)?jiren.src = 'perso/'+positionj+'jiren/initialtouchedtop.png' : (yj = y, jiren.src = 'perso/'+positionj+'jiren/initialtouchedbehind.png'))), document.getElementById('kamehamehatouched').innerHTML = '@keyframes kamehamehatouched{0%{left: '+xj+'px}60%{left: '+(x >= xj? '0' : '872')+'px}100%{left: '+(x >= xj? '0' : '872')+'px}}',x >= xj? xj = 0 : xj = 872, jiren.style = 'animation: kamehamehatouched 3s;left:'+xj+'px;bottom:'+yj+'px;', voan_ka = true) : '';
-                energie_goku = baisse_energie('goku');
-                energie_goku = baisse_energie('goku');
-                energie_goku = baisse_energie('goku');
+                
+                for(let i = 0; i < 10; i++) // 5 par baisse
+                    energie_goku = baisse_energie('goku');
+                
                 barre_energie('goku');
                 var kamehameha = setInterval(function(){
                     time = new Date().getTime();
@@ -624,12 +625,8 @@ if(!boolk && !boolfin)
 //automatisme jiren
 
     function rand(min, max, integer) {
-if (!integer) {
-return Math.random() * (max - min) + min;
-} else {
-return Math.floor(Math.random() * (max - min + 1) + min);
-}
-}
+        return integer? Math.floor(Math.random() * (max - min + 1) + min) : Math.random() * (max - min) + min;
+    }
 
 function rand_number_action()
 {
@@ -688,6 +685,7 @@ function prepouvoir()
 {
     if(!boolk && pres && !boolfin)
     {
+        if(!boolpj) action_possible(rand(4,6,true));
                     if(yj <= 0)
                     {
                         jiren.src = 'perso/'+positionj+'jiren/initialpouvoir.png';
@@ -714,9 +712,9 @@ function pouvoir(yj, y, xj, x)
                     {
                         jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
                     }
-                        boolpj = true;
+                        boolpj = can_pj;
                 
-                    if(boolpj && can_pj)
+                    if(boolpj && can_pj) // Amboarina am manaraka fa tsisy sens
                     {
                         
                         if(x >= xj)
@@ -796,42 +794,42 @@ function action_possible(number_of_action)
 {
     switch(number_of_action)
     {
-        case 1:
+        case 1: // Midina na miakatra de manisy pouvoir
             var debutj = new Date().getTime(), fin = debutj + 2000;
             var action = setInterval(function(){
                 var time = new Date().getTime();
                 if(time < fin)
                 {
-    if(!boolk && pres)
-    {
-    var atteint_y = false;
-    var action_ = setInterval(function(){
-    if(!boolk && pres)
-    {
-        if(!atteint_y && !touchedj)
-        {
-            if(y < yj)
-            {
-                yj-=10;
-            }
-            else if(y > yj)
-            {
-                yj+=10;
-            }
-            else
-            {
-                atteint_y = true;
-            }
-            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-            boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
-        }
-        else
-        {
-            clearInterval(action_);
-        }
-    }
-    },25);
-    }
+                    if(!boolk && pres)
+                    {
+                        var atteint_y = false;
+                        var action_ = setInterval(function(){
+                            if(!boolk && pres)
+                            {
+                                if(!atteint_y && !touchedj)
+                                {
+                                    if(y < yj)
+                                    {
+                                        yj-=10;
+                                    }
+                                    else if(y > yj)
+                                    {
+                                        yj+=10;
+                                    }
+                                    else
+                                    {
+                                        atteint_y = true;
+                                    }
+                                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
+                                }
+                                else
+                                {
+                                    clearInterval(action_);
+                                }
+                            }
+                        },25);
+                    }
                 }
                 else
                 {
@@ -853,69 +851,153 @@ function action_possible(number_of_action)
                 }
             },1000);
             break;
-        case 2:
+        case 2: // Mandroso de midina na miakatra de manisy pouvoir
             var debutj = new Date().getTime(), fin = debutj + 2000;
             var action = setInterval(function(){
                 var time = new Date().getTime();
                 if(time < fin)
                 {
-    if(!boolk && pres)
-    {
-    var atteint_x = false, atteint_y = false;
-    var action1 = setInterval(function(){
-        
-    if(!boolk && pres)
-    {
-        if(!atteint_x && !touchedj)
-        {
-            if(x < xj && x+60 < xj)
-            {
-                xj-=10;
-            }
-            else if(x > xj && x-60 > xj)
-            {
-                xj+=10;
-            }
-            else
-            {
-                atteint_x = true;
-            }
-            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-            boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
-        }
-        else
-        {
-            clearInterval(action1);
-                var action2 = setInterval(function(){
-    if(!boolk && pres)
-    {
-                if(!atteint_y && !touchedj)
-                {
-                    if(y < yj)
+                    if(!boolk && pres)
                     {
-                        yj-=10;
+                        var atteint_x = false, atteint_y = false;
+                        var action1 = setInterval(function(){
+                            
+                            if(!boolk && pres)
+                            {
+                                if(!atteint_x && !touchedj)
+                                {
+                                    if(x < xj && x+60 < xj)
+                                    {
+                                        xj-=10;
+                                    }
+                                    else if(x > xj && x-60 > xj)
+                                    {
+                                        xj+=10;
+                                    }
+                                    else
+                                    {
+                                        atteint_x = true;
+                                    }
+                                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
+                                }
+                                else
+                                {
+                                    clearInterval(action1);
+                                    var action2 = setInterval(function(){
+                                        if(!boolk && pres)
+                                        {
+                                            if(!atteint_y && !touchedj)
+                                            {
+                                                if(y < yj)
+                                                {
+                                                    yj-=10;
+                                                }
+                                                else if(y > yj)
+                                                {
+                                                    yj+=10;
+                                                }
+                                                else
+                                                {
+                                                    atteint_y = true;
+                                                }
+                                                jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                                boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
+                                            }
+                                            else
+                                            {
+                                                clearInterval(action2);
+                                            }
+                                        }
+                                    },25);
+                                }
+                            }
+                        },25);
                     }
-                    else if(y > yj)
-                    {
-                        yj+=10;
-                    }
-                    else
-                    {
-                        atteint_y = true;
-                    }
-                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
                 }
-                else
+                                else
+                                {
+                                    var coup_effectue = 0, nb_coup = rand(1, 17, integer=true);
+                                    var actions = setInterval(function(){
+                                        if(coup_effectue < nb_coup)
+                                        {
+                                            prepouvoir();
+                                            pouvoir(yj, y, xj, x);
+                                            coup_effectue++;
+                                        }
+                                        else
+                                        {
+                                            clearInterval(actions);
+                                        }
+                                    },100);
+
+                                    clearInterval(action);
+                                }
+            },1000);
+            break;
+        case 3: // Miakatra na midina de aveo mandroso de aveo manisy pouvoir
+            var debutj = new Date().getTime(), fin = debutj + 2000;
+            var action = setInterval(function(){
+                var time = new Date().getTime();
+                if(time < fin)
                 {
-                    clearInterval(action2);
-                }
-    }
-            },25);
-        }
-    }
-    },25);
-    }
+                    if(!boolk && pres)
+                    {
+                        var atteint_x = false, atteint_y = false;
+                        var action1 = setInterval(function(){
+                            
+                            if(!boolk && pres)
+                            {
+                                if(!atteint_y && !touchedj)
+                                {
+                                    if(y < yj)
+                                    {
+                                        yj-=10;
+                                    }
+                                    else if(y > yj)
+                                    {
+                                        yj+=10;
+                                    }
+                                    else
+                                    {
+                                        atteint_y = true;
+                                    }
+                                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
+                                }
+                                else
+                                {
+                                    clearInterval(action1);
+                                    var action2 = setInterval(function(){
+                                        if(!boolk && pres)
+                                        {
+                                                    if(!atteint_x && !touchedj)
+                                                    {
+                                                        if(x < xj && x+60 < xj)
+                                                        {
+                                                            xj-=10;
+                                                        }
+                                                        else if(x > xj && x-60 > xj)
+                                                        {
+                                                            xj+=10;
+                                                        }
+                                                        else
+                                                        {
+                                                            atteint_x = true;
+                                                        }
+                                                        jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                                        boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
+                                                    }
+                                                    else
+                                                    {
+                                                        clearInterval(action2);
+                                                    }
+                                        }
+                                    },25);
+                                }
+                            }
+                        },25);
+                    }
                 }
                 else
                 {
@@ -937,154 +1019,69 @@ function action_possible(number_of_action)
                 }
             },1000);
             break;
-        case 3:
+        case 4: // Mandroso de aveo midina na miakatra de manisy totondry
             var debutj = new Date().getTime(), fin = debutj + 2000;
             var action = setInterval(function(){
                 var time = new Date().getTime();
                 if(time < fin)
                 {
-    if(!boolk && pres)
-    {
-    var atteint_x = false, atteint_y = false;
-    var action1 = setInterval(function(){
-        
-    if(!boolk && pres)
-    {
-        if(!atteint_y && !touchedj)
-        {
-            if(y < yj)
-            {
-                yj-=10;
-            }
-            else if(y > yj)
-            {
-                yj+=10;
-            }
-            else
-            {
-                atteint_y = true;
-            }
-            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-            boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
-        }
-        else
-        {
-            clearInterval(action1);
-                var action2 = setInterval(function(){
-                    
-    if(!boolk && pres)
-    {
-                if(!atteint_x && !touchedj)
-                {
-                    if(x < xj && x+60 < xj)
+                    if(!boolk && pres)
                     {
-                        xj-=10;
+                        var atteint_x = false, atteint_y = false;
+                        var action1 = setInterval(function(){
+                            
+                            if(!boolk && pres)
+                            {
+                                if(!atteint_x && !touchedj)
+                                {
+                                    if(x < xj && x+60 < xj)
+                                    {
+                                        xj-=10;
+                                    }
+                                    else if(x > xj && x-60 > xj)
+                                    {
+                                        xj+=10;
+                                    }
+                                    else
+                                    {
+                                        atteint_x = true;
+                                    }
+                                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png'; 
+                                }
+                                else
+                                {
+                                    clearInterval(action1);
+                                    var action2 = setInterval(function(){
+                                        if(!boolk && pres)
+                                        {
+                                            if(!atteint_y && !touchedj)
+                                            {
+                                                if(y < yj)
+                                                {
+                                                    yj-=10;
+                                                }
+                                                else if(y > yj)
+                                                {
+                                                    yj+=10;
+                                                }
+                                                else
+                                                {
+                                                    atteint_y = true;
+                                                }
+                                                jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                                boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
+                                            }
+                                            else
+                                            {
+                                                clearInterval(action2);
+                                            }
+                                        }
+                                    },25);
+                                }
+                            }
+                        },25);
                     }
-                    else if(x > xj && x-60 > xj)
-                    {
-                        xj+=10;
-                    }
-                    else
-                    {
-                        atteint_x = true;
-                    }
-                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
-                }
-                else
-                {
-                    clearInterval(action2);
-                }
-    }
-            },25);
-        }
-    }
-    },25);
-    }
-                }
-                else
-                {
-                    var coup_effectue = 0, nb_coup = rand(1, 17, integer=true);
-                    var actions = setInterval(function(){
-                        if(coup_effectue < nb_coup)
-                        {
-                            prepouvoir();
-                            pouvoir(yj, y, xj, x);
-                            coup_effectue++;
-                        }
-                        else
-                        {
-                            clearInterval(actions);
-                        }
-                    },100);
-
-                    clearInterval(action);
-                }
-            },1000);
-            break;
-        case 4:
-            var debutj = new Date().getTime(), fin = debutj + 2000;
-            var action = setInterval(function(){
-                var time = new Date().getTime();
-                if(time < fin)
-                {
-    if(!boolk && pres)
-    {
-    var atteint_x = false, atteint_y = false;
-    var action1 = setInterval(function(){
-        
-    if(!boolk && pres)
-    {
-        if(!atteint_x && !touchedj)
-        {
-            if(x < xj && x+60 < xj)
-            {
-                xj-=10;
-            }
-            else if(x > xj && x-60 > xj)
-            {
-                xj+=10;
-            }
-            else
-            {
-                atteint_x = true;
-            }
-            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-            boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png'; 
-        }
-        else
-        {
-            clearInterval(action1);
-                var action2 = setInterval(function(){
-    if(!boolk && pres)
-    {
-                if(!atteint_y && !touchedj)
-                {
-                    if(y < yj)
-                    {
-                        yj-=10;
-                    }
-                    else if(y > yj)
-                    {
-                        yj+=10;
-                    }
-                    else
-                    {
-                        atteint_y = true;
-                    }
-                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';
-                }
-                else
-                {
-                    clearInterval(action2);
-                }
-    }
-            },25);
-        }
-    }
-    },25);
-    }
                 }
                 else
                 {
@@ -1093,70 +1090,70 @@ function action_possible(number_of_action)
                 }
             },1000);
             break;
-        case 5:
+        case 5: // Midina na miakatra de mandroso de manisy totondry
             var debutj = new Date().getTime(), fin = debutj + 2000;
             var action = setInterval(function(){
                 var time = new Date().getTime();
                 if(time < fin)
                 {
-    if(!boolk && pres)
-    {
-    var atteint_x = false, atteint_y = false;
-    var action1 = setInterval(function(){
-        
-    if(!boolk && pres)
-    {
-        if(!atteint_y && !touchedj)
-        {
-            if(y < yj)
-            {
-                yj-=10;
-            }
-            else if(y > yj)
-            {
-                yj+=10;
-            }
-            else
-            {
-                atteint_y = true;
-            }
-            jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-            boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';   
-        }
-        else
-        {
-            clearInterval(action1);
-                var action2 = setInterval(function(){
-                    
-    if(!boolk && pres)
-    {
-                if(!atteint_x && !touchedj)
-                {
-                    if(x < xj && x+60 < xj)
+                    if(!boolk && pres)
                     {
-                        xj-=10;
+                        var atteint_x = false, atteint_y = false;
+                        var action1 = setInterval(function(){
+                            
+                            if(!boolk && pres)
+                            {
+                                if(!atteint_y && !touchedj)
+                                {
+                                    if(y < yj)
+                                    {
+                                        yj-=10;
+                                    }
+                                    else if(y > yj)
+                                    {
+                                        yj+=10;
+                                    }
+                                    else
+                                    {
+                                        atteint_y = true;
+                                    }
+                                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';   
+                                }
+                                else
+                                {
+                                    clearInterval(action1);
+                                    var action2 = setInterval(function(){
+                                            
+                                        if(!boolk && pres)
+                                        {
+                                            if(!atteint_x && !touchedj)
+                                            {
+                                                if(x < xj && x+60 < xj)
+                                                {
+                                                    xj-=10;
+                                                }
+                                                else if(x > xj && x-60 > xj)
+                                                {
+                                                    xj+=10;
+                                                }
+                                                else
+                                                {
+                                                    atteint_x = true;
+                                                }
+                                                jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
+                                                boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';  
+                                            }
+                                            else
+                                            {
+                                                clearInterval(action2);
+                                            }
+                                        }
+                                    },25);
+                                }
+                            }
+                        },25);
                     }
-                    else if(x > xj && x-60 > xj)
-                    {
-                        xj+=10;
-                    }
-                    else
-                    {
-                        atteint_x = true;
-                    }
-                    jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
-                    boolpj? jiren.src = 'perso/'+positionj+'jiren/initialairpouvoir.png' : jiren.src = 'perso/'+positionj+'jiren/initialmonte.png';  
-                }
-                else
-                {
-                    clearInterval(action2);
-                }
-    }
-            },25);
-        }
-    }
-    },25);
-    }
                 }
                 else
                 {
@@ -1164,6 +1161,8 @@ function action_possible(number_of_action)
                     totondry();
                 }
             },1000);
+            break;
+        case 6: // Tsy manao ninoninoa fa lasa mafy loatra
             break;
     }
             jiren.style = 'left: '+xj+'px;bottom: '+yj+'px;';
@@ -1172,8 +1171,7 @@ function action_possible(number_of_action)
 
 
 var jiren_action = setInterval(function(){
-    rand_number_action();
-    action_possible(number_of_action);
+    action_possible(rand_number_action());
 },3000);
 
 //energie
