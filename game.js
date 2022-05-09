@@ -1231,7 +1231,7 @@ function vie(personnage)
         document.getElementById('fin').addEventListener('click', function(){
             location.href = '';
             },false);
-        clearInterval(jiren_action);
+        clearInterval(jiren_action); pres = false;
         clearInterval(reconstitution_energie);
         boolfin = true;
         clearInterval(game);
@@ -1244,7 +1244,7 @@ function vie(personnage)
         document.getElementById('fin').addEventListener('click', function(){
             location.href = '';
         },false);
-        clearInterval(jiren_action);
+        clearInterval(jiren_action); pres = false;
         clearInterval(reconstitution_energie);
         boolfin = true;
         clearInterval(game);
