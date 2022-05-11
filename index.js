@@ -1,20 +1,18 @@
 function Game(player1, player2)
 {
-    var vitesse = 30, fs = 25; //ms
+    var vitesse_logiques = 25; //ms
     
     var self = this;
 
     self.handleGame = null;
-    self.handlePlayer1 = null;
-    self.handlePlayer2 = null;
     self.player1 = player1;
     self.player2 = player2;
 
     self.start = function()
     {
-        self.handleGame = setInterval(self.logiques,fs,player1,player2);
-        self.handlePlayer1 = setInterval(self.player1.agir,vitesse);
-        self.handlePlayer2 = setInterval(self.player2.agir,vitesse);
+        self.handleGame = setInterval(self.logiques,vitesse_logiques,player1,player2);
+        self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse);
+        self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse);
         
         if(self.player1.controlleur == 'user')
         {
@@ -41,8 +39,8 @@ function Game(player1, player2)
             document.removeEventListener("keyup",self.player2.keyupToBrain,false);
         }
 
-        clearInterval(self.handlePlayer1);
-        clearInterval(self.handlePlayer2);
+        clearInterval(self.player1.handleAction);
+        clearInterval(self.player2.handleAction);
         clearInterval(self.handleGame);
     };
 
@@ -64,7 +62,7 @@ function Game(player1, player2)
 var keyConfig = new KeyToCommand();
 var position = new PositionPersonnage('gauche','',0,0);
 var puissances = [new PuissancePersonnage(0.3,0.2),new PuissancePersonnage(0.6,0.5),new PuissancePersonnage(1,0.7)];
-var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[10,10,10],puissances);
+var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[30,20,10],puissances);
 var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',15,50)];
 
 var Songoku = new Personnage('goku',keyConfig,100,100,position,niveaux,pouvoirs);

@@ -71,6 +71,8 @@ function NiveauxPersonnage(max, noms, durees, vitesse, puissance)
 function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pouvoirs)
 {
     var self = this;
+
+    self.handleAction = null;
     self.nom = nom;
     self.controlleur = keyConfig != null? 'user' : 'computer';
     self.vie = vie_max;
@@ -137,24 +139,24 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             case 'U':
                 self.deplacement.relative = 'air';
                 if(self.position.y < 410)
-                    self.position.y += self.vitesse;
+                    self.position.y += 10;
                 break;
             case 'D':
                 self.deplacement.relative = 'descend';
                 if(self.position.y > 0)
-                    self.position.y -= self.vitesse;
+                    self.position.y -= 10;
                 break;
         }
         switch (self.deplacement.x) {
             case 'R':
                 self.deplacement.relative = 'avance';
                 if(self.position.x < 870)
-                    self.position.x += self.vitesse;
+                    self.position.x += 10;
                 break;
             case 'L':
                 self.deplacement.relative = 'retour';
                 if(self.position.x >= 0)
-                    self.position.x -= self.vitesse;
+                    self.position.x -= 10;
                 break;
         }
 
@@ -184,6 +186,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.majSprite("transformation");
     }
 
+    self.majVitesse = function()
+    {
+        clearInterval(self.handleAction);
+        self.handleAction = setInterval(self.agir,self.vitesse);
+    }
+
     self.majNiveau = function()
     {
         self.nom_niveau = self.liste_niveaux.noms[self.niveau];
@@ -191,6 +199,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.vitesse = self.liste_niveaux.vitesse[self.niveau];
         self.puissance = self.liste_niveaux.puissance[self.niveau];
         self.majAvatar();
+        self.majVitesse();
     }
 
     if(self.controlleur == 'user')
