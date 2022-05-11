@@ -3,12 +3,14 @@
 /**Position d'un personnage
  * 
  * @param {String} relative "gauche" ou "droite" (par rapport à son adversaire sur l'écran)
+ * @param {String} place "air" ou "" ("air" si il vole, "" sinon)
  * @param {int} x position par rapport à l'axe des abscisses
  * @param {int} y position par rapport à l'axe des ordonnées
  */
-function PositionPersonnage(relative, x, y)
+function PositionPersonnage(relative, place, x, y)
 {
     this.relative = relative;
+    this.place = place;
     this.x = x;
     this.y = y;
 }
@@ -78,20 +80,75 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.niveau = 0;
     self.vitesse = self.liste_niveaux.vitesse[0];
     self.puissance = self.liste_niveaux.puissance[0];
+
+    self.handleSprite = document.getElementById(self.nom);
     self.avatar = 'avatar/'+self.niveau+self.nom+'.png';
-    self.sprite = 'perso/'+self.position.relative+self.nom+'/'+self.niveau;
+    self.sprite = self.handleSprite.children[0];
     
     self.action = 'R';
     self.deplacement = {
-        up: false,
-        down: false,
-        left: false,
-        right: false
+        x: '',
+        y: '',
+        relative: ''
     };
 
     self.keydownToBrain = null;
     self.keyupToBrain = null;
     self.agir = null;
+
+    self.majSprite = function()
+    {
+        self.sprite.style = "display: none";
+        self.sprite = document.getElementById(self.nom+self.position.relative+'initial'+self.position.place+self.deplacement.relative);
+        self.sprite.style = "display: inline";
+    }
+
+    self.faireRien = function()
+    {
+        self.deplacement.relative = self.position.y > 0 ? 'monte' : '';
+        self.majSprite();
+    }
+
+    self.doitSeDeplacer = function()
+    {
+        return self.deplacement.x != '' || self.deplacement.y != '';
+    }
+
+    self.seDeplacer = function()
+    {
+        switch (self.deplacement.y) {
+            case 'U':
+                self.deplacement.relative = 'monte';
+                if(self.position.y < 410)
+                    self.position.y += self.vitesse;
+                break;
+            case 'D':
+                self.deplacement.relative = 'descend';
+                if(self.position.y > 0)
+                    self.position.y -= self.vitesse;
+                break;
+        }
+        switch (self.deplacement.x) {
+            case 'R':
+                self.deplacement.relative = 'avance';
+                if(self.position.x < 870)
+                    self.position.x += self.vitesse;
+                break;
+            case 'L':
+                self.deplacement.relative = 'retour';
+                if(self.position.x >= 0)
+                    self.position.x -= self.vitesse;
+                break;
+        }
+
+        // Positionner le personnage au bon endroit
+        self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;';
+
+        if(self.action == 'R')
+        {
+            self.majSprite();
+        }
+    }
 
     if(self.controlleur == 'user')
     {
@@ -124,22 +181,23 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     
                 case keyConfig.transform:
                     self.action = 'T';
+                    self.vie = 0;
                     break;
     
                 case keyConfig.up:
-                    self.deplacement.up = true;
+                    self.deplacement.y = 'U';
                     break;
     
                 case keyConfig.down:
-                    self.deplacement.down = true;
+                    self.deplacement.y = 'D';
                     break;
     
                 case keyConfig.left:
-                    self.deplacement.left = true;
+                    self.deplacement.x = 'L';
                     break;
     
                 case keyConfig.right:
-                    self.deplacement.right = true;
+                    self.deplacement.x = 'R';
                     break;
     
                 default:
@@ -152,19 +210,19 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         {
             switch (e.keyCode) {
                 case keyConfig.up:
-                    self.deplacement.up = false;
+                    self.deplacement.y = '';
                     break;
     
                 case keyConfig.down:
-                    self.deplacement.down = false;
+                    self.deplacement.y = '';
                     break;
     
                 case keyConfig.left:
-                    self.deplacement.left = false;
+                    self.deplacement.x = '';
                     break;
     
                 case keyConfig.right:
-                    self.deplacement.right = false;
+                    self.deplacement.x = '';
                     break;
     
                 default:
@@ -175,14 +233,15 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         self.agir = function()
         {
-            if(self.deplacement.up)
+            if(self.doitSeDeplacer())
             {
-                self.position.y += self.vitesse;
-                if(self.action == 'R')
-                {
-                    
-                }
+                self.seDeplacer();
             }
+            else
+            {
+                self.faireRien();
+            }
+            
         };
     }
     else // controller is computer
