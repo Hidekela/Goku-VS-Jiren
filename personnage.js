@@ -44,13 +44,15 @@ function PouvoirPersonnage(nom, type, puissance, energie_necessaire)
 /**Niveaux d'un personnage
  * 
  * @param {int} max le niveau maximal (~ nombre de niveau)
+ * @param {string[]} noms tableau de noms pour chaque niveau
  * @param {int[]} durees tableau de durées de maintient de niveau
  * @param {int[]} vitesse tableau de vitesse du personnage à chaque niveau
  * @param {PuissancePersonnage[]} puissance tableau de puissance du personnage à chaque niveau
  */
-function NiveauxPersonnage(max, durees, vitesse, puissance)
+function NiveauxPersonnage(max, noms, durees, vitesse, puissance)
 {
     this.max = max;
+    this.noms = noms;
     this.durees = durees;
     this.vitesse = vitesse;
     this.puissance = puissance;
@@ -78,6 +80,8 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.pouvoirs = pouvoirs;
     
     self.niveau = 0;
+    self.nom_niveau = self.liste_niveaux.noms[0];
+    self.durree_niveau = self.liste_niveaux.durees[0];
     self.vitesse = self.liste_niveaux.vitesse[0];
     self.puissance = self.liste_niveaux.puissance[0];
 
@@ -96,16 +100,16 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.keyupToBrain = null;
     self.agir = null;
 
-    self.majSprite = function()
+    self.majSprite = function(seTransformer="")
     {
         self.sprite.style = "display: none";
-        self.sprite = document.getElementById(self.nom+self.position.relative+'initial'+self.position.place+self.deplacement.relative);
+        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+self.position.place+self.deplacement.relative);
         self.sprite.style = "display: inline";
     }
 
     self.faireRien = function()
     {
-        self.deplacement.relative = self.position.y > 0 ? 'monte' : '';
+        self.deplacement.relative = self.position.y > 0 ? 'air' : '';
         self.majSprite();
     }
 
@@ -118,7 +122,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     {
         switch (self.deplacement.y) {
             case 'U':
-                self.deplacement.relative = 'monte';
+                self.deplacement.relative = 'air';
                 if(self.position.y < 410)
                     self.position.y += self.vitesse;
                 break;
@@ -150,6 +154,25 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
     }
 
+    self.peutSeTransformer = function()
+    {
+        return self.liste_niveaux.max > self.niveau;
+    }
+
+    self.seTransformer = function()
+    {
+        ++self.niveau;
+        self.majNiveau();
+    }
+
+    self.majNiveau = function()
+    {
+        self.nom_niveau = self.liste_niveaux.noms[self.niveau];
+        self.durree_niveau = self.liste_niveaux.durees[self.niveau];
+        self.vitesse = self.liste_niveaux.vitesse[self.niveau];
+        self.puissance = self.liste_niveaux.puissance[self.niveau];
+    }
+
     if(self.controlleur == 'user')
     {
         self.keydownToBrain = function(e)
@@ -173,6 +196,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     
                 case keyConfig.block:
                     self.action = 'BO';
+                    self.vie = 0;
                     break;
     
                 case keyConfig.blockSpecial:
@@ -181,7 +205,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     
                 case keyConfig.transform:
                     self.action = 'T';
-                    self.vie = 0;
                     break;
     
                 case keyConfig.up:
@@ -241,7 +264,10 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             {
                 self.faireRien();
             }
-            
+            if(self.action == 'T' && self.peutSeTransformer())
+            {
+
+            }
         };
     }
     else // controller is computer
