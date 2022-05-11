@@ -86,7 +86,8 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.puissance = self.liste_niveaux.puissance[0];
 
     self.handleSprite = document.getElementById(self.nom);
-    self.avatar = 'avatar/'+self.niveau+self.nom+'.png';
+    self.avatar = document.getElementById('avatar'+self.nom);
+    self.avatar.src = 'avatar/'+self.nom_niveau+self.nom+'.png';
     self.sprite = self.handleSprite.children[0];
     
     self.action = 'R';
@@ -101,6 +102,11 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.agir = null;
 
     self.entrainDeSeTransformer = false;
+
+    self.majAvatar = function()
+    {
+        self.avatar.src = 'avatar/'+self.nom_niveau+self.nom+'.png';
+    }
 
     self.majSprite = function(transformation="")
     {
@@ -184,6 +190,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.durree_niveau = self.liste_niveaux.durees[self.niveau];
         self.vitesse = self.liste_niveaux.vitesse[self.niveau];
         self.puissance = self.liste_niveaux.puissance[self.niveau];
+        self.majAvatar();
     }
 
     if(self.controlleur == 'user')
