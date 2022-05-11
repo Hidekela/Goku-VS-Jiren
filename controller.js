@@ -7,7 +7,7 @@ function KeyToCommand() { // e.keyCode => KeyToCommand.smthg
     this.kick          = 68; // D
     this.pouvoir       = 90; // Z
     this.attackSpecial = 83; // S
-    this.transform     = 16; // shift
+    this.transform     = 17; // ctrl
     this.block         = 65; // A
     this.blockSpecial  = 69; // E
 };

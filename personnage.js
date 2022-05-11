@@ -100,11 +100,18 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.keyupToBrain = null;
     self.agir = null;
 
-    self.majSprite = function(seTransformer="")
+    self.entrainDeSeTransformer = false;
+
+    self.majSprite = function(transformation="")
     {
         self.sprite.style = "display: none";
-        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+self.position.place+self.deplacement.relative);
+        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative));
         self.sprite.style = "display: inline";
+    }
+
+    self.majPlace = function()
+    {
+        self.position.place = self.position.y > 0? 'air' : '';
     }
 
     self.faireRien = function()
@@ -145,6 +152,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                 break;
         }
 
+        self.majPlace();
         // Positionner le personnage au bon endroit
         self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;';
 
@@ -156,13 +164,18 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.peutSeTransformer = function()
     {
-        return self.liste_niveaux.max > self.niveau;
+        return self.liste_niveaux.max > self.niveau && !self.entrainDeSeTransformer;
     }
 
     self.seTransformer = function()
     {
-        ++self.niveau;
-        self.majNiveau();
+        if(self.peutSeTransformer())
+        {
+            ++self.niveau;
+            self.majNiveau();
+            self.entrainDeSeTransformer = true;
+        }
+        self.majSprite("transformation");
     }
 
     self.majNiveau = function()
@@ -249,6 +262,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     break;
     
                 default:
+                    self.entrainDeSeTransformer = false;
                     self.action = 'R';
                     break;
             }
@@ -260,13 +274,13 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             {
                 self.seDeplacer();
             }
-            else
+            else if(self.action == 'R')
             {
                 self.faireRien();
             }
-            if(self.action == 'T' && self.peutSeTransformer())
+            if(self.action == 'T')
             {
-
+                self.seTransformer();
             }
         };
     }
