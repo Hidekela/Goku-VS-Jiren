@@ -93,10 +93,21 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.sprite = self.handleSprite.children[0];
     
     self.action = 'R';
+    self.action_detaillee = '';
     self.deplacement = {
         x: '',
         y: '',
         relative: ''
+    };
+
+    self.nbbox = {
+        max: 2,
+        current: 1
+    };
+
+    self.nbkick = {
+        max: 3,
+        current: 1
     };
 
     self.keydownToBrain = null;
@@ -113,7 +124,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.majSprite = function(transformation="")
     {
         self.sprite.style = "display: none";
-        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative));
+        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.action_detaillee? self.action_detaillee : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)));
         self.sprite.style = "display: inline";
     }
 
@@ -202,6 +213,21 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.majVitesse();
     }
 
+    self.attaquer = function()
+    {
+        if(self.action[1] == 'K')
+        {
+            self.action_detaillee = 'daka'+self.nbkick.current;
+            self.nbkick.current = self.nbkick.current == self.nbkick.max? 1 : self.nbkick.current+1;
+        }
+        else
+        {
+            self.action_detaillee = 'totondry'+self.nbbox.current;
+            self.nbbox.current = self.nbbox.current == self.nbbox.max? 1 : self.nbbox.current+1;
+        }
+        self.majSprite();
+    }
+
     if(self.controlleur == 'user')
     {
         self.keydownToBrain = function(e)
@@ -280,6 +306,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                 default:
                     self.entrainDeSeTransformer = false;
                     self.action = 'R';
+                    self.action_detaillee = '';
                     break;
             }
         };
@@ -294,9 +321,19 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             {
                 self.faireRien();
             }
-            if(self.action == 'T')
-            {
-                self.seTransformer();
+
+            switch (self.action) {
+                case 'T':
+                    self.seTransformer();                    
+                    break;
+
+                case 'AB':
+                case 'AK':
+                    self.attaquer();
+                    break;
+            
+                default:
+                    break;
             }
         };
     }
