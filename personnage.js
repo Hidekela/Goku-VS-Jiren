@@ -93,7 +93,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.sprite = self.handleSprite.children[0];
     
     self.action = 'R';
-    self.action_detaillee = '';
+    self.etat = '';
     self.deplacement = {
         x: '',
         y: '',
@@ -124,7 +124,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.majSprite = function(transformation="")
     {
         self.sprite.style = "display: none";
-        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.action_detaillee? self.action_detaillee : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)));
+        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.etat? self.etat : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)));
         self.sprite.style = "display: inline";
     }
 
@@ -144,7 +144,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         return self.deplacement.x != '' || self.deplacement.y != '';
     }
 
-    self.seDeplacer = function()
+    self.seDeplacer = function(position_x_adversaire)
     {
         switch (self.deplacement.y) {
             case 'U':
@@ -160,18 +160,20 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
         switch (self.deplacement.x) {
             case 'R':
-                self.deplacement.relative = 'avance';
+                self.deplacement.relative = self.position.relative == 'gauche'? 'avance' : 'retour';
                 if(self.position.x < 870)
                     self.position.x += 10;
                 break;
             case 'L':
-                self.deplacement.relative = 'retour';
+                self.deplacement.relative = self.position.relative == 'droite'? 'avance' : 'retour';
                 if(self.position.x >= 0)
                     self.position.x -= 10;
                 break;
         }
 
         self.majPlace();
+        self.regarderAdversaire(position_x_adversaire);
+
         // Positionner le personnage au bon endroit
         self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;';
 
@@ -181,50 +183,61 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
     }
 
+    self.regarderAdversaire = function(position_x_adversaire)
+    {
+        self.position.relative = self.position.x < position_x_adversaire? 'gauche' : 'droite';
+    }
+
     self.peutSeTransformer = function()
     {
         return self.liste_niveaux.max > self.niveau && !self.entrainDeSeTransformer;
     }
 
-    self.seTransformer = function()
+    self.seTransformer = function(position_adversaire)
     {
         if(self.peutSeTransformer())
         {
             ++self.niveau;
-            self.majNiveau();
+            self.majNiveau(position_adversaire);
             self.entrainDeSeTransformer = true;
         }
         self.majSprite("transformation");
     }
 
-    self.majVitesse = function()
+    self.majVitesse = function(position_adversaire)
     {
         clearInterval(self.handleAction);
-        self.handleAction = setInterval(self.agir,self.vitesse);
+        self.handleAction = setInterval(self.agir,self.vitesse,position_adversaire);
     }
 
-    self.majNiveau = function()
+    self.majNiveau = function(position_adversaire)
     {
         self.nom_niveau = self.liste_niveaux.noms[self.niveau];
         self.durree_niveau = self.liste_niveaux.durees[self.niveau];
         self.vitesse = self.liste_niveaux.vitesse[self.niveau];
         self.puissance = self.liste_niveaux.puissance[self.niveau];
         self.majAvatar();
-        self.majVitesse();
+        self.majVitesse(position_adversaire);
     }
 
     self.attaquer = function()
     {
         if(self.action[1] == 'K')
         {
-            self.action_detaillee = 'daka'+self.nbkick.current;
+            self.etat = 'daka'+self.nbkick.current;
             self.nbkick.current = self.nbkick.current == self.nbkick.max? 1 : self.nbkick.current+1;
         }
         else
         {
-            self.action_detaillee = 'totondry'+self.nbbox.current;
+            self.etat = 'totondry'+self.nbbox.current;
             self.nbbox.current = self.nbbox.current == self.nbbox.max? 1 : self.nbbox.current+1;
         }
+        self.majSprite();
+    }
+
+    self.bloquer = function()
+    {
+        self.etat = 'block';
         self.majSprite();
     }
 
@@ -242,7 +255,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     break;
                     
                 case keyConfig.pouvoir:
-                    self.action = 'PB';
+                    self.action = 'PO';
                     break;
     
                 case keyConfig.attackSpecial:
@@ -250,12 +263,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     break;
     
                 case keyConfig.block:
-                    self.action = 'BO';
-                    self.vie = 0;
+                    self.action = 'DO';
                     break;
     
                 case keyConfig.blockSpecial:
-                    self.action = 'BS';
+                    self.action = 'DS';
+                    self.vie = 0;
                     break;
     
                 case keyConfig.transform:
@@ -304,18 +317,16 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     break;
     
                 default:
-                    self.entrainDeSeTransformer = false;
                     self.action = 'R';
-                    self.action_detaillee = '';
                     break;
             }
         };
 
-        self.agir = function()
+        self.agir = function(position_adversaire)
         {
             if(self.doitSeDeplacer())
             {
-                self.seDeplacer();
+                self.seDeplacer(position_adversaire.x);
             }
             else if(self.action == 'R')
             {
@@ -324,12 +335,21 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
             switch (self.action) {
                 case 'T':
-                    self.seTransformer();                    
+                    self.seTransformer(position_adversaire);                    
                     break;
 
                 case 'AB':
                 case 'AK':
                     self.attaquer();
+                    break;
+
+                case 'DO':
+                    self.bloquer();
+                    break;
+
+                case 'R':
+                    self.entrainDeSeTransformer = false;
+                    self.etat = '';
                     break;
             
                 default:

@@ -11,8 +11,8 @@ function Game(player1, player2)
     self.start = function()
     {
         self.handleGame = setInterval(self.logiques,vitesse_logiques,player1,player2);
-        self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse);
-        self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse);
+        self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse,self.player2.position);
+        self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse,self.player1.position);
         
         if(self.player1.controlleur == 'user')
         {
@@ -46,7 +46,7 @@ function Game(player1, player2)
 
     self.logiques = function()
     {
-        if(player1.vie == 0) 
+        if(!player1.vie || !player2.vie) 
         {
             self.end(self.player1,self.player2);
             alert("Game is end!");
