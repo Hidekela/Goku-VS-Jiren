@@ -8,6 +8,7 @@ body
     height: 590px;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     background: url('terrain/terrain.jpg') no-repeat;
 }
 

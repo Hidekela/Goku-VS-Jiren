@@ -11,8 +11,8 @@ function Game(player1, player2)
     self.start = function()
     {
         self.handleGame = setInterval(self.logiques,vitesse_logiques,player1,player2);
-        self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse,self.player2.position);
-        self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse,self.player1.position);
+        self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse,self.player2.position,self.player2.handleSprite);
+        self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse,self.player1.position,self.player1.handleSprite);
         
         if(self.player1.controlleur == 'user')
         {
@@ -63,14 +63,14 @@ var keyConfig = new KeyToCommand();
 var position = new PositionPersonnage('gauche','',0,0);
 var puissances = [new PuissancePersonnage(0.3,0.2),new PuissancePersonnage(0.6,0.5),new PuissancePersonnage(1,0.7)];
 var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[30,20,10],puissances);
-var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',15,50)];
+var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',15,50,1500)];
 
 var Songoku = new Personnage('goku',keyConfig,100,100,position,niveaux,pouvoirs);
 
 position = new PositionPersonnage('droite','',870,0);
 puissances = [new PuissancePersonnage(1,1)];
 niveaux = new NiveauxPersonnage(0,['initial'],[-1],[10],puissances);
-pouvoirs = [new PouvoirPersonnage('pouvoir','A',1,5)];
+pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',20,50,0)];
 
 var Jiren = new Personnage('jiren',null,100,100,position,niveaux,pouvoirs);
 

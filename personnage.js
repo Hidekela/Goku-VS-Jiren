@@ -32,13 +32,15 @@ function PuissancePersonnage(attaque, defence)
  * @param {char} type 'A' ou 'D' (attaque ou défence)
  * @param {float} puissance valeur de dégat ou de protection
  * @param {float} energie_necessaire valeur de l'énergie nécessaire pour son utilisation
+ * @param {int} temps_chargement temps de chargement nécessaire pour son utilisation (0 si ce n'est pas précisé)
  */
-function PouvoirPersonnage(nom, type, puissance, energie_necessaire)
+function PouvoirPersonnage(nom, type, puissance, energie_necessaire,temps_chargement=0)
 {
     this.nom = nom;
     this.type = type;
     this.puissance = puissance;
     this.energie_necessaire = energie_necessaire;
+    this.temps_chargement = temps_chargement;
 }
 
 /**Niveaux d'un personnage
@@ -110,11 +112,26 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         current: 1
     };
 
+    self.nbpouvoir = {
+        max: 10,
+        current: 1
+    }
+
+    self.nbpouvoirspecial = {
+        max: 3,
+        current: 1
+    }
+
     self.keydownToBrain = null;
     self.keyupToBrain = null;
     self.agir = null;
 
     self.entrainDeSeTransformer = false;
+    self.peutSeDeplacer = true;
+    self.peutBouger = true;
+    self.pouvoirSpecialPres = false;
+    self.chargementPouvoirSpecial = null;
+    self.lancementPouvoirSpecial = null;
 
     self.majAvatar = function()
     {
@@ -141,7 +158,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.doitSeDeplacer = function()
     {
-        return self.deplacement.x != '' || self.deplacement.y != '';
+        return self.peutSeDeplacer && (self.deplacement.x != '' || self.deplacement.y != '');
     }
 
     self.seDeplacer = function(position_x_adversaire)
@@ -193,31 +210,31 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         return self.liste_niveaux.max > self.niveau && !self.entrainDeSeTransformer;
     }
 
-    self.seTransformer = function(position_adversaire)
+    self.seTransformer = function(position_adversaire,handle_sprite_adversaire)
     {
         if(self.peutSeTransformer())
         {
             ++self.niveau;
-            self.majNiveau(position_adversaire);
+            self.majNiveau(position_adversaire,handle_sprite_adversaire);
             self.entrainDeSeTransformer = true;
         }
         self.majSprite("transformation");
     }
 
-    self.majVitesse = function(position_adversaire)
+    self.majVitesse = function(position_adversaire,handle_sprite_adversaire)
     {
         clearInterval(self.handleAction);
-        self.handleAction = setInterval(self.agir,self.vitesse,position_adversaire);
+        self.handleAction = setInterval(self.agir,self.vitesse,position_adversaire,handle_sprite_adversaire);
     }
 
-    self.majNiveau = function(position_adversaire)
+    self.majNiveau = function(position_adversaire,handle_sprite_adversaire)
     {
         self.nom_niveau = self.liste_niveaux.noms[self.niveau];
         self.durree_niveau = self.liste_niveaux.durees[self.niveau];
         self.vitesse = self.liste_niveaux.vitesse[self.niveau];
         self.puissance = self.liste_niveaux.puissance[self.niveau];
         self.majAvatar();
-        self.majVitesse(position_adversaire);
+        self.majVitesse(position_adversaire,handle_sprite_adversaire);
     }
 
     self.attaquer = function()
@@ -239,6 +256,109 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     {
         self.etat = 'block';
         self.majSprite();
+    }
+
+    self.avoirEnergiePlusDe = function(valeur)
+    {
+        return self.energie >= valeur;
+    }
+
+    self.chargePouvoir = function()
+    {
+        if(!self.avoirEnergiePlusDe(self.pouvoirs[0].energie_necessaire))
+            return;
+        
+        self.etat = self.pouvoirs[0].nom;
+        self.majSprite();
+    }
+
+    self.lancerPouvoir = function(position_adversaire,handle_sprite_adversaire)
+    {
+        var sprite_pouvoir = document.getElementById(self.pouvoirs[0].nom+self.position.relative+self.nbpouvoir.current);
+        var pouvoirPosition = {
+            x: self.position.x+(self.position.relative == 'gauche'? self.handleSprite.clientWidth : -sprite_pouvoir.clientWidth),
+            y: self.position.y+self.handleSprite.clientHeight/2
+        };
+
+        var positionRelative = self.position.relative; // Eviter le pouvoir qui revient quand on change de position relative
+        
+        self.nbpouvoir.current = self.nbpouvoir.current == self.nbpouvoir.max? 1 : self.nbpouvoir.current+1;
+
+        var pouvoirMouvement = setInterval(function(){
+            sprite_pouvoir.style = "opacity: 1; left: "+pouvoirPosition.x+"px; bottom: "+pouvoirPosition.y+"px";
+            if(positionRelative == "gauche")
+            {
+                if((position_adversaire.y-sprite_pouvoir.clientHeight < pouvoirPosition.y && pouvoirPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirPosition.x >= position_adversaire.x+handle_sprite_adversaire.clientWidth) || pouvoirPosition.x >= 980 - sprite_pouvoir.clientWidth/2)
+                {
+                    sprite_pouvoir.style = "opacity: 0";
+                    clearInterval(pouvoirMouvement);
+                }
+                pouvoirPosition.x+=25;
+            }
+            else
+            {
+                if((position_adversaire.y-sprite_pouvoir.clientHeight < pouvoirPosition.y && pouvoirPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirPosition.x <= position_adversaire.x) || pouvoirPosition.x <= 0)
+                {
+                    sprite_pouvoir.style = "opacity: 0";
+                    clearInterval(pouvoirMouvement);
+                }
+                pouvoirPosition.x-=25;
+            }
+        },30);
+    }
+
+    self.chargePouvoirSpecial = function()
+    {
+        if(!self.avoirEnergiePlusDe(self.pouvoirs[1].energie_necessaire))
+            return;
+        
+        if(!self.chargementPouvoirSpecial)
+        {
+            self.chargementPouvoirSpecial = setTimeout(function(){
+                self.pouvoirSpecialPres = self.etat == self.pouvoirs[1].nom+'chargement';;
+                clearTimeout(self.chargementPouvoirSpecial);
+            },self.pouvoirs[1].temps_chargement);
+        }
+
+        self.etat = self.pouvoirs[1].nom+'chargement';
+        self.majSprite();
+    }
+
+    self.lancerPouvoirSpecial = function()
+    {
+        if(!self.pouvoirSpecialPres)
+            return;
+
+        self.pouvoirSpecialPres = false;
+        self.peutSeDeplacer = false;
+        self.peutBouger = false;
+        self.etat = self.pouvoirs[1].nom;
+        var sprite_pouvoir_special = document.getElementById(self.pouvoirs[1].nom+self.position.relative+self.nbpouvoirspecial.current);
+        var pouvoirSpecialPosition = {
+            x: self.position.x+(self.position.relative == 'gauche'? self.handleSprite.clientWidth : -sprite_pouvoir_special.clientWidth),
+            y: self.position.y+(self.handleSprite.clientHeight - sprite_pouvoir_special.clientHeight)/2
+        };
+
+        self.majSprite();
+
+        self.lancementPouvoirSpecial = setInterval(function(){
+            self.nbpouvoirspecial.current = self.nbpouvoirspecial.current == self.nbpouvoirspecial.max? 1 : self.nbpouvoirspecial.current+1;
+            sprite_pouvoir_special.style = "opacity: 0";
+            sprite_pouvoir_special = document.getElementById(self.pouvoirs[1].nom+self.position.relative+self.nbpouvoirspecial.current);
+            sprite_pouvoir_special.style = "opacity: 1; left: "+pouvoirSpecialPosition.x+"px; bottom: "+pouvoirSpecialPosition.y+"px";
+        },50);
+
+        var arretPouvoirSpecial = setTimeout(function(){
+            if(self.lancementPouvoirSpecial)
+            {
+                clearInterval(self.lancementPouvoirSpecial);
+                sprite_pouvoir_special.style = "opacity: 0";
+                self.peutSeDeplacer = true;
+                self.peutBouger = true;
+                self.etat = '';
+            }
+            clearTimeout(arretPouvoirSpecial);
+        },2000);
     }
 
     if(self.controlleur == 'user')
@@ -322,8 +442,11 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             }
         };
 
-        self.agir = function(position_adversaire)
+        self.agir = function(position_adversaire,handle_sprite_adversaire)
         {
+            if(!self.peutBouger)
+                return;
+                
             if(self.doitSeDeplacer())
             {
                 self.seDeplacer(position_adversaire.x);
@@ -335,7 +458,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
             switch (self.action) {
                 case 'T':
-                    self.seTransformer(position_adversaire);                    
+                    self.seTransformer(position_adversaire,handle_sprite_adversaire);                    
                     break;
 
                 case 'AB':
@@ -347,7 +470,28 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     self.bloquer();
                     break;
 
+                case 'PO':
+                    self.chargePouvoir();
+                    break;
+
+                case 'PS':
+                    self.chargePouvoirSpecial();
+                    break;
+
                 case 'R':
+                    switch (self.etat) {
+                        case self.pouvoirs[0].nom:
+                            self.lancerPouvoir(position_adversaire,handle_sprite_adversaire);
+                            break;
+
+                        case self.pouvoirs[1].nom+'chargement':
+                            self.lancerPouvoirSpecial();
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    self.chargementPouvoirSpecial = false;
                     self.entrainDeSeTransformer = false;
                     self.etat = '';
                     break;
