@@ -33,14 +33,20 @@ function PuissancePersonnage(attaque, defence)
  * @param {float} puissance valeur de dégat ou de protection
  * @param {float} energie_necessaire valeur de l'énergie nécessaire pour son utilisation
  * @param {int} temps_chargement temps de chargement nécessaire pour son utilisation (0 si ce n'est pas précisé)
+ * @param {elementdAnimation} animation_chargement objet contenant des propriétés nécessaire pour une animation pendant le chargement
+ * @param {string} style style à affecter au sprite du personnage lors de lancement du pouvoir
+ * @param {int} pas pas de déplacement du personnage lors de lancement du pouvoir
  */
-function PouvoirPersonnage(nom, type, puissance, energie_necessaire,temps_chargement=0)
+function PouvoirPersonnage(nom, type, puissance, energie_necessaire,temps_chargement=0, animation_chargement=null, style='', pas=10)
 {
     this.nom = nom;
     this.type = type;
     this.puissance = puissance;
     this.energie_necessaire = energie_necessaire;
     this.temps_chargement = temps_chargement;
+    this.animation_chargement = animation_chargement;
+    this.style = style;
+    this.pas = pas;
 }
 
 /**Niveaux d'un personnage
@@ -49,14 +55,16 @@ function PouvoirPersonnage(nom, type, puissance, energie_necessaire,temps_charge
  * @param {string[]} noms tableau de noms pour chaque niveau
  * @param {int[]} durees tableau de durées de maintient de niveau
  * @param {int[]} vitesse tableau de vitesse du personnage à chaque niveau
+ * @param {int[]} pas tableau de pas de déplacement du personnage à chaque niveau
  * @param {PuissancePersonnage[]} puissance tableau de puissance du personnage à chaque niveau
  */
-function NiveauxPersonnage(max, noms, durees, vitesse, puissance)
+function NiveauxPersonnage(max, noms, durees, vitesse, pas, puissance)
 {
     this.max = max;
     this.noms = noms;
     this.durees = durees;
     this.vitesse = vitesse;
+    this.pas = pas;
     this.puissance = puissance;
 }
 
@@ -87,6 +95,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.nom_niveau = self.liste_niveaux.noms[0];
     self.durree_niveau = self.liste_niveaux.durees[0];
     self.vitesse = self.liste_niveaux.vitesse[0];
+    self.pas = self.liste_niveaux.pas[0];
     self.puissance = self.liste_niveaux.puissance[0];
 
     self.handleSprite = document.getElementById(self.nom);
@@ -130,8 +139,28 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.peutSeDeplacer = true;
     self.peutBouger = true;
     self.pouvoirSpecialPres = false;
+    self.enDefenceSpecial = false;
     self.chargementPouvoirSpecial = null;
     self.lancementPouvoirSpecial = null;
+
+    self.animationPouvoirSpecialHandle = [];
+
+    // Ajout des éléments HTML styles dans la page
+    for(let i = 0; i < self.pouvoirs.length; i++)
+    {
+        if(self.pouvoirs[i].animation_chargement)
+        {
+            var style = document.createElement('style');
+            style.innerHTML = self.pouvoirs[i].animation_chargement.style;
+            document.body.appendChild(style);
+            self.animationPouvoirSpecialHandle.push(document.getElementById(self.pouvoirs[i].animation_chargement.id));
+        }
+        else
+        {
+            
+            self.animationPouvoirSpecialHandle.push(null);
+        }
+    }
 
     self.majAvatar = function()
     {
@@ -141,7 +170,10 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.majSprite = function(transformation="")
     {
         self.sprite.style = "display: none";
-        self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.etat? self.etat : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)));
+        if(!self.enDefenceSpecial)
+            self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.etat? self.etat : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)));
+        else
+            self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+self.pouvoirs[2].nom);
         self.sprite.style = "display: inline";
     }
 
@@ -167,24 +199,24 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             case 'U':
                 self.deplacement.relative = 'air';
                 if(self.position.y < 410)
-                    self.position.y += 10;
+                    self.position.y += self.pas;
                 break;
             case 'D':
                 self.deplacement.relative = 'descend';
                 if(self.position.y > 0)
-                    self.position.y -= 10;
+                    self.position.y -= self.pas;
                 break;
         }
         switch (self.deplacement.x) {
             case 'R':
                 self.deplacement.relative = self.position.relative == 'gauche'? 'avance' : 'retour';
                 if(self.position.x < 870)
-                    self.position.x += 10;
+                    self.position.x += self.pas;
                 break;
             case 'L':
                 self.deplacement.relative = self.position.relative == 'droite'? 'avance' : 'retour';
                 if(self.position.x >= 0)
-                    self.position.x -= 10;
+                    self.position.x -= self.pas;
                 break;
         }
 
@@ -192,7 +224,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.regarderAdversaire(position_x_adversaire);
 
         // Positionner le personnage au bon endroit
-        self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;';
+        self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;'+(self.enDefenceSpecial? self.pouvoirs[2].style : '');
 
         if(self.action == 'R')
         {
@@ -207,7 +239,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.peutSeTransformer = function()
     {
-        return self.liste_niveaux.max > self.niveau && !self.entrainDeSeTransformer;
+        return self.liste_niveaux.max > self.niveau && !self.entrainDeSeTransformer && !self.enDefenceSpecial;
     }
 
     self.seTransformer = function(position_adversaire,handle_sprite_adversaire)
@@ -218,6 +250,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             self.majNiveau(position_adversaire,handle_sprite_adversaire);
             self.entrainDeSeTransformer = true;
         }
+
         self.majSprite("transformation");
     }
 
@@ -239,21 +272,30 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.attaquer = function()
     {
+        if(self.enDefenceSpecial)
+            return;
+
+        self.desactiverAnimationPouvoir();
+
         if(self.action[1] == 'K')
         {
             self.etat = 'daka'+self.nbkick.current;
-            self.nbkick.current = self.nbkick.current == self.nbkick.max? 1 : self.nbkick.current+1;
+            self.nbkick.current = anneauxIncrementation(self.nbkick);
         }
         else
         {
             self.etat = 'totondry'+self.nbbox.current;
-            self.nbbox.current = self.nbbox.current == self.nbbox.max? 1 : self.nbbox.current+1;
+            self.nbbox.current = anneauxIncrementation(self.nbbox);
         }
         self.majSprite();
     }
 
     self.bloquer = function()
     {
+        if(self.enDefenceSpecial)
+            return;
+
+        self.desactiverAnimationPouvoir();
         self.etat = 'block';
         self.majSprite();
     }
@@ -265,9 +307,13 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.chargePouvoir = function()
     {
+        if(self.enDefenceSpecial)
+            return;
+
         if(!self.avoirEnergiePlusDe(self.pouvoirs[0].energie_necessaire))
             return;
         
+        self.desactiverAnimationPouvoir();
         self.etat = self.pouvoirs[0].nom;
         self.majSprite();
     }
@@ -282,7 +328,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         var positionRelative = self.position.relative; // Eviter le pouvoir qui revient quand on change de position relative
         
-        self.nbpouvoir.current = self.nbpouvoir.current == self.nbpouvoir.max? 1 : self.nbpouvoir.current+1;
+        self.nbpouvoir.current = anneauxIncrementation(self.nbpouvoir);
 
         var pouvoirMouvement = setInterval(function(){
             sprite_pouvoir.style = "opacity: 1; left: "+pouvoirPosition.x+"px; bottom: "+pouvoirPosition.y+"px";
@@ -309,23 +355,53 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.chargePouvoirSpecial = function()
     {
+        if(self.enDefenceSpecial)
+            return;
+
         if(!self.avoirEnergiePlusDe(self.pouvoirs[1].energie_necessaire))
             return;
         
         if(!self.chargementPouvoirSpecial)
         {
             self.chargementPouvoirSpecial = setTimeout(function(){
-                self.pouvoirSpecialPres = self.etat == self.pouvoirs[1].nom+'chargement';;
+                self.pouvoirSpecialPres = self.etat == self.pouvoirs[1].nom+'chargement';
                 clearTimeout(self.chargementPouvoirSpecial);
+                self.chargementPouvoirSpecial = null;
             },self.pouvoirs[1].temps_chargement);
+        }
+
+        if(self.pouvoirs[1].animation_chargement)
+        {
+            var x, y = self.pouvoirs[1].animation_chargement.ay*self.position.y + self.pouvoirs[1].animation_chargement.by;
+            
+            if(self.position.relative == 'droite')
+                x = self.pouvoirs[1].animation_chargement.ax*self.position.x + self.handleSprite.clientWidth - self.pouvoirs[1].animation_chargement.bx - self.pouvoirs[1].animation_chargement.width_element;
+            else
+                x = self.pouvoirs[1].animation_chargement.ax*self.position.x + self.pouvoirs[1].animation_chargement.bx;
+            
+                self.animationPouvoirSpecialHandle[1].style = "animation: "+self.pouvoirs[1].nom+" 3s linear infinite;display: block; left: "+x+"px; bottom: "+y+"px";
         }
 
         self.etat = self.pouvoirs[1].nom+'chargement';
         self.majSprite();
     }
 
+    self.desactiverAnimationPouvoir = function()
+    {
+        for(let i = 0; i < self.pouvoirs.length; i++)
+        {
+            if(self.pouvoirs[i].animation_chargement)
+                self.animationPouvoirSpecialHandle[i].style = "";
+        }
+    }
+
     self.lancerPouvoirSpecial = function()
     {
+        self.desactiverAnimationPouvoir();
+
+        clearTimeout(self.chargementPouvoirSpecial);
+        self.chargementPouvoirSpecial = null;
+
         if(!self.pouvoirSpecialPres)
             return;
 
@@ -342,7 +418,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.majSprite();
 
         self.lancementPouvoirSpecial = setInterval(function(){
-            self.nbpouvoirspecial.current = self.nbpouvoirspecial.current == self.nbpouvoirspecial.max? 1 : self.nbpouvoirspecial.current+1;
+            self.nbpouvoirspecial.current = anneauxIncrementation(self.nbpouvoirspecial);
             sprite_pouvoir_special.style = "opacity: 0";
             sprite_pouvoir_special = document.getElementById(self.pouvoirs[1].nom+self.position.relative+self.nbpouvoirspecial.current);
             sprite_pouvoir_special.style = "opacity: 1; left: "+pouvoirSpecialPosition.x+"px; bottom: "+pouvoirSpecialPosition.y+"px";
@@ -359,6 +435,34 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             }
             clearTimeout(arretPouvoirSpecial);
         },2000);
+    }
+
+    self.activerDefenceSpecial = function()
+    {
+        if(!self.avoirEnergiePlusDe(self.pouvoirs[2].energie_necessaire))
+            return;
+
+        if(self.pouvoirs[2].style)
+            self.handleSprite.style = self.pouvoirs[2].style;
+
+        self.pas = self.pouvoirs[2].pas;
+
+        self.enDefenceSpecial = true;
+    }
+
+    self.desactiverDefenceSpecial = function()
+    {
+        self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;';
+        self.pas = self.liste_niveaux.pas[self.niveau];
+        self.enDefenceSpecial = false;
+    }
+
+    self.defenceSpecial = function()
+    {
+        self.desactiverAnimationPouvoir();
+        
+        self.etat = self.pouvoirs[2].nom;
+        self.majSprite();
     }
 
     if(self.controlleur == 'user')
@@ -388,7 +492,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     
                 case keyConfig.blockSpecial:
                     self.action = 'DS';
-                    self.vie = 0;
                     break;
     
                 case keyConfig.transform:
@@ -412,7 +515,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     break;
     
                 default:
-                    self.action = 'R';
                     break;
             }
         };
@@ -436,8 +538,17 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     self.deplacement.x = '';
                     break;
     
-                default:
+                case keyConfig.box:
+                case keyConfig.kick:
+                case keyConfig.pouvoir:
+                case keyConfig.attackSpecial:
+                case keyConfig.block:
+                case keyConfig.blockSpecial:    
+                case keyConfig.transform:
                     self.action = 'R';
+                    break;
+    
+                default:
                     break;
             }
         };
@@ -478,6 +589,10 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                     self.chargePouvoirSpecial();
                     break;
 
+                case 'DS':
+                    self.defenceSpecial();
+                    break;
+
                 case 'R':
                     switch (self.etat) {
                         case self.pouvoirs[0].nom:
@@ -487,11 +602,17 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                         case self.pouvoirs[1].nom+'chargement':
                             self.lancerPouvoirSpecial();
                             break;
+
+                        case self.pouvoirs[2].nom:
+                            if(self.enDefenceSpecial)
+                                self.desactiverDefenceSpecial();
+                            else
+                                self.activerDefenceSpecial();
+                            break;
                     
                         default:
                             break;
                     }
-                    self.chargementPouvoirSpecial = false;
                     self.entrainDeSeTransformer = false;
                     self.etat = '';
                     break;

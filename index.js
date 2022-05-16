@@ -59,20 +59,43 @@ function Game(player1, player2)
     };
 }
 
-var keyConfig = new KeyToCommand();
+var keyConfigGoku = new KeyToCommand();
+var kamehamehaStyle = "@keyframes kamehameha {from{transform: rotate(0deg)} to{transform: rotate(360deg)}}";
+var animationKamehameha = new elementdAnimation('kamehamehaanimation',1,-105,1,-22,270,kamehamehaStyle);
 var position = new PositionPersonnage('gauche','',0,0);
 var puissances = [new PuissancePersonnage(0.3,0.2),new PuissancePersonnage(0.6,0.5),new PuissancePersonnage(1,0.7)];
-var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[30,20,10],puissances);
-var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',15,50,1500)];
+var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[30,20,10],[10,10,10],puissances);
+var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',15,50,1500,animationKamehameha),new PouvoirPersonnage('teleportation','D',15,10,0,null,'opacity: 0',40)];
 
-var Songoku = new Personnage('goku',keyConfig,100,100,position,niveaux,pouvoirs);
+var Songoku = new Personnage('goku',keyConfigGoku,100,100,position,niveaux,pouvoirs);
+
+var keyConfigJiren = null;
+
+// keyConfigJiren = new KeyToCommand(56,57,48,169,61,73,79,80,160,164,170);
+
+/*
+        Jiren keys:
+
+left          = 56;  // touche 8 (non numpad)
+up            = 57;  // touche 9 (non numpad)
+right         = 48;  // touche 0 (non numpad)
+down          = 169; // touche )
+box           = 61;  // touche =
+kick          = 73;  // I
+pouvoir       = 79;  // O
+attackSpecial = 80;  // P
+transform     = 160; // touche ^
+block         = 164; // touche $
+blockSpecial  = 170; // touche *
+
+*/
 
 position = new PositionPersonnage('droite','',870,0);
 puissances = [new PuissancePersonnage(1,1)];
-niveaux = new NiveauxPersonnage(0,['initial'],[-1],[10],puissances);
-pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',20,50,0)];
+niveaux = new NiveauxPersonnage(0,['initial'],[-1],[10],[10],puissances);
+pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',20,50,0),new PouvoirPersonnage('bouclier','D',20,10)];
 
-var Jiren = new Personnage('jiren',null,100,100,position,niveaux,pouvoirs);
+var Jiren = new Personnage('jiren',keyConfigJiren,100,100,position,niveaux,pouvoirs);
 
 var game = new Game(Songoku,Jiren);
 

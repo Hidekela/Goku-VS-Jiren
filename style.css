@@ -159,9 +159,10 @@ h3
     opacity: 0;
 }
 
-#kamehamehaanim, #kamehamehacharge
+.a
 {
-    border-radius: 50%;
+    position: absolute;
+    display: none;
 }
 
 p
