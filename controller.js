@@ -1,4 +1,4 @@
-function KeyToCommand(left = 37, up = 38, right = 39, down = 40, box = 81, kick = 68, pouvoir = 90, attackSpecial = 83, transform = 49, block = 65, blockSpecial = 69) {
+function KeyToCommand(left = 37, up = 38, right = 39, down = 40, box = 81, kick = 68, pouvoir = 90, attackSpecial = 83, transform = 49, block = 65, blockSpecial = 69, pause = 27) {
     // e.keyCode => KeyToCommand.smthg
     this.left          = left;
     this.up            = up;
@@ -11,6 +11,7 @@ function KeyToCommand(left = 37, up = 38, right = 39, down = 40, box = 81, kick 
     this.transform     = transform;
     this.block         = block;
     this.blockSpecial  = blockSpecial;
+    this.pause         = pause;
 };
 
 /* 
@@ -27,5 +28,6 @@ this.attackSpecial = 83; // S
 this.transform     = 49; // 1 (non numpad)
 this.block         = 65; // A
 this.blockSpecial  = 69; // E 
+this.pause         = 27; // touche Echap 
 
 */

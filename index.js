@@ -7,6 +7,7 @@ function Game(player1, player2)
     self.handleGame = null;
     self.player1 = player1;
     self.player2 = player2;
+    self.reconstitutionEnergie = null;
 
     self.start = function()
     {
@@ -24,6 +25,20 @@ function Game(player1, player2)
             document.addEventListener("keydown",self.player2.keydownToBrain,false);
             document.addEventListener("keyup",self.player2.keyupToBrain,false);
         }
+
+        self.reconstitutionEnergie = setInterval(function()
+        {
+            if(player1.energie < player1.energie_max)
+            {
+                player1.energie++;
+                player1.barreEnergieRestant.style = 'width: '+player1.energie+'%';
+            }
+            if(player2.energie < player2.energie_max)
+            {
+                player2.energie++;
+                player2.barreEnergieRestant.style = 'width: '+player2.energie+'%';
+            }
+        },1000);
     };
 
     self.end = function()
@@ -41,16 +56,62 @@ function Game(player1, player2)
 
         clearInterval(self.player1.handleAction);
         clearInterval(self.player2.handleAction);
+        clearInterval(self.reconstitutionEnergie);
         clearInterval(self.handleGame);
+
+        var winner = self.player1.vie <= 0? self.player2.nom : self.player1.nom;
+        alert(winner.toUpperCase()+" wins!");
     };
 
     self.logiques = function()
     {
-        if(!player1.vie || !player2.vie) 
+        if(player1.vie <= 0 || player2.vie <= 0) 
         {
             self.end(self.player1,self.player2);
-            alert("Game is end!");
         }
+        else if(player1.wantPause || player2.wantPause)
+        {
+            self.pause();
+            player1.wantPause = false;
+            player2.wantPause = false;
+        }
+
+        if(player1.toucherAdversaire && player2.valeurDefence != -1 && player1.valeurDegat > player2.valeurDefence)
+        {
+            player2.vie += player2.valeurDefence - player1.valeurDegat;
+            player2.toucheParlAdversaire = true;
+            player2.barreVieRestant.style = 'width: '+(player2.vie > 0 ? player2.vie*100/player2.vie_max : '0')+'%';
+            if(player1.lancementPouvoirSpecial)
+            {
+                player2.peutBouger = false;
+                player2.majSprite();
+                player2.arretPouvoirSpecial();
+            }
+        }
+        else if(!player1.lancementPouvoirSpecial && !player2.lancementPouvoirSpecial)
+        {
+            player2.peutBouger = true;
+        }
+
+        if(player2.toucherAdversaire && player1.valeurDefence != -1 && player2.valeurDegat > player1.valeurDefence)
+        {
+            player1.vie += player1.valeurDefence - player2.valeurDegat;
+            player1.toucheParlAdversaire = true;
+            player1.barreVieRestant.style = 'width: '+(player1.vie > 0 ? player1.vie*100/player1.vie_max : '0')+'%';
+            if(player2.lancementPouvoirSpecial)
+            {
+                player1.peutBouger = false;
+                player1.majSprite();
+                player1.arretPouvoirSpecial();
+            }
+        }
+        else if(!player2.lancementPouvoirSpecial && !player1.lancementPouvoirSpecial)
+        {
+            player1.peutBouger = true;
+        }
+
+        player1.toucherAdversaire = false;
+        player2.toucherAdversaire = false;
     };
 
     self.pause = function()
@@ -63,15 +124,15 @@ var keyConfigGoku = new KeyToCommand();
 var kamehamehaStyle = "@keyframes kamehameha {from{transform: rotate(0deg)} to{transform: rotate(360deg)}}";
 var animationKamehameha = new elementdAnimation('kamehamehaanimation',1,-105,1,-22,270,kamehamehaStyle);
 var position = new PositionPersonnage('gauche','',0,0);
-var puissances = [new PuissancePersonnage(0.3,0.2),new PuissancePersonnage(0.6,0.5),new PuissancePersonnage(1,0.7)];
+var puissances = [new PuissancePersonnage(0.3,0.4),new PuissancePersonnage(0.6,0.7),new PuissancePersonnage(1,1)];
 var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[30,20,10],[10,10,10],puissances);
-var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',15,50,1500,animationKamehameha),new PouvoirPersonnage('teleportation','D',15,10,0,null,'opacity: 0',40)];
+var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',0.3,50,1000,animationKamehameha),new PouvoirPersonnage('teleportation','D',-1,10,0,null,'opacity: 0',40)];
 
-var Songoku = new Personnage('goku',keyConfigGoku,100,100,position,niveaux,pouvoirs);
+var Songoku = new Personnage('goku',keyConfigGoku,200,100,position,niveaux,pouvoirs);
 
 var keyConfigJiren = null;
 
-// keyConfigJiren = new KeyToCommand(56,57,48,169,61,73,79,80,160,164,170);
+keyConfigJiren = new KeyToCommand(56,57,48,169,61,73,79,80,160,164,170,27);
 
 /*
         Jiren keys:
@@ -87,15 +148,16 @@ attackSpecial = 80;  // P
 transform     = 160; // touche ^
 block         = 164; // touche $
 blockSpecial  = 170; // touche *
+pause         = 170; // touche Echap
 
 */
 
 position = new PositionPersonnage('droite','',870,0);
 puissances = [new PuissancePersonnage(1,1)];
 niveaux = new NiveauxPersonnage(0,['initial'],[-1],[10],[10],puissances);
-pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',20,50,0),new PouvoirPersonnage('bouclier','D',20,10)];
+pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',0.5,50,0),new PouvoirPersonnage('bouclier','D',-1,10)];
 
-var Jiren = new Personnage('jiren',keyConfigJiren,100,100,position,niveaux,pouvoirs);
+var Jiren = new Personnage('jiren',keyConfigJiren,200,100,position,niveaux,pouvoirs);
 
 var game = new Game(Songoku,Jiren);
 

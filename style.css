@@ -5,11 +5,17 @@ body
     top: 0;
     width: 980px;
     min-width: 100%;
+    min-height: 92%;
     height: 590px;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: url('terrain/terrain.jpg') no-repeat;
+}
+
+#terrain
+{
+    width: 100%;
+    z-index: -1;
 }
 
 h3
@@ -28,6 +34,7 @@ h3
     left: 0;
     border: 7px outset gray;
     border-radius: 50%;
+    z-index: 1;
 }
 
 #avatarjiren
@@ -38,6 +45,7 @@ h3
     right: 0;
     border: 7px outset gray;
     border-radius: 50%;
+    z-index: 1;
 }
 
 #barre_de_vie_goku
@@ -45,18 +53,18 @@ h3
     position: absolute;
     top: 20px;
     left: 110px;
-    width: 300px;
+    width: 30%;
     height: 45px;
     background: #363636;
     border: 5px solid black;
     border-radius: 0 15px 15px 0;
-    z-index: -1;
+    z-index: 0;
 }
 
-#vie_restant_goku
+#vie_restante_goku
 {
-    width: 300px;
-    height: 45px;
+    width: 100%;
+    height: 100%;
     background: #188e1b;
     border-radius: 0 10px 10px 0;
     box-shadow: 0 20px 30px #3bf723 inset;
@@ -67,18 +75,18 @@ h3
     position: absolute;
     top: 80px;
     left: 100px;
-    width: 200px;
+    width: 20%;
     height: 15px;
     background: #363636;
     border: 3px solid black;
     border-radius: 0 5px 5px 0;
-    z-index: -1;
+    z-index: 0;
 }
 
-#energie_restant_goku
+#energie_restante_goku
 {
-    width: 200px;
-    height: 15px;
+    width: 100%;
+    height: 100%;
     background: #2132f8;
     border-radius: 0 2px 2px 0;
     box-shadow: 0 -7px 10px #3c9cfc inset;
@@ -89,20 +97,20 @@ h3
     position: absolute;
     top: 20px;
     right: 110px;
-    width: 300px;
+    width: 30%;
     height: 45px;
     background: #363636;
     border: 5px solid black;
     border-radius: 15px 0 0 15px;
-    z-index: -1;
+    z-index: 0;
 }
 
-#vie_restant_jiren
+#vie_restante_jiren
 {
     position: absolute;
     right: 0;
-    width: 300px;
-    height: 45px;
+    width: 100%;
+    height: 100%;
     background: #188e1b;
     border-radius: 10px 0 0 10px;
     box-shadow: 0 20px 30px #3bf723 inset;
@@ -113,20 +121,20 @@ h3
     position: absolute;
     top: 80px;
     right: 100px;
-    width: 200px;
+    width: 20%;
     height: 15px;
     background: #363636;
     border: 3px solid black;
     border-radius: 5px 0 0 5px;
-    z-index: -1;
+    z-index: 0;
 }
 
-#energie_restant_jiren
+#energie_restante_jiren
 {
     position: absolute;
     right: 0;
-    width: 200px;
-    height: 15px;
+    width: 100%;
+    height: 100%;
     background: #2132f8;
     border-radius: 2px 0 0 2px;
     box-shadow: 0 -7px 10px #3c9cfc inset;
