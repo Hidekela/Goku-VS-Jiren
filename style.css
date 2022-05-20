@@ -1,3 +1,5 @@
+/* General */
+
 body
 {
     position: absolute;
@@ -12,138 +14,137 @@ body
     overflow: hidden;
 }
 
+#c
+{
+    position: absolute;
+    right: 10px;
+    bottom: -30px;
+    font-size: 12px;
+    font-family: Comic Sans MS;
+    font-style: italic;
+    color: rgb(133, 166, 187);
+    z-index: 2;
+}
+
+::selection
+{
+    background: none;
+}
+
+/* Game */
+
 #terrain
 {
     width: 100%;
     z-index: -1;
 }
 
-h3
+.avatar
 {
-    padding: 0;
-    margin: 0;
-    text-decoration: underline;
-    text-shadow: none;
+    position: absolute;
+    width: 100px;
+    top: 0;
+    border: 5px outset rgb(30, 50, 50);
+    border-radius: 50%;
+    z-index: 1;
 }
 
 #avatargoku
 {
-    position: absolute;
-    width: 100px;
-    top: 0;
     left: 0;
-    border: 7px outset gray;
-    border-radius: 50%;
-    z-index: 1;
 }
-
 #avatarjiren
 {
-    position: absolute;
-    width: 100px;
-    top: 0;
     right: 0;
-    border: 7px outset gray;
-    border-radius: 50%;
-    z-index: 1;
+}
+
+.barre_de_vie
+{
+    position: absolute;
+    top: 25px;
+    width: 30%;
+    height: 40px;
+    background: #2e2e2e;
+    border: 2px outset rgb(50,50,50);
+    z-index: 0;
 }
 
 #barre_de_vie_goku
 {
-    position: absolute;
-    top: 20px;
-    left: 110px;
-    width: 30%;
-    height: 45px;
-    background: #363636;
-    border: 5px solid black;
-    border-radius: 0 15px 15px 0;
-    z-index: 0;
-}
-
-#vie_restante_goku
-{
-    width: 100%;
-    height: 100%;
-    background: #188e1b;
-    border-radius: 0 10px 10px 0;
-    box-shadow: 0 20px 30px #3bf723 inset;
-}
-
-#barre_d_energie_goku
-{
-    position: absolute;
-    top: 80px;
     left: 100px;
-    width: 20%;
-    height: 15px;
-    background: #363636;
-    border: 3px solid black;
-    border-radius: 0 5px 5px 0;
-    z-index: 0;
-}
-
-#energie_restante_goku
-{
-    width: 100%;
-    height: 100%;
-    background: #2132f8;
-    border-radius: 0 2px 2px 0;
-    box-shadow: 0 -7px 10px #3c9cfc inset;
+    transform: skewX(25deg);
 }
 
 #barre_de_vie_jiren
 {
-    position: absolute;
-    top: 20px;
-    right: 110px;
-    width: 30%;
-    height: 45px;
-    background: #363636;
-    border: 5px solid black;
-    border-radius: 15px 0 0 15px;
-    z-index: 0;
+    right: 100px;
+    transform: skewX(-25deg);
 }
+
+.vie_restante
+{
+    width: 100%;
+    height: 100%;
+    background: #0ba710;
+}
+
+/* #vie_restante_goku
+{
+} */
 
 #vie_restante_jiren
 {
     position: absolute;
     right: 0;
-    width: 100%;
-    height: 100%;
-    background: #188e1b;
-    border-radius: 10px 0 0 10px;
-    box-shadow: 0 20px 30px #3bf723 inset;
+}
+
+.barre_d_energie
+{
+    position: absolute;
+    top: 75px;
+    width: 20%;
+    height: 10px;
+    background: #2e2e2e;
+    border: 2px outset rgb(50,50,50);
+    z-index: 0;
+}
+
+#barre_d_energie_goku
+{
+    left: 100px;
+    transform: skewX(-40deg);
 }
 
 #barre_d_energie_jiren
 {
-    position: absolute;
-    top: 80px;
     right: 100px;
-    width: 20%;
-    height: 15px;
-    background: #363636;
-    border: 3px solid black;
-    border-radius: 5px 0 0 5px;
-    z-index: 0;
+    transform: skewX(40deg);
+}
+
+.energie_restante
+{
+    width: 100%;
+    height: 100%;
+    background: #1b5ea0;
+}
+
+#energie_restante_goku
+{
+    border-radius: 0 2px 2px 0;
 }
 
 #energie_restante_jiren
 {
     position: absolute;
     right: 0;
-    width: 100%;
-    height: 100%;
-    background: #2132f8;
     border-radius: 2px 0 0 2px;
-    box-shadow: 0 -7px 10px #3c9cfc inset;
 }
 
 #goku, #jiren
 {
     position: absolute;
     bottom: 0;
+    z-index: 1;
 }
 
 #goku img, #jiren img
@@ -165,81 +166,200 @@ h3
 {
     position: absolute;
     opacity: 0;
+    z-index: 1;
 }
 
 .a
 {
     position: absolute;
     display: none;
+    z-index: 1;
 }
 
-p
-{
-    margin-top: 3em;
-    margin: auto;
-    width: 80%;
-    height: auto;
-    z-index: 4;
-    font-family: cursive;
-    color: white;
-    text-shadow: 0 0 30px #0047fa;
-    font-size: 80px;
-    text-align: center;
-}
+/* Intro */
 
-#fin, #tuto
+#intro_page
 {
     position: absolute;
-    width: 100%;
-    height: 643px;
-    top: 0;
     left: 0;
-    text-align: center;
-    font-family: Comic Sans MS;
-    font-size: 75px;
-    background: rgb(0,0,0);
-    background: rgba(0,0,0,0.8);
-}
-
-#fin
-{
-    padding-top: 100px;
-}
-
-table
-{
-    margin: auto;
-}
-
-td
-{
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-#fight
-{
-    position: absolute;
-    width: 100%;
-    height: 425px;
     top: 0;
-    left: 0;
-    padding-top: 200px;
-    text-align: center;
-    font-family: Comic Sans MS;
-    font-size: 150px;
-    color: #ff6c00;
-    font-weight: bold;
-    text-shadow: 0 0 50px white;
+    min-width: 100%;
+    min-height: 120%;
+    background: #101010;
+    z-index: 2;
 }
 
-#c
+#intro_page div
 {
     position: absolute;
-    right: 10px;
-    bottom: -30px;
-    font-size: 12px;
-    font-family: Comic Sans MS;
-    font-style: italic;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+#intro_page div svg
+{
+    width: 250px;
+    margin: auto;
+    margin-top: 15%;
+}
+
+@keyframes intro {
+    0%
+    {
+        opacity: 0;
+    }
+    35%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+#intro_1
+{
+    animation: intro 5s;
+}
+
+#intro_2
+{
+    animation: intro 5s 5s;
+}
+
+#intro_3
+{
+    animation: intro 5s 10s;
+}
+
+#intro_4
+{
+    animation: intro 5s 15s;
+}
+
+/* Menu & Win*/
+
+#menu_page, #win_page
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 100%;
+    min-height: 120%;
+    background: #101010f4;
+    z-index: 1;
+}
+
+ul
+{
+    list-style-type: none;
+    padding: 0;
+    width: 50%;
+    margin: auto;
+    background: #05050588;
+    border: 3px double #0ba710;
+}
+
+#menu_page h1
+{
     color: silver;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120px;
+    font-style: italic;
+    text-align: center;
+    text-shadow: 0 0 3px #0ba710;
+    display: inline-block;
+    width: 50%;
+}
+
+#menu_page ul
+{
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+    margin-top: 20%;
+}
+
+#win_page h2
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100px;
+    text-align: center;
+    text-shadow: 0 0 5px #0ba710;
+    color: rgba(192, 192, 192, 0.959);
+    transform: skewX(-30deg);
+    width: 100%;
+    overflow: hidden;
+}
+
+@keyframes winning {
+    0%
+    {
+        margin-top: 25%;
+        margin-left: 100%;
+    }
+    35%
+    {
+        margin-left: 0%;
+    }
+    90%
+    {
+        margin-top: 25%;
+    }
+    100%
+    {
+        margin-top: 83px;
+    }
+}
+
+ul li
+{
+    text-align: center;
+    padding: 10px 0;
+    margin: 5px 0;
+    width: 100%;
+    background: #101010;
+}
+
+ul li button
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    width: 100%;
+    overflow: hidden;
+    color: silver;
+    background: transparent;
+    border: none;
+    margin: 0;
+}
+
+ul li:hover
+{
+    transform: skewX(-30deg) translate(-50px);
+    border-left: 50px double #0ba710;
+    border-right: 50px double #0ba710;
+    box-shadow: 0 0 5px #0ba710;
+    transition: border 0.2s;
+}
+
+ul li:hover ul
+{
+    background: none;
+}
+
+#menu_page ul li:hover
+{
+    transform: skew(-30deg) translate(-80px);
+}
+
+ul li:hover button
+{
+    cursor: pointer;
+    transform: skewX(30deg);
+    text-shadow: 0 0 5px #0ba710;
 }
