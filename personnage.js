@@ -136,7 +136,15 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.keydownToBrain = null;
     self.keyupToBrain = null;
     self.agir = null;
-    self.automatiser = null;
+
+    /* Only for computer controller ******/ 
+    self.automatismeID = null;
+    self.decisionAuto = null;
+    self.keydownEventSimulation = {keyCode: 0};
+    self.keyupEventSimulation = {keyCode: 0};
+    self.keydownEventSimulationListener = null;
+    self.keyupEventSimulationListener = null;
+    /******                              */
 
     self.entrainDeSeTransformer = false;
     self.entrainDeBloquer = false;
@@ -159,6 +167,8 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.barreVieRestant = document.getElementById('vie_restante_'+self.nom);
     self.barreEnergieRestant = document.getElementById('energie_restante_'+self.nom);
+
+    var Terrain = document.body;
     
     // Stocker les éléments HTML pour optimiser l'affichage
     self.allSpritesId = [];
@@ -199,6 +209,8 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.majSprite = function(transformation="")
     {
+        if(self.sprite == null)
+            alert(self.sprite);
         self.sprite.style = "display: none";
         if(self.enDefenceSpecial)
             self.sprite = self.allSprites[self.allSpritesId.indexOf(self.nom+self.position.relative+self.nom_niveau+self.pouvoirs[2].nom)];
@@ -235,7 +247,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         switch (self.deplacement.y) {
             case 'U':
                 self.deplacement.relative = 'air';
-                if(self.position.y < screen.height-self.handleSprite.clientHeight)
+                if(self.position.y < document.body.clientHeight-self.handleSprite.clientHeight)
                     self.position.y += self.pas;
                 break;
             case 'D':
@@ -330,7 +342,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
         self.majSprite();
         
-        if(position_adversaire.y-handle_sprite_adversaire.clientHeight/2-self.handleSprite.clientHeight < self.position.y && self.position.y < position_adversaire.y+handle_sprite_adversaire.clientHeight-handle_sprite_adversaire.clientHeight/2)
+        if(position_adversaire.y+handle_sprite_adversaire.clientHeight/2-self.handleSprite.clientHeight < self.position.y && self.position.y < position_adversaire.y+handle_sprite_adversaire.clientHeight-handle_sprite_adversaire.clientHeight/2)
         {
             if(self.position.relative == 'gauche' && self.position.x > position_adversaire.x+(handle_sprite_adversaire.clientWidth/2)-self.handleSprite.clientWidth)
             {   
@@ -461,14 +473,14 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             
                 self.animationPouvoirSpecialHandle[1].style = "animation: "+self.pouvoirs[1].nom+" 3s linear infinite;display: block; left: "+x+"px; bottom: "+y+"px";
         }
+            
+        self.regarderAdversaire(position_x_adversaire);
+        self.majSprite();
         
         if(self.entrainDeChargerPouvoirSpecial)
             return;
 
         self.etat = self.pouvoirs[1].nom+'chargement';
-            
-        self.regarderAdversaire(position_x_adversaire);
-        self.majSprite();
         self.entrainDeChargerPouvoirSpecial = true;
     }
 
@@ -579,185 +591,438 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.entrainDeChargerDefenceSpecial = true;
     }
 
-    if(self.controlleur == 'user')
+    self.keydownToBrain = function(e)
     {
-        self.keydownToBrain = function(e)
-        {
-            switch (e.keyCode) {
-                case keyConfig.box:
-                    self.action = 'AB';
-                    self.toucheParlAdversaire = false;
-                    break;
+        switch (e.keyCode) {
+            case keyConfig.box:
+                self.action = 'AB';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case keyConfig.kick:
-                    self.action = 'AK';
-                    self.toucheParlAdversaire = false;
-                    break;
-                    
-                case keyConfig.pouvoir:
-                    self.action = 'PO';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.attackSpecial:
-                    self.action = 'PS';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.block:
-                    self.action = 'DO';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.blockSpecial:
-                    self.action = 'DS';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.transform:
-                    self.action = 'T';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.up:
-                    self.deplacement.y = 'U';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.down:
-                    self.deplacement.y = 'D';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.left:
-                    self.deplacement.x = 'L';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.right:
-                    self.deplacement.x = 'R';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                case keyConfig.pause:
-                    self.wantPause = true;
-                    break;
-
-                default:
-                    break;
-            }
-        };
-
-        self.keyupToBrain = function(e)
-        {
-            switch (e.keyCode) {
-                case keyConfig.up:
-                    self.deplacement.y = '';
-                    break;
-
-                case keyConfig.down:
-                    self.deplacement.y = '';
-                    break;
-
-                case keyConfig.left:
-                    self.deplacement.x = '';
-                    break;
-
-                case keyConfig.right:
-                    self.deplacement.x = '';
-                    break;
-
-                case keyConfig.box:
-                case keyConfig.kick:
-                case keyConfig.pouvoir:
-                case keyConfig.attackSpecial:
-                case keyConfig.block:
-                case keyConfig.blockSpecial:    
-                case keyConfig.transform:
-                    self.action = 'R';
-                    self.toucheParlAdversaire = false;
-                    break;
-
-                default:
-                    break;
-            }
-        };
-
-        self.agir = function(position_adversaire,handle_sprite_adversaire)
-        {
-            if(!self.peutBouger)
-                return;
+            case keyConfig.kick:
+                self.action = 'AK';
+                self.toucheParlAdversaire = false;
+                break;
                 
-            if(self.doitSeDeplacer())
-            {
-                self.seDeplacer(position_adversaire.x);
-            }
-            else if(self.action == 'R')
-            {
-                self.faireRien();
-            }
+            case keyConfig.pouvoir:
+                self.action = 'PO';
+                self.toucheParlAdversaire = false;
+                break;
 
-            switch (self.action) {
-                case 'T':
-                    self.seTransformer(position_adversaire,handle_sprite_adversaire);
-                    break;
+            case keyConfig.attackSpecial:
+                self.action = 'PS';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case 'AB':
-                case 'AK':
-                    self.attaquer(position_adversaire,handle_sprite_adversaire,position_adversaire.x);
-                    self.toucheParlAdversaire = false;
-                    break;
+            case keyConfig.block:
+                self.action = 'DO';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case 'DO':
-                    self.bloquer(position_adversaire.x);
-                    break;
+            case keyConfig.blockSpecial:
+                self.action = 'DS';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case 'PO':
-                    self.chargePouvoir(position_adversaire.x);
-                    break;
+            case keyConfig.transform:
+                self.action = 'T';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case 'PS':
-                    self.chargePouvoirSpecial(position_adversaire.x);
-                    break;
+            case keyConfig.up:
+                self.deplacement.y = 'U';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case 'DS':
-                    self.defenceSpecial(position_adversaire.x);
-                    break;
+            case keyConfig.down:
+                self.deplacement.y = 'D';
+                self.toucheParlAdversaire = false;
+                break;
 
-                case 'R':
-                    switch (self.etat) {
-                        case self.pouvoirs[0].nom:
-                            self.lancerPouvoir(position_adversaire,handle_sprite_adversaire,position_adversaire.x);
-                            break;
+            case keyConfig.left:
+                self.deplacement.x = 'L';
+                self.toucheParlAdversaire = false;
+                break;
 
-                        case self.pouvoirs[1].nom+'chargement':
-                            self.lancerPouvoirSpecial(position_adversaire,handle_sprite_adversaire,position_adversaire.x);
-                            break;
+            case keyConfig.right:
+                self.deplacement.x = 'R';
+                self.toucheParlAdversaire = false;
+                break;
 
-                        case self.pouvoirs[2].nom:
-                            if(self.enDefenceSpecial)
-                                self.desactiverDefenceSpecial();
-                            else
-                                self.activerDefenceSpecial();
-                            break;
-                    
-                        default:
-                            if(!self.enDefenceSpecial)
-                                self.valeurDefence = 0;
-                            break;
-                    }
-                    self.entrainDeSeTransformer = false;
-                    self.entrainDeBloquer = false;
-                    self.entrainDeChargerPouvoir = false;
-                    self.entrainDeChargerPouvoirSpecial = false;
-                    self.entrainDeChargerDefenceSpecial = false;
-                    self.etat = '';
-                    break;
+            case keyConfig.pause:
+                self.wantPause = true;
+                break;
+
+            default:
+                break;
+        }
+    };
+
+    self.keyupToBrain = function(e)
+    {
+        switch (e.keyCode) {
+            case keyConfig.up:
+                self.deplacement.y = '';
+                break;
+
+            case keyConfig.down:
+                self.deplacement.y = '';
+                break;
+
+            case keyConfig.left:
+                self.deplacement.x = '';
+                break;
+
+            case keyConfig.right:
+                self.deplacement.x = '';
+                break;
+
+            case keyConfig.box:
+            case keyConfig.kick:
+            case keyConfig.pouvoir:
+            case keyConfig.attackSpecial:
+            case keyConfig.block:
+            case keyConfig.blockSpecial:    
+            case keyConfig.transform:
+                self.action = 'R';
+                self.toucheParlAdversaire = false;
+                break;
+
+            default:
+                break;
+        }
+
+        if(self.controlleur == 'computer')
+        {
+            e.keyCode = 0;
+        }
+    };
+
+    self.agir = function(position_adversaire,handle_sprite_adversaire)
+    {
+        if(!self.peutBouger)
+            return;
             
-                default:
-                    break;
+        if(self.doitSeDeplacer())
+        {
+            self.seDeplacer(position_adversaire.x);
+        }
+        else if(self.action == 'R')
+        {
+            self.faireRien();
+        }
+
+        switch (self.action) {
+            case 'T':
+                self.seTransformer(position_adversaire,handle_sprite_adversaire);
+                break;
+
+            case 'AB':
+            case 'AK':
+                self.attaquer(position_adversaire,handle_sprite_adversaire,position_adversaire.x);
+                self.toucheParlAdversaire = false;
+                break;
+
+            case 'DO':
+                self.bloquer(position_adversaire.x);
+                break;
+
+            case 'PO':
+                self.chargePouvoir(position_adversaire.x);
+                break;
+
+            case 'PS':
+                self.chargePouvoirSpecial(position_adversaire.x);
+                break;
+
+            case 'DS':
+                self.defenceSpecial(position_adversaire.x);
+                break;
+
+            case 'R':
+                switch (self.etat) {
+                    case self.pouvoirs[0].nom:
+                        self.lancerPouvoir(position_adversaire,handle_sprite_adversaire,position_adversaire.x);
+                        break;
+
+                    case self.pouvoirs[1].nom+'chargement':
+                        self.lancerPouvoirSpecial(position_adversaire,handle_sprite_adversaire,position_adversaire.x);
+                        break;
+
+                    case self.pouvoirs[2].nom:
+                        if(self.enDefenceSpecial)
+                            self.desactiverDefenceSpecial();
+                        else
+                            self.activerDefenceSpecial();
+                        break;
+                
+                    default:
+                        if(!self.enDefenceSpecial)
+                            self.valeurDefence = 0;
+                        break;
+                }
+                self.entrainDeSeTransformer = false;
+                self.entrainDeBloquer = false;
+                self.entrainDeChargerPouvoir = false;
+                self.entrainDeChargerPouvoirSpecial = false;
+                self.entrainDeChargerDefenceSpecial = false;
+                self.etat = '';
+                break;
+        
+            default:
+                break;
+        }
+    };
+
+    if(self.controlleur == 'computer') // Automatise les actions, simuler des keydowns et des keyups
+    {
+        var keyConfig = new KeyToCommand(-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12);
+
+        /* 
+                keyConfig :
+
+        this.left          = -1;
+        this.up            = -2;
+        this.right         = -3;
+        this.down          = -4;
+        this.box           = -5;
+        this.kick          = -6;
+        this.pouvoir       = -7;
+        this.attackSpecial = -8;
+        this.transform     = -9;
+        this.block         = -10;
+        this.blockSpecial  = -11;
+        this.pause         = -12;
+
+        */
+
+
+        self.keysdown = new Array();
+        
+        function pushInKeysdownIfNotIn(val)
+        {
+            if(self.keysdown.indexOf(val) == -1){
+                self.keysdown.push(val);
             }
-        };
+        }
+        
+        function popInKeysdown(val)
+        {
+            self.keysdown.splice(self.keysdown.indexOf(val),1);
+        }
+
+        function avancer(position_adversaire)
+        {
+            if(position_adversaire.relative == 'gauche' && position_adversaire.x+60 < self.position.x)
+            {
+                self.keydownEventSimulation.keyCode = -1;
+                popInKeysdown(-3);
+                pushInKeysdownIfNotIn(-1);
+            }
+            else if(position_adversaire.relative == 'droite' && position_adversaire.x > self.position.x+60)
+            {
+                self.keydownEventSimulation.keyCode = -3;
+                popInKeysdown(-1);
+                pushInKeysdownIfNotIn(-3);
+            }
+            else
+                self.ieme_sousActionAuto++;
+        }
+
+        function reculer(position_adversaire)
+        {
+            var x_rand = rand(0,Terrain.clientWidth);
+            if(position_adversaire.relative == 'droite' && position_adversaire.x < self.position.x + x_rand)
+            {
+                self.keydownEventSimulation.keyCode = -1;
+                popInKeysdown(-3);
+                pushInKeysdownIfNotIn(-1);
+            }
+            else if(position_adversaire.relative == 'gauche' && position_adversaire.x + x_rand > self.position.x)
+            {
+                self.keydownEventSimulation.keyCode = -3;
+                popInKeysdown(-1);
+                pushInKeysdownIfNotIn(-3);
+            }
+            else
+                self.ieme_sousActionAuto++;
+        }
+
+        function atteindre_hauteur(position_adversaire)
+        {
+            if(position_adversaire.y+60 < self.position.y)
+            {
+                self.keydownEventSimulation.keyCode = -4;
+                popInKeysdown(-2);
+                pushInKeysdownIfNotIn(-4);
+            }
+            else if(position_adversaire.y > self.position.y+60)
+            {
+                self.keydownEventSimulation.keyCode = -2;
+                popInKeysdown(-4);
+                pushInKeysdownIfNotIn(-2);
+            }
+            else
+                self.ieme_sousActionAuto++;
+        }
+
+        function eviter_hauteur(position_adversaire)
+        {
+            var y_rand = rand(0,Terrain.clientHeight);
+            if(y_rand < self.position.y-60)
+            {
+                self.keydownEventSimulation.keyCode = -4;
+                popInKeysdown(-2);
+                pushInKeysdownIfNotIn(-4);
+            }
+            else if(y_rand > self.position.y+60)
+            {
+                self.keydownEventSimulation.keyCode = -2;
+                popInKeysdown(-4);
+                pushInKeysdownIfNotIn(-2);
+            }
+            else
+                self.ieme_sousActionAuto++;
+        }
+
+        function arret_deplacement_x()
+        {
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function arret_deplacement_y()
+        {
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function attaquer()
+        {
+            self.keydownEventSimulation.keyCode = rand(-6,-5);
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            self.ieme_sousActionAuto++;
+        }
+
+        function arreter_attaque()
+        {
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function charger_pouvoir()
+        {
+            if(!self.avoirEnergiePlusDe(self.pouvoirs[0].energie_necessaire))
+            {
+                // Va pour l'action "s'approcher puis kick/box"
+                self.actionAuto = 0;
+                self.ieme_sousActionAuto = 0;
+                return;
+            }
+
+            self.keydownEventSimulation.keyCode = -7;
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            self.ieme_sousActionAuto++;
+        }
+
+        function lancer_pouvoir()
+        {
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function charger_pouvoir_special()
+        {
+            if(!self.avoirEnergiePlusDe(self.pouvoirs[1].energie_necessaire))
+            {
+                // Va pour le chargement du pouvoir ordinaire
+                self.actionAuto = 1;
+                self.ieme_sousActionAuto = 2;
+                return;
+            }
+
+            self.keydownEventSimulation.keyCode = -8;
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            if(self.pouvoirSpecialPres)
+                self.ieme_sousActionAuto++;
+        }
+
+        function lancer_pouvoir_special()
+        {
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function attendre_fin_pouvoir_special()
+        {
+            if(!self.lancementPouvoirSpecial)
+                self.ieme_sousActionAuto++;
+        }
+        
+        // Les actions que le perso peut faire
+        var actions = [
+            [// action 0: avancer et monter/descendre puis kick/box
+                avancer,
+                arret_deplacement_x,
+                atteindre_hauteur,
+                arret_deplacement_y,
+                attaquer, // Mba attaquer elaela
+                attaquer,
+                attaquer,
+                arreter_attaque
+            ],
+            [// action 1: monter/descendre puis charger et lancer pouvoir
+                atteindre_hauteur,
+                arret_deplacement_y,
+                charger_pouvoir,
+                charger_pouvoir, // Atao hita le izy micharge anle pouvoir fa otran mapme be le avy de lasa fotsiny tsy hita akory
+                charger_pouvoir,
+                charger_pouvoir,
+                lancer_pouvoir
+            ],
+            [// action 2: monter/descendre puis charger et lancer pouvoir special
+                atteindre_hauteur,
+                arret_deplacement_y,
+                charger_pouvoir_special,
+                lancer_pouvoir_special,
+                attendre_fin_pouvoir_special
+            ],
+            [// action 3: reculer puis charger et lancer pouvoir
+                reculer,
+                arret_deplacement_x,
+                charger_pouvoir,
+                lancer_pouvoir
+            ],
+            [// aciotn 4: évite juste l'auteur de l'adversaire
+                eviter_hauteur,
+                arret_deplacement_y
+            ]
+        ];
+
+        self.actionAuto = rand(0,4);
+        self.ieme_sousActionAuto = 0;
+
+        self.decisionAuto = function(position_adversaire)
+        {
+            if(actions[self.actionAuto][self.ieme_sousActionAuto])
+                actions[self.actionAuto][self.ieme_sousActionAuto](position_adversaire);
+            else
+            {
+                self.ieme_sousActionAuto = 0;
+                // return; // Atao manao action hafa, ovaina ny actionAuto @ alalan function
+                self.actionAuto = rand(0,4); // Ito le manova actionAuto eh!
+            }
+        }
     }
 
     self.reinitialiser = function(position_x,position_adversaire,handle_sprite_adversaire)
@@ -810,5 +1075,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
         self.arretPouvoirSpecial();
         self.seDeplacer(position_adversaire.x);
+        self.handleAction = null;
     }
 }
