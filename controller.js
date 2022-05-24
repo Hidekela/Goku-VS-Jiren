@@ -1,4 +1,4 @@
-function KeyToCommand(left = 37, up = 38, right = 39, down = 40, box = 81, kick = 68, pouvoir = 90, attackSpecial = 83, transform = 49, block = 65, blockSpecial = 69, pause = 27) {
+function KeyToCommand(left = 70, up = 84, right = 72, down = 71, box = 81, kick = 68, pouvoir = 90, attackSpecial = 83, transform = 49, block = 65, blockSpecial = 69, pause = 27) {
     // e.keyCode => KeyToCommand.smthg
     this.left          = left;
     this.up            = up;
@@ -17,10 +17,10 @@ function KeyToCommand(left = 37, up = 38, right = 39, down = 40, box = 81, kick 
 /* 
         Par défaut:
 
-this.left          = 37; // touche gauche
-this.up            = 38; // touche haut
-this.right         = 39; // touche droite
-this.down          = 40; // touche bas
+this.left          = 70; // F
+this.up            = 84; // T
+this.right         = 72; // H
+this.down          = 71; // G
 this.box           = 81; // Q
 this.kick          = 68; // D
 this.pouvoir       = 90; // Z

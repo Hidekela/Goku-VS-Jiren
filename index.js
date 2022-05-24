@@ -191,19 +191,19 @@ function Game(player1, player2)
 
 var keyConfigGoku = null;
 
-// keyConfigGoku = new KeyToCommand();
+ keyConfigGoku = new KeyToCommand();
 
 var kamehamehaStyle = "@keyframes kamehameha {from{transform: rotate(0deg)} to{transform: rotate(360deg)}}";
 var animationKamehameha = new elementdAnimation('kamehamehaanimation',1,-105,1,-22,270,kamehamehaStyle);
 var position = new PositionPersonnage('gauche','',0,0);
 
 // Normal
-// var puissances = [new PuissancePersonnage(0.3,0.4),new PuissancePersonnage(0.6,0.7),new PuissancePersonnage(1,1)];
-// var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[40,32,25],[10,10,10],puissances);
+var puissances = [new PuissancePersonnage(0.3,0.4),new PuissancePersonnage(0.6,0.7),new PuissancePersonnage(1,1)];
+var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[40,32,25],[10,10,10],puissances);
 
 // Essaie atao mifampicontre ho azy zareo
-var puissances = [new PuissancePersonnage(1,1)];
-var niveaux = new NiveauxPersonnage(0,['blue'],[12000],[25],[10],puissances);
+// var puissances = [new PuissancePersonnage(1,1)];
+// var niveaux = new NiveauxPersonnage(0,['blue'],[12000],[25],[10],puissances);
 
 var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',0.3,50,1000,animationKamehameha),new PouvoirPersonnage('teleportation','D',-1,10,0,null,'opacity: 0',40)];
 
@@ -212,22 +212,22 @@ var Songoku = new Personnage('goku',keyConfigGoku,200,100,position,niveaux,pouvo
 
 var keyConfigJiren = null;
 
-// keyConfigJiren = new KeyToCommand(56,57,48,169,61,73,79,80,160,164,170,27);
+//  keyConfigJniren = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,170);
 
 /*
         Jiren keys:
 
-left          = 56;  // touche 8 (non numpad)
-up            = 57;  // touche 9 (non numpad)
-right         = 48;  // touche 0 (non numpad)
-down          = 169; // touche )
-box           = 61;  // touche =
-kick          = 73;  // I
+left          = 37;  // touche gauche
+up            = 38;  // touche haut
+right         = 39;  // touche droite
+down          = 40;  // touche bas
+box           = 75;  // K
+kick          = 77;  // M
 pouvoir       = 79;  // O
-attackSpecial = 80;  // P
-transform     = 160; // touche ^
-block         = 164; // touche $
-blockSpecial  = 170; // touche *
+attackSpecial = 76;  // L
+transform     = 56;  // 8
+block         = 73;  // I
+blockSpecial  = 80;  // P
 pause         = 170; // touche Echap
 
 */

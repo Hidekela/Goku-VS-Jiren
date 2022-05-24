@@ -365,3 +365,88 @@ ul li:hover button
     transform: skewX(30deg);
     text-shadow: 0 0 5px #0ba710;
 }
+
+/* Command */
+
+#command_page
+{
+    position: absolute;
+    left: -100%;
+    top: 0;
+    min-width: 100%;
+    min-height: 120%;
+    background: #1010109a;
+    z-index: 2;
+}
+
+#command_page div
+{
+    width: 75%;
+    padding: 20px 0;
+    margin: auto;
+    margin-top: 20px;
+    background: #252525;
+    color: silver;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+}
+
+#command_page h2
+{
+    font-size: 50px;
+    text-align: center;
+    text-shadow: 0 0 5px #0ba710;
+    width: 100%;
+    margin: 20px 0;
+}
+
+#command_page table
+{
+    text-align: left;
+    width: 90%;
+    padding: 10px;
+    margin: auto;
+    background: #101010;
+    border: 3px double #0ba710;
+}
+
+#command_page td
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.key_icon
+{
+    padding: 10px;
+    background: black;
+    border: 1px outset rgb(26, 26, 26);
+    border-radius: 5px;
+}
+
+#command_page p
+{
+    width: 90%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#hide_command_button
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    width: 100%;
+    color: silver;
+    background: black;
+    border: none;
+    text-shadow: 0 0 5px #0ba710;
+    padding: 5px 0;
+    margin: 0;
+}
+
+#hide_command_button:hover
+{
+    cursor: pointer;
+    text-shadow: 0 0 15px #0ba710;
+    box-shadow: 0 0 5px #0ba710;
+}

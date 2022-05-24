@@ -248,9 +248,56 @@
             <h1>GOKU VS JIREN</h1>
             <ul>
                 <li><button id="play_button" type="button">PLAY</button></li>
-                <li><button type="button">COMMAND</button></li>
+                <li><button id="command_button" type="button">COMMAND</button></li>
                 <li><button id="quit_button" type="button">QUIT</button></li>
             </ul>
+        </section>
+        <section id="command_page" style="display:block;">
+            <div>
+                <h2>GOKU</h2>
+                <table>
+                    <tr>
+                        <td><span class="key_icon">T</span> up</td>
+                        <td><span class="key_icon">G</span> down</td>
+                        <td><span class="key_icon">F</span> left</td>
+                        <td><span class="key_icon">H</span> right</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">Z</span> fireball</td>
+                        <td><span class="key_icon">S</span> special power</td>
+                        <td><span class="key_icon">Q</span> box</td>
+                        <td><span class="key_icon">D</span> kick</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">&</span> transform</td>
+                        <td><span class="key_icon">A</span> block</td>
+                        <td><span class="key_icon">E</span> special defense</td>
+                        <td><span class="key_icon">Escape</span> pause</td>
+                    </tr>
+                </table>
+                <h2>JIREN</h2>
+                <table>
+                    <tr>
+                        <td><span class="key_icon">↑</span> up</td>
+                        <td><span class="key_icon">↓</span> down</td>
+                        <td><span class="key_icon">←</span> left</td>
+                        <td><span class="key_icon">→</span> right</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">O</span> fireball</td>
+                        <td><span class="key_icon">L</span> special power</td>
+                        <td><span class="key_icon">K</span> box</td>
+                        <td><span class="key_icon">M</span> kick</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">_</span> transform</td>
+                        <td><span class="key_icon">I</span> block</td>
+                        <td><span class="key_icon">P</span> special defense</td>
+                        <td><span class="key_icon">Escape</span> pause</td>
+                    </tr>
+                </table>
+                <p><button id="hide_command_button" type="button">DONE</button></p>
+            </div>
         </section>
         <section id="win_page" style="display:none">
             <h2 id="winner"></h2>
@@ -310,6 +357,14 @@
         document.getElementById('play_button').addEventListener('click',function(e){
             document.getElementById('menu_page').style = "top: -120%; transition: top 0.5s";
             game.start();
+        },false);
+
+        document.getElementById('command_button').addEventListener('click',function(e){
+            document.getElementById('command_page').style = "left: 0; transition: left 0.5s";
+        },false);
+
+        document.getElementById('hide_command_button').addEventListener('click',function(e){
+            document.getElementById('command_page').style = "left: -100%; transition: left 0.5s";
         },false);
 
         document.getElementById('quit_button').addEventListener('click',function(e){

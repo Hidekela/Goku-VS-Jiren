@@ -84,7 +84,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.handleAction = null;
     self.nom = nom;
-    self.controlleur = keyConfig != null? 'user' : 'computer';
     self.vie_max = vie_max;
     self.vie = vie_max;
     self.energie_max = energie_max;
@@ -167,6 +166,26 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     self.barreVieRestant = document.getElementById('vie_restante_'+self.nom);
     self.barreEnergieRestant = document.getElementById('energie_restante_'+self.nom);
+
+    self.controlleur = keyConfig? 'user' : 'computer';
+    self.keyConfig = keyConfig? keyConfig : new KeyToCommand(-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12);
+    /* 
+            keyConfig :
+
+    this.left          = -1;
+    this.up            = -2;
+    this.right         = -3;
+    this.down          = -4;
+    this.box           = -5;
+    this.kick          = -6;
+    this.pouvoir       = -7;
+    this.attackSpecial = -8;
+    this.transform     = -9;
+    this.block         = -10;
+    this.blockSpecial  = -11;
+    this.pause         = -12;
+
+    */
 
     var Terrain = document.body;
     
@@ -594,62 +613,62 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.keydownToBrain = function(e)
     {
         switch (e.keyCode) {
-            case keyConfig.box:
+            case self.keyConfig.box:
                 self.action = 'AB';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.kick:
+            case self.keyConfig.kick:
                 self.action = 'AK';
                 self.toucheParlAdversaire = false;
                 break;
                 
-            case keyConfig.pouvoir:
+            case self.keyConfig.pouvoir:
                 self.action = 'PO';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.attackSpecial:
+            case self.keyConfig.attackSpecial:
                 self.action = 'PS';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.block:
+            case self.keyConfig.block:
                 self.action = 'DO';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.blockSpecial:
+            case self.keyConfig.blockSpecial:
                 self.action = 'DS';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.transform:
+            case self.keyConfig.transform:
                 self.action = 'T';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.up:
+            case self.keyConfig.up:
                 self.deplacement.y = 'U';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.down:
+            case self.keyConfig.down:
                 self.deplacement.y = 'D';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.left:
+            case self.keyConfig.left:
                 self.deplacement.x = 'L';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.right:
+            case self.keyConfig.right:
                 self.deplacement.x = 'R';
                 self.toucheParlAdversaire = false;
                 break;
 
-            case keyConfig.pause:
+            case self.keyConfig.pause:
                 self.wantPause = true;
                 break;
 
@@ -661,29 +680,29 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.keyupToBrain = function(e)
     {
         switch (e.keyCode) {
-            case keyConfig.up:
+            case self.keyConfig.up:
                 self.deplacement.y = '';
                 break;
 
-            case keyConfig.down:
+            case self.keyConfig.down:
                 self.deplacement.y = '';
                 break;
 
-            case keyConfig.left:
+            case self.keyConfig.left:
                 self.deplacement.x = '';
                 break;
 
-            case keyConfig.right:
+            case self.keyConfig.right:
                 self.deplacement.x = '';
                 break;
 
-            case keyConfig.box:
-            case keyConfig.kick:
-            case keyConfig.pouvoir:
-            case keyConfig.attackSpecial:
-            case keyConfig.block:
-            case keyConfig.blockSpecial:    
-            case keyConfig.transform:
+            case self.keyConfig.box:
+            case self.keyConfig.kick:
+            case self.keyConfig.pouvoir:
+            case self.keyConfig.attackSpecial:
+            case self.keyConfig.block:
+            case self.keyConfig.blockSpecial:    
+            case self.keyConfig.transform:
                 self.action = 'R';
                 self.toucheParlAdversaire = false;
                 break;
@@ -776,27 +795,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     if(self.controlleur == 'computer') // Automatise les actions, simuler des keydowns et des keyups
     {
-        var keyConfig = new KeyToCommand(-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12);
-
-        /* 
-                keyConfig :
-
-        this.left          = -1;
-        this.up            = -2;
-        this.right         = -3;
-        this.down          = -4;
-        this.box           = -5;
-        this.kick          = -6;
-        this.pouvoir       = -7;
-        this.attackSpecial = -8;
-        this.transform     = -9;
-        this.block         = -10;
-        this.blockSpecial  = -11;
-        this.pause         = -12;
-
-        */
-
-
         self.keysdown = new Array();
         
         function pushInKeysdownIfNotIn(val)
@@ -813,13 +811,13 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function avancer(position_adversaire)
         {
-            if(position_adversaire.relative == 'gauche' && position_adversaire.x+60 < self.position.x)
+            if(position_adversaire.relative == 'gauche' && position_adversaire.x+60 < self.position.x && self.action == 'R') // Action == 'R' pour éviter l'arret du mouvement en cas d'érreur
             {
                 self.keydownEventSimulation.keyCode = -1;
                 popInKeysdown(-3);
                 pushInKeysdownIfNotIn(-1);
             }
-            else if(position_adversaire.relative == 'droite' && position_adversaire.x > self.position.x+60)
+            else if(position_adversaire.relative == 'droite' && position_adversaire.x > self.position.x+60 && self.action == 'R')
             {
                 self.keydownEventSimulation.keyCode = -3;
                 popInKeysdown(-1);
@@ -832,7 +830,9 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         function reculer(position_adversaire)
         {
             var x_rand = rand(0,Terrain.clientWidth);
-            if(position_adversaire.relative == 'droite' && position_adversaire.x < self.position.x + x_rand)
+            if(self.position.x <= 0 || self.position.x >= Terrain.clientWidth - self.sprite.clientWidth)
+                self.ieme_sousActionAuto++;
+            else if(position_adversaire.relative == 'droite' && position_adversaire.x < self.position.x + x_rand)
             {
                 self.keydownEventSimulation.keyCode = -1;
                 popInKeysdown(-3);
@@ -843,6 +843,24 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                 self.keydownEventSimulation.keyCode = -3;
                 popInKeysdown(-1);
                 pushInKeysdownIfNotIn(-3);
+            }
+            else
+                self.ieme_sousActionAuto++;
+        }
+
+        function se_mettre_derriere(position_adversaire)
+        {
+            if(position_adversaire.relative == 'gauche' && self.position.x > position_adversaire.x)
+            {
+                self.keydownEventSimulation.keyCode = -1;
+                popInKeysdown(-3);
+                pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            }
+            else if(position_adversaire.relative == 'droite' && self.position.x < position_adversaire.x)
+            {
+                self.keydownEventSimulation.keyCode = -3;
+                popInKeysdown(-1);
+                pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
             }
             else
                 self.ieme_sousActionAuto++;
@@ -866,16 +884,16 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                 self.ieme_sousActionAuto++;
         }
 
-        function eviter_hauteur(position_adversaire)
+        function eviter_hauteur()
         {
             var y_rand = rand(0,Terrain.clientHeight);
-            if(y_rand < self.position.y-60)
+            if(y_rand < self.position.y-200)
             {
                 self.keydownEventSimulation.keyCode = -4;
                 popInKeysdown(-2);
                 pushInKeysdownIfNotIn(-4);
             }
-            else if(y_rand > self.position.y+60)
+            else if(y_rand > self.position.y+200)
             {
                 self.keydownEventSimulation.keyCode = -2;
                 popInKeysdown(-4);
@@ -903,6 +921,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function attaquer()
         {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
             self.keydownEventSimulation.keyCode = rand(-6,-5);
             pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
             self.ieme_sousActionAuto++;
@@ -910,6 +934,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function arreter_attaque()
         {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
             popInKeysdown(self.keydownEventSimulation.keyCode);
             self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
             self.keydownEventSimulation.keyCode = 0;
@@ -918,11 +948,19 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function charger_pouvoir()
         {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
             if(!self.avoirEnergiePlusDe(self.pouvoirs[0].energie_necessaire))
             {
                 // Va pour l'action "s'approcher puis kick/box"
                 self.actionAuto = 0;
                 self.ieme_sousActionAuto = 0;
+                self.keydownEventSimulation.keyCode = -7;
+                pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
                 return;
             }
 
@@ -933,6 +971,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function lancer_pouvoir()
         {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
             popInKeysdown(self.keydownEventSimulation.keyCode);
             self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
             self.keydownEventSimulation.keyCode = 0;
@@ -941,6 +985,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function charger_pouvoir_special()
         {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
             if(!self.avoirEnergiePlusDe(self.pouvoirs[1].energie_necessaire))
             {
                 // Va pour le chargement du pouvoir ordinaire
@@ -957,6 +1007,12 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function lancer_pouvoir_special()
         {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
             popInKeysdown(self.keydownEventSimulation.keyCode);
             self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
             self.keydownEventSimulation.keyCode = 0;
@@ -968,6 +1024,87 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             if(!self.lancementPouvoirSpecial)
                 self.ieme_sousActionAuto++;
         }
+
+        function bloquer()
+        {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
+            self.keydownEventSimulation.keyCode = -10;
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            self.ieme_sousActionAuto++;
+        }
+
+        function arreter_bloque()
+        {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function charger_defence_special()
+        {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
+            self.keydownEventSimulation.keyCode = -11;
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            self.ieme_sousActionAuto++;
+        }
+
+        function lancer_defence_special()
+        {
+            if(self.enDefenceSpecial)
+            {
+                self.ieme_sousActionAuto++;
+                return;
+            }
+
+            if(!self.avoirEnergiePlusDe(self.pouvoirs[2].energie_necessaire))
+            {
+                // Va pour le chargement du defence ordinaire
+                self.actionAuto = 5;
+                self.ieme_sousActionAuto = 0;
+
+                popInKeysdown(self.keydownEventSimulation.keyCode);
+                self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+                self.keydownEventSimulation.keyCode = 0;
+                return;
+            }
+
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
+
+        function charger_arret_defence_special()
+        {
+            self.keydownEventSimulation.keyCode = -11;
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            self.ieme_sousActionAuto++;
+        }
+
+        function arreter_defence_special()
+        {
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = -11;
+            self.keydownEventSimulation.keyCode = 0;
+            self.ieme_sousActionAuto++;
+        }
         
         // Les actions que le perso peut faire
         var actions = [
@@ -976,7 +1113,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                 arret_deplacement_x,
                 atteindre_hauteur,
                 arret_deplacement_y,
-                attaquer, // Mba attaquer elaela
+                attaquer, // Attaquer pendant un certain moment
                 attaquer,
                 attaquer,
                 arreter_attaque
@@ -984,8 +1121,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             [// action 1: monter/descendre puis charger et lancer pouvoir
                 atteindre_hauteur,
                 arret_deplacement_y,
-                charger_pouvoir,
-                charger_pouvoir, // Atao hita le izy micharge anle pouvoir fa otran mapme be le avy de lasa fotsiny tsy hita akory
+                charger_pouvoir, // Charger un peu plus longtemps pour pouvoir apercevoir le chargement du pouvoir
                 charger_pouvoir,
                 charger_pouvoir,
                 lancer_pouvoir
@@ -1003,13 +1139,61 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
                 charger_pouvoir,
                 lancer_pouvoir
             ],
-            [// aciotn 4: évite juste l'auteur de l'adversaire
+            [// aciotn 4: évite juste l'hauteur de l'adversaire
                 eviter_hauteur,
                 arret_deplacement_y
+            ],
+            [// action 5: bloquer, pouvoir puis bloquer
+                bloquer, // bloquer pendant un certain moment
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                arreter_bloque,
+                charger_pouvoir,
+                charger_pouvoir,
+                charger_pouvoir,
+                lancer_pouvoir,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                bloquer,
+                arreter_bloque
+            ],
+            [// action 6: lancer defence special puis eviter hauteur et se mettre derriere l'adversaire
+                charger_defence_special,
+                lancer_defence_special,
+                eviter_hauteur,
+                arret_deplacement_y,
+                charger_arret_defence_special,
+                arreter_defence_special,
+                se_mettre_derriere,
+                arret_deplacement_x
+            ],
+            [// action 7: se mettre derriere l'adversaire et monter/descendre puis kick/box
+                se_mettre_derriere,
+                arret_deplacement_x,
+                atteindre_hauteur,
+                arret_deplacement_y,
+                attaquer, // Attaquer pendant un certain moment
+                attaquer,
+                attaquer,
+                arreter_attaque
             ]
         ];
 
-        self.actionAuto = rand(0,4);
+        self.actionAuto = rand(0,7);
         self.ieme_sousActionAuto = 0;
 
         self.decisionAuto = function(position_adversaire)
@@ -1020,7 +1204,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             {
                 self.ieme_sousActionAuto = 0;
                 // return; // Atao manao action hafa, ovaina ny actionAuto @ alalan function
-                self.actionAuto = rand(0,4); // Ito le manova actionAuto eh!
+                self.actionAuto = rand(0,7); // Ito le manova actionAuto eh!
             }
         }
     }
