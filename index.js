@@ -9,7 +9,7 @@ function Game(player1, player2)
     self.player2 = player2;
     self.reconstitutionEnergie = null;
 
-    self.init = function()
+    self.reinit = function()
     {
         self.player1.reinitialiser(0,self.player2.position,self.player2.handleSprite);
         self.player2.reinitialiser(screen.width-150,self.player1.position,self.player1.handleSprite);
@@ -25,8 +25,6 @@ function Game(player1, player2)
 
     self.start = function()
     {
-        self.init();
-
         self.handleGame = setInterval(self.logiques,vitesse_logiques,player1,player2);
         self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse,self.player2.position,self.player2.handleSprite);
         self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse,self.player1.position,self.player1.handleSprite);
