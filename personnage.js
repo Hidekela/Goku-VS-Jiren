@@ -850,7 +850,9 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         function se_mettre_derriere(position_adversaire)
         {
-            if(position_adversaire.relative == 'gauche' && self.position.x > position_adversaire.x)
+            if(position_adversaire.x <= 0 || position_adversaire.x >= Terrain.clientWidth - self.sprite.clientWidth)
+                self.ieme_sousActionAuto++;
+            else if(position_adversaire.relative == 'gauche' && self.position.x > position_adversaire.x)
             {
                 self.keydownEventSimulation.keyCode = -1;
                 popInKeysdown(-3);
