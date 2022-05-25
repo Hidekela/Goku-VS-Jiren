@@ -1215,7 +1215,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     {
         self.position.x = position_x;
         self.position.y = 0;
-        self.position.relative = position_adversaire.relative == 'droite'? 'gauche' : 'droite';
+        self.position.relative = position_x? 'gauche' : 'droite';
         self.action = 'R';
         self.etat = '';
         self.deplacement.x = '';

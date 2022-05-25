@@ -274,17 +274,37 @@ ul
     font-size: 120px;
     font-style: italic;
     text-align: center;
-    text-shadow: 0 0 3px #0ba710;
+    text-shadow: 10px 0 15px #0ba710;
     display: inline-block;
     width: 50%;
+    margin-top: 15%;
+    vertical-align: top;
 }
 
-#menu_page ul
+#menu_page div
 {
     display: inline-block;
     width: 45%;
     vertical-align: top;
-    margin-top: 20%;
+    margin-top: 15%;
+}
+
+#menu_page ul
+{
+    width: 100%;
+}
+
+.underlined
+{
+    text-decoration: underline;
+}
+
+#synopsis_text
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: silver;
+    margin-top: 15%;
 }
 
 #win_page h2
@@ -292,7 +312,7 @@ ul
     font-family: Arial, Helvetica, sans-serif;
     font-size: 100px;
     text-align: center;
-    text-shadow: 0 0 5px #0ba710;
+    text-shadow: 10px 0 15px #0ba710;
     color: rgba(192, 192, 192, 0.959);
     transform: skewX(-30deg);
     width: 100%;
@@ -363,7 +383,7 @@ ul li:hover button
 {
     cursor: pointer;
     transform: skewX(30deg);
-    text-shadow: 0 0 5px #0ba710;
+    text-shadow: 0 0 15px #0ba710;
 }
 
 /* Command */
@@ -395,7 +415,7 @@ ul li:hover button
 {
     font-size: 50px;
     text-align: center;
-    text-shadow: 0 0 5px #0ba710;
+    text-shadow: 0 0 15px #0ba710;
     width: 100%;
     margin: 20px 0;
 }
@@ -426,7 +446,7 @@ ul li:hover button
 
 #command_page p
 {
-    width: 90%;
+    width: 50%;
     margin: auto;
     margin-top: 20px;
 }
@@ -436,10 +456,12 @@ ul li:hover button
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
     width: 100%;
-    color: silver;
-    background: black;
-    border: none;
-    text-shadow: 0 0 5px #0ba710;
+    color: #707070;
+    background: #080808;
+    border-top: 3px solid #104010;
+    border-bottom: 3px solid #102010;
+    border-left: 3px solid #101010;
+    border-right: 3px solid #101010;
     padding: 5px 0;
     margin: 0;
 }
@@ -447,6 +469,7 @@ ul li:hover button
 #hide_command_button:hover
 {
     cursor: pointer;
+    color: silver;
     text-shadow: 0 0 15px #0ba710;
     box-shadow: 0 0 5px #0ba710;
 }
@@ -460,7 +483,7 @@ ul li:hover button
     top: 0;
     min-width: 100%;
     min-height: 120%;
-    background: #1010109a;
+    background: #101010bb;
     display: none;
     z-index: 1;
 }
@@ -473,7 +496,7 @@ ul li:hover button
     font-family: Arial, Helvetica, sans-serif;
     font-size: 100px;
     text-align: center;
-    text-shadow: 0 0 5px #0ba710;
+    text-shadow: 0 0 15px #0ba710;
     color: rgba(192, 192, 192, 0.959);
     transform: skewX(-30deg);
     width: 100%;

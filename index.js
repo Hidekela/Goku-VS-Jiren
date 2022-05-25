@@ -183,7 +183,7 @@ function Game(player1, player2)
 
     self.pause = function()
     {
-        alert("\t\t\t\t\t\t\tPause\n\n\t\t\t\t\tCliquez sur OK pour Play");
+        alert("\t\t\t\t\t\t\t Pause\n\n\t\t\t\t\t\tClick OK to Play");
     };
 }
 
