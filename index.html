@@ -262,7 +262,7 @@
                     <li><label id="goku_control_label"><input type="checkbox" id="goku_control_check">GOKU</label></li>
                     <li><label id="jiren_control_label"><input type="checkbox" id="jiren_control_check">JIREN</label></li>
                 </ul>
-                <p><button id="play_game_button">PLAY</button></p>
+                <p><button id="return_game_button">RETURN</button><button id="play_game_button">PLAY</button></p>
                 <p id="control_note_text"><span class="underlined">Note</span> : All unchecked characters will be controlled by computer.<br>Goku's special power (kamehameha) must be charged for at least one second (1s)</p>
             </div>
             <script>
@@ -397,6 +397,10 @@
         document.getElementById('play_button').addEventListener('click',function(e){
             document.getElementById('setting_game_page').style = "top: 0; transition: top 0.5s";
         },false);
+        
+        document.getElementById('return_game_button').addEventListener('click',function(e){
+            document.getElementById('setting_game_page').style = "top: -130%; transition: top 0.5s";
+        },true);
         
         document.getElementById('play_game_button').addEventListener('click',function(e){
             document.getElementById('setting_game_page').style = "top: -130%; transition: top 0.5s";
