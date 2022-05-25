@@ -210,7 +210,7 @@ var Songoku = new Personnage('goku',keyConfigGoku,200,100,position,niveaux,pouvo
 
 var keyConfigJiren = null;
 
-//  keyConfigJniren = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,170);
+//  keyConfigJiren = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,170);
 
 /*
         Jiren keys:
