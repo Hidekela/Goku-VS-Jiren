@@ -78,12 +78,12 @@ function Game(player1, player2)
 
         self.reconstitutionEnergie = setInterval(function()
         {
-            if(player1.energie < player1.energie_max)
+            if(!player1.enDefenceSpecial && player1.energie < player1.energie_max)
             {
                 player1.energie++;
                 player1.barreEnergieRestant.style = 'width: '+player1.energie+'%';
             }
-            if(player2.energie < player2.energie_max)
+            if(!player2.enDefenceSpecialplayer2.energie < player2.energie_max)
             {
                 player2.energie++;
                 player2.barreEnergieRestant.style = 'width: '+player2.energie+'%';
@@ -170,6 +170,9 @@ function Game(player1, player2)
                 self.player2.chargementPouvoirSpecial = null;
                 self.player2.desactiverAnimationPouvoir();
             }
+            // Augmenter l'énergie du perso touché
+            self.player2.energie = self.player2.energie >= self.player2.energie_max? self.player2.energie_max : self.player2.energie+1;
+            self.player2.majBarreEnergie();
         }
         else if(!self.player1.lancementPouvoirSpecial && !self.player2.lancementPouvoirSpecial)
         {
@@ -193,6 +196,9 @@ function Game(player1, player2)
                 self.player1.chargementPouvoirSpecial = null;
                 self.player1.desactiverAnimationPouvoir();
             }
+            // Augmenter l'énergie du perso touché
+            self.player1.energie = self.player1.energie >= self.player1.energie_max? self.player1.energie_max : self.player1.energie+1;
+            self.player1.majBarreEnergie();
         }
         else if(!self.player2.lancementPouvoirSpecial && !self.player1.lancementPouvoirSpecial)
         {

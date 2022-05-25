@@ -138,7 +138,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
     /* Only for computer controller ******/
     self.keysdown = new Array();
-    self.actionAuto = rand(0,7);
+    self.actionAuto = rand(0,8);
     self.ieme_sousActionAuto = 0;
     self.automatismeID = null;
     self.decisionAuto = null;
@@ -857,7 +857,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         // Pour les persos auto
         if(self.controlleur == 'computer')
         {
-            self.actionAuto = rand(0,7);
+            self.actionAuto = rand(0,8);
             self.niveau = self.liste_niveaux.max;
             self.majNiveau(position_adversaire,handle_sprite_adversaire);
         }
@@ -928,6 +928,24 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
         }
         else if(position_adversaire.relative == 'droite' && self.position.x < position_adversaire.x)
+        {
+            self.keydownEventSimulation.keyCode = -3;
+            popInKeysdown(-1);
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        }
+        else
+            self.ieme_sousActionAuto++;
+    }
+
+    function se_mettre_au_milieu_terrain()
+    {
+        if(self.position.x-60 > Terrain.clientWidth/2)
+        {
+            self.keydownEventSimulation.keyCode = -1;
+            popInKeysdown(-3);
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        }
+        else if(self.position.x+60 < Terrain.clientWidth/2)
         {
             self.keydownEventSimulation.keyCode = -3;
             popInKeysdown(-1);
@@ -1072,7 +1090,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         self.keydownEventSimulation.keyCode = -8;
         pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-        if(self.pouvoirSpecialPres)
+        if(self.pouvoirSpecialPres || self.toucheParlAdversaire)
             self.ieme_sousActionAuto++;
     }
 
@@ -1261,6 +1279,10 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             attaquer,
             attaquer,
             arreter_attaque
+        ],
+        [// action 8: se mettre au milieu du terrain en abscisse
+            se_mettre_au_milieu_terrain,
+            arret_deplacement_x
         ]
     ];
 
@@ -1272,7 +1294,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         {
             self.ieme_sousActionAuto = 0;
             // return; // Atao manao action hafa, ovaina ny actionAuto @ alalan function
-            self.actionAuto = rand(0,7); // Ito le manova actionAuto eh!
+            self.actionAuto = rand(0,8); // Ito le manova actionAuto eh!
         }
     }
 }
