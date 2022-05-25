@@ -136,7 +136,10 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     self.keyupToBrain = null;
     self.agir = null;
 
-    /* Only for computer controller ******/ 
+    /* Only for computer controller ******/
+    self.keysdown = new Array();
+    self.actionAuto = rand(0,7);
+    self.ieme_sousActionAuto = 0;
     self.automatismeID = null;
     self.decisionAuto = null;
     self.keydownEventSimulation = {keyCode: 0};
@@ -537,7 +540,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.majSprite();
 
         self.lancementPouvoirSpecial = setInterval(function(){
-            if(self.position.relative == 'gauche' && position_adversaire.y-sprite_pouvoir_special.clientHeight < pouvoirSpecialPosition.y && pouvoirSpecialPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirSpecialPosition.x+sprite_pouvoir_special.clientWidth > position_adversaire.x && position_adversaire.x >= pouvoirSpecialPosition.x)
+            if(self.position.relative == 'gauche' && position_adversaire.y-sprite_pouvoir_special.clientHeight < pouvoirSpecialPosition.y && pouvoirSpecialPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirSpecialPosition.x+sprite_pouvoir_special.clientWidth > position_adversaire.x && position_adversaire.x+handle_sprite_adversaire.clientWidth >= pouvoirSpecialPosition.x)
             {
                 self.valeurDegat = self.pouvoirs[1].puissance;
                 self.toucherAdversaire = true;
@@ -793,422 +796,10 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
     };
 
-    if(self.controlleur == 'computer') // Automatise les actions, simuler des keydowns et des keyups
+    self.majControlleur = function(keyConfig=null)
     {
-        self.keysdown = new Array();
-        
-        function pushInKeysdownIfNotIn(val)
-        {
-            if(self.keysdown.indexOf(val) == -1){
-                self.keysdown.push(val);
-            }
-        }
-        
-        function popInKeysdown(val)
-        {
-            self.keysdown.splice(self.keysdown.indexOf(val),1);
-        }
-
-        function avancer(position_adversaire)
-        {
-            if(position_adversaire.relative == 'gauche' && position_adversaire.x+60 < self.position.x && self.action == 'R') // Action == 'R' pour éviter l'arret du mouvement en cas d'érreur
-            {
-                self.keydownEventSimulation.keyCode = -1;
-                popInKeysdown(-3);
-                pushInKeysdownIfNotIn(-1);
-            }
-            else if(position_adversaire.relative == 'droite' && position_adversaire.x > self.position.x+60 && self.action == 'R')
-            {
-                self.keydownEventSimulation.keyCode = -3;
-                popInKeysdown(-1);
-                pushInKeysdownIfNotIn(-3);
-            }
-            else
-                self.ieme_sousActionAuto++;
-        }
-
-        function reculer(position_adversaire)
-        {
-            var x_rand = rand(0,Terrain.clientWidth);
-            if(self.position.x <= 0 || self.position.x >= Terrain.clientWidth - self.sprite.clientWidth)
-                self.ieme_sousActionAuto++;
-            else if(position_adversaire.relative == 'droite' && position_adversaire.x < self.position.x + x_rand)
-            {
-                self.keydownEventSimulation.keyCode = -1;
-                popInKeysdown(-3);
-                pushInKeysdownIfNotIn(-1);
-            }
-            else if(position_adversaire.relative == 'gauche' && position_adversaire.x + x_rand > self.position.x)
-            {
-                self.keydownEventSimulation.keyCode = -3;
-                popInKeysdown(-1);
-                pushInKeysdownIfNotIn(-3);
-            }
-            else
-                self.ieme_sousActionAuto++;
-        }
-
-        function se_mettre_derriere(position_adversaire)
-        {
-            if(position_adversaire.x <= 0 || position_adversaire.x >= Terrain.clientWidth - self.sprite.clientWidth)
-                self.ieme_sousActionAuto++;
-            else if(position_adversaire.relative == 'gauche' && self.position.x > position_adversaire.x)
-            {
-                self.keydownEventSimulation.keyCode = -1;
-                popInKeysdown(-3);
-                pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            }
-            else if(position_adversaire.relative == 'droite' && self.position.x < position_adversaire.x)
-            {
-                self.keydownEventSimulation.keyCode = -3;
-                popInKeysdown(-1);
-                pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            }
-            else
-                self.ieme_sousActionAuto++;
-        }
-
-        function atteindre_hauteur(position_adversaire)
-        {
-            if(position_adversaire.y+60 < self.position.y)
-            {
-                self.keydownEventSimulation.keyCode = -4;
-                popInKeysdown(-2);
-                pushInKeysdownIfNotIn(-4);
-            }
-            else if(position_adversaire.y > self.position.y+60)
-            {
-                self.keydownEventSimulation.keyCode = -2;
-                popInKeysdown(-4);
-                pushInKeysdownIfNotIn(-2);
-            }
-            else
-                self.ieme_sousActionAuto++;
-        }
-
-        function eviter_hauteur()
-        {
-            var y_rand = rand(0,Terrain.clientHeight);
-            if(y_rand < self.position.y-200)
-            {
-                self.keydownEventSimulation.keyCode = -4;
-                popInKeysdown(-2);
-                pushInKeysdownIfNotIn(-4);
-            }
-            else if(y_rand > self.position.y+200)
-            {
-                self.keydownEventSimulation.keyCode = -2;
-                popInKeysdown(-4);
-                pushInKeysdownIfNotIn(-2);
-            }
-            else
-                self.ieme_sousActionAuto++;
-        }
-
-        function arret_deplacement_x()
-        {
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function arret_deplacement_y()
-        {
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function attaquer()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            self.keydownEventSimulation.keyCode = rand(-6,-5);
-            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            self.ieme_sousActionAuto++;
-        }
-
-        function arreter_attaque()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function charger_pouvoir()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            if(!self.avoirEnergiePlusDe(self.pouvoirs[0].energie_necessaire))
-            {
-                // Va pour l'action "s'approcher puis kick/box"
-                self.actionAuto = 0;
-                self.ieme_sousActionAuto = 0;
-                self.keydownEventSimulation.keyCode = -7;
-                pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-                return;
-            }
-
-            self.keydownEventSimulation.keyCode = -7;
-            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            self.ieme_sousActionAuto++;
-        }
-
-        function lancer_pouvoir()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function charger_pouvoir_special()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            if(!self.avoirEnergiePlusDe(self.pouvoirs[1].energie_necessaire))
-            {
-                // Va pour le chargement du pouvoir ordinaire
-                self.actionAuto = 1;
-                self.ieme_sousActionAuto = 2;
-                return;
-            }
-
-            self.keydownEventSimulation.keyCode = -8;
-            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            if(self.pouvoirSpecialPres)
-                self.ieme_sousActionAuto++;
-        }
-
-        function lancer_pouvoir_special()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function attendre_fin_pouvoir_special()
-        {
-            if(!self.lancementPouvoirSpecial)
-                self.ieme_sousActionAuto++;
-        }
-
-        function bloquer()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            self.keydownEventSimulation.keyCode = -10;
-            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            self.ieme_sousActionAuto++;
-        }
-
-        function arreter_bloque()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function charger_defence_special()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            self.keydownEventSimulation.keyCode = -11;
-            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            self.ieme_sousActionAuto++;
-        }
-
-        function lancer_defence_special()
-        {
-            if(self.enDefenceSpecial)
-            {
-                self.ieme_sousActionAuto++;
-                return;
-            }
-
-            if(!self.avoirEnergiePlusDe(self.pouvoirs[2].energie_necessaire))
-            {
-                // Va pour le chargement du defence ordinaire
-                self.actionAuto = 5;
-                self.ieme_sousActionAuto = 0;
-
-                popInKeysdown(self.keydownEventSimulation.keyCode);
-                self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-                self.keydownEventSimulation.keyCode = 0;
-                return;
-            }
-
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-
-        function charger_arret_defence_special()
-        {
-            self.keydownEventSimulation.keyCode = -11;
-            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
-            self.ieme_sousActionAuto++;
-        }
-
-        function arreter_defence_special()
-        {
-            popInKeysdown(self.keydownEventSimulation.keyCode);
-            self.keyupEventSimulation.keyCode = -11;
-            self.keydownEventSimulation.keyCode = 0;
-            self.ieme_sousActionAuto++;
-        }
-        
-        // Les actions que le perso peut faire
-        var actions = [
-            [// action 0: avancer et monter/descendre puis kick/box
-                avancer,
-                arret_deplacement_x,
-                atteindre_hauteur,
-                arret_deplacement_y,
-                attaquer, // Attaquer pendant un certain moment
-                attaquer,
-                attaquer,
-                arreter_attaque
-            ],
-            [// action 1: monter/descendre puis charger et lancer pouvoir
-                atteindre_hauteur,
-                arret_deplacement_y,
-                charger_pouvoir, // Charger un peu plus longtemps pour pouvoir apercevoir le chargement du pouvoir
-                charger_pouvoir,
-                charger_pouvoir,
-                lancer_pouvoir
-            ],
-            [// action 2: monter/descendre puis charger et lancer pouvoir special
-                atteindre_hauteur,
-                arret_deplacement_y,
-                charger_pouvoir_special,
-                lancer_pouvoir_special,
-                attendre_fin_pouvoir_special
-            ],
-            [// action 3: reculer puis charger et lancer pouvoir
-                reculer,
-                arret_deplacement_x,
-                charger_pouvoir,
-                lancer_pouvoir
-            ],
-            [// aciotn 4: évite juste l'hauteur de l'adversaire
-                eviter_hauteur,
-                arret_deplacement_y
-            ],
-            [// action 5: bloquer, pouvoir puis bloquer
-                bloquer, // bloquer pendant un certain moment
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                arreter_bloque,
-                charger_pouvoir,
-                charger_pouvoir,
-                charger_pouvoir,
-                lancer_pouvoir,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                bloquer,
-                arreter_bloque
-            ],
-            [// action 6: lancer defence special puis eviter hauteur et se mettre derriere l'adversaire
-                charger_defence_special,
-                lancer_defence_special,
-                eviter_hauteur,
-                arret_deplacement_y,
-                charger_arret_defence_special,
-                arreter_defence_special,
-                se_mettre_derriere,
-                arret_deplacement_x
-            ],
-            [// action 7: se mettre derriere l'adversaire et monter/descendre puis kick/box
-                se_mettre_derriere,
-                arret_deplacement_x,
-                atteindre_hauteur,
-                arret_deplacement_y,
-                attaquer, // Attaquer pendant un certain moment
-                attaquer,
-                attaquer,
-                arreter_attaque
-            ]
-        ];
-
-        self.actionAuto = rand(0,7);
-        self.ieme_sousActionAuto = 0;
-
-        self.decisionAuto = function(position_adversaire)
-        {
-            if(actions[self.actionAuto][self.ieme_sousActionAuto])
-                actions[self.actionAuto][self.ieme_sousActionAuto](position_adversaire);
-            else
-            {
-                self.ieme_sousActionAuto = 0;
-                // return; // Atao manao action hafa, ovaina ny actionAuto @ alalan function
-                self.actionAuto = rand(0,7); // Ito le manova actionAuto eh!
-            }
-        }
+        self.keyConfig = keyConfig? keyConfig : new KeyToCommand(-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12);
+        self.controlleur = keyConfig? 'user' : 'computer';
     }
 
     self.reinitialiser = function(position_x,position_adversaire,handle_sprite_adversaire)
@@ -1262,5 +853,426 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.arretPouvoirSpecial();
         self.seDeplacer(position_adversaire.x);
         self.handleAction = null;
+
+        // Pour les persos auto
+        if(self.controlleur == 'computer')
+        {
+            self.actionAuto = rand(0,7);
+            self.niveau = self.liste_niveaux.max;
+            self.majNiveau(position_adversaire,handle_sprite_adversaire);
+        }
+
+    }
+
+    //Les actions automatiques pour les personnages non controlés par l'utilisateurs
+
+    function pushInKeysdownIfNotIn(val)
+    {
+        if(self.keysdown.indexOf(val) == -1){
+            self.keysdown.push(val);
+        }
+    }
+    
+    function popInKeysdown(val)
+    {
+        self.keysdown.splice(self.keysdown.indexOf(val),1);
+    }
+
+    function avancer(position_adversaire)
+    {
+        if(position_adversaire.relative == 'gauche' && position_adversaire.x+60 < self.position.x && self.action == 'R') // Action == 'R' pour éviter l'arret du mouvement en cas d'érreur
+        {
+            self.keydownEventSimulation.keyCode = -1;
+            popInKeysdown(-3);
+            pushInKeysdownIfNotIn(-1);
+        }
+        else if(position_adversaire.relative == 'droite' && position_adversaire.x > self.position.x+60 && self.action == 'R')
+        {
+            self.keydownEventSimulation.keyCode = -3;
+            popInKeysdown(-1);
+            pushInKeysdownIfNotIn(-3);
+        }
+        else
+            self.ieme_sousActionAuto++;
+    }
+
+    function reculer(position_adversaire)
+    {
+        var x_rand = rand(0,Terrain.clientWidth);
+        if(self.position.x <= 0 || self.position.x >= Terrain.clientWidth - self.sprite.clientWidth)
+            self.ieme_sousActionAuto++;
+        else if(position_adversaire.relative == 'droite' && position_adversaire.x < self.position.x + x_rand)
+        {
+            self.keydownEventSimulation.keyCode = -1;
+            popInKeysdown(-3);
+            pushInKeysdownIfNotIn(-1);
+        }
+        else if(position_adversaire.relative == 'gauche' && position_adversaire.x + x_rand > self.position.x)
+        {
+            self.keydownEventSimulation.keyCode = -3;
+            popInKeysdown(-1);
+            pushInKeysdownIfNotIn(-3);
+        }
+        else
+            self.ieme_sousActionAuto++;
+    }
+
+    function se_mettre_derriere(position_adversaire)
+    {
+        if(position_adversaire.x <= 0 || position_adversaire.x >= Terrain.clientWidth - self.sprite.clientWidth)
+            self.ieme_sousActionAuto++;
+        else if(position_adversaire.relative == 'gauche' && self.position.x > position_adversaire.x)
+        {
+            self.keydownEventSimulation.keyCode = -1;
+            popInKeysdown(-3);
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        }
+        else if(position_adversaire.relative == 'droite' && self.position.x < position_adversaire.x)
+        {
+            self.keydownEventSimulation.keyCode = -3;
+            popInKeysdown(-1);
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        }
+        else
+            self.ieme_sousActionAuto++;
+    }
+
+    function atteindre_hauteur(position_adversaire)
+    {
+        if(position_adversaire.y+60 < self.position.y)
+        {
+            self.keydownEventSimulation.keyCode = -4;
+            popInKeysdown(-2);
+            pushInKeysdownIfNotIn(-4);
+        }
+        else if(position_adversaire.y > self.position.y+60)
+        {
+            self.keydownEventSimulation.keyCode = -2;
+            popInKeysdown(-4);
+            pushInKeysdownIfNotIn(-2);
+        }
+        else
+            self.ieme_sousActionAuto++;
+    }
+
+    function eviter_hauteur()
+    {
+        var y_rand = rand(0,Terrain.clientHeight);
+        if(y_rand < self.position.y-200)
+        {
+            self.keydownEventSimulation.keyCode = -4;
+            popInKeysdown(-2);
+            pushInKeysdownIfNotIn(-4);
+        }
+        else if(y_rand > self.position.y+200)
+        {
+            self.keydownEventSimulation.keyCode = -2;
+            popInKeysdown(-4);
+            pushInKeysdownIfNotIn(-2);
+        }
+        else
+            self.ieme_sousActionAuto++;
+    }
+
+    function arret_deplacement_x()
+    {
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function arret_deplacement_y()
+    {
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function attaquer()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        self.keydownEventSimulation.keyCode = rand(-6,-5);
+        pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        self.ieme_sousActionAuto++;
+    }
+
+    function arreter_attaque()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function charger_pouvoir()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        if(!self.avoirEnergiePlusDe(self.pouvoirs[0].energie_necessaire))
+        {
+            // Va pour l'action "s'approcher puis kick/box"
+            self.actionAuto = 0;
+            self.ieme_sousActionAuto = 0;
+            self.keydownEventSimulation.keyCode = -7;
+            pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+            return;
+        }
+
+        self.keydownEventSimulation.keyCode = -7;
+        pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        self.ieme_sousActionAuto++;
+    }
+
+    function lancer_pouvoir()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function charger_pouvoir_special()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        if(!self.avoirEnergiePlusDe(self.pouvoirs[1].energie_necessaire))
+        {
+            // Va pour le chargement du pouvoir ordinaire
+            self.actionAuto = 1;
+            self.ieme_sousActionAuto = 2;
+            return;
+        }
+
+        self.keydownEventSimulation.keyCode = -8;
+        pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        if(self.pouvoirSpecialPres)
+            self.ieme_sousActionAuto++;
+    }
+
+    function lancer_pouvoir_special()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function attendre_fin_pouvoir_special()
+    {
+        if(!self.lancementPouvoirSpecial)
+            self.ieme_sousActionAuto++;
+    }
+
+    function bloquer()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        self.keydownEventSimulation.keyCode = -10;
+        pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        self.ieme_sousActionAuto++;
+    }
+
+    function arreter_bloque()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function charger_defence_special()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        self.keydownEventSimulation.keyCode = -11;
+        pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        self.ieme_sousActionAuto++;
+    }
+
+    function lancer_defence_special()
+    {
+        if(self.enDefenceSpecial)
+        {
+            self.ieme_sousActionAuto++;
+            return;
+        }
+
+        if(!self.avoirEnergiePlusDe(self.pouvoirs[2].energie_necessaire))
+        {
+            // Va pour le chargement du defence ordinaire
+            self.actionAuto = 5;
+            self.ieme_sousActionAuto = 0;
+
+            popInKeysdown(self.keydownEventSimulation.keyCode);
+            self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+            self.keydownEventSimulation.keyCode = 0;
+            return;
+        }
+
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = self.keydownEventSimulation.keyCode;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+
+    function charger_arret_defence_special()
+    {
+        self.keydownEventSimulation.keyCode = -11;
+        pushInKeysdownIfNotIn(self.keydownEventSimulation.keyCode);
+        self.ieme_sousActionAuto++;
+    }
+
+    function arreter_defence_special()
+    {
+        popInKeysdown(self.keydownEventSimulation.keyCode);
+        self.keyupEventSimulation.keyCode = -11;
+        self.keydownEventSimulation.keyCode = 0;
+        self.ieme_sousActionAuto++;
+    }
+    
+    // Les actions que le perso peut faire en mode automatique
+    var actions = [
+        [// action 0: avancer et monter/descendre puis kick/box
+            avancer,
+            arret_deplacement_x,
+            atteindre_hauteur,
+            arret_deplacement_y,
+            attaquer, // Attaquer pendant un certain moment
+            attaquer,
+            attaquer,
+            arreter_attaque
+        ],
+        [// action 1: monter/descendre puis charger et lancer pouvoir
+            atteindre_hauteur,
+            arret_deplacement_y,
+            charger_pouvoir, // Charger un peu plus longtemps pour pouvoir apercevoir le chargement du pouvoir
+            charger_pouvoir,
+            charger_pouvoir,
+            lancer_pouvoir
+        ],
+        [// action 2: monter/descendre puis charger et lancer pouvoir special
+            atteindre_hauteur,
+            arret_deplacement_y,
+            charger_pouvoir_special,
+            lancer_pouvoir_special,
+            attendre_fin_pouvoir_special
+        ],
+        [// action 3: reculer puis charger et lancer pouvoir
+            reculer,
+            arret_deplacement_x,
+            charger_pouvoir,
+            lancer_pouvoir
+        ],
+        [// aciotn 4: évite juste l'hauteur de l'adversaire
+            eviter_hauteur,
+            arret_deplacement_y
+        ],
+        [// action 5: bloquer, pouvoir puis bloquer
+            bloquer, // bloquer pendant un certain moment
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            arreter_bloque,
+            charger_pouvoir,
+            charger_pouvoir,
+            charger_pouvoir,
+            lancer_pouvoir,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            bloquer,
+            arreter_bloque
+        ],
+        [// action 6: lancer defence special puis eviter hauteur et se mettre derriere l'adversaire
+            charger_defence_special,
+            lancer_defence_special,
+            eviter_hauteur,
+            arret_deplacement_y,
+            charger_arret_defence_special,
+            arreter_defence_special,
+            se_mettre_derriere,
+            arret_deplacement_x
+        ],
+        [// action 7: se mettre derriere l'adversaire et monter/descendre puis kick/box
+            se_mettre_derriere,
+            arret_deplacement_x,
+            atteindre_hauteur,
+            arret_deplacement_y,
+            attaquer, // Attaquer pendant un certain moment
+            attaquer,
+            attaquer,
+            arreter_attaque
+        ]
+    ];
+
+    self.decisionAuto = function(position_adversaire)
+    {
+        if(actions[self.actionAuto][self.ieme_sousActionAuto])
+            actions[self.actionAuto][self.ieme_sousActionAuto](position_adversaire);
+        else
+        {
+            self.ieme_sousActionAuto = 0;
+            // return; // Atao manao action hafa, ovaina ny actionAuto @ alalan function
+            self.actionAuto = rand(0,7); // Ito le manova actionAuto eh!
+        }
     }
 }

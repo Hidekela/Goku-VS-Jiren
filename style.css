@@ -541,3 +541,111 @@ ul li:hover button
     }
 }
 
+/* Setting game */
+
+#setting_game_page
+{
+    position: absolute;
+    left: 0;
+    top: -130%;
+    min-width: 100%;
+    min-height: 120%;
+    background: #1010109a;
+    padding: 20px;
+    z-index: 2;
+}
+
+#setting_game_page div
+{
+    width: 75%;
+    padding: 20px 0;
+    margin: auto;
+    margin-top: 5%;
+    background: #252525;
+    color: silver;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+}
+
+#setting_game_page h2
+{
+    font-size: 50px;
+    text-align: center;
+    text-shadow: 0 0 15px #0ba710;
+    width: 100%;
+    margin: 20px 0;
+}
+
+#setting_game_page p
+{
+    width: 90%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#perso_list
+{
+    background: #0c0c0c;
+    padding: 5px;
+    text-align: justify;
+}
+
+#setting_game_page input[type=checkbox]
+{
+    display: none;
+}
+
+#setting_game_page label
+{
+    color: silver;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+    background: transparent;
+    width: 100%;
+    display: inline-block;
+}
+
+#setting_game_page li:hover label
+{
+    text-shadow: 0 0 15px #0ba710;
+    transform: skewX(30deg);
+}
+
+#setting_game_page label:hover
+{
+    cursor: pointer;
+}
+
+#play_game_button
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    width: 50%;
+    color: #707070;
+    background: #080808;
+    border-top: 3px solid #104010;
+    border-bottom: 3px solid #102010;
+    border-left: 3px solid #101010;
+    border-right: 3px solid #101010;
+    padding: 5px 0;
+    margin: 0;
+}
+
+#play_game_button:hover
+{
+    cursor: pointer;
+    color: silver;
+    text-shadow: 0 0 15px #0ba710;
+    box-shadow: 0 0 5px #0ba710;
+}
+
+#control_note_text
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: silver;
+    margin-top: 15%;
+}

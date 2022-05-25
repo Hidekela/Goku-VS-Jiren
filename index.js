@@ -1,3 +1,8 @@
+/**Définition du jeu
+ * 
+ * @param {Personnage} player1 le premier personnage
+ * @param {Personnage} player2 le deuxième personnage
+ */
 function Game(player1, player2)
 {
     var vitesse_logiques = 25; //ms
@@ -11,6 +16,23 @@ function Game(player1, player2)
 
     self.reinit = function()
     {
+        if(document.getElementById(self.player1.nom+'_control_check').checked)
+        {
+            self.player1.majControlleur(keyConfigPlayer1);
+        }
+        else
+        {
+            self.player1.majControlleur();
+        }
+        if(document.getElementById(self.player2.nom+'_control_check').checked)
+        {
+            self.player2.majControlleur(keyConfigPlayer2);
+        }
+        else
+        {
+            self.player2.majControlleur();
+        }
+
         self.player1.reinitialiser(0,self.player2.position,self.player2.handleSprite);
         self.player2.reinitialiser(screen.width-150,self.player1.position,self.player1.handleSprite);
         
@@ -187,30 +209,24 @@ function Game(player1, player2)
     };
 }
 
-var keyConfigGoku = null;
+var keyConfigPlayer1 = null;
 
- keyConfigGoku = new KeyToCommand();
+keyConfigPlayer1 = new KeyToCommand();
 
 var kamehamehaStyle = "@keyframes kamehameha {from{transform: rotate(0deg)} to{transform: rotate(360deg)}}";
 var animationKamehameha = new elementdAnimation('kamehamehaanimation',1,-105,1,-22,270,kamehamehaStyle);
 var position = new PositionPersonnage('gauche','',0,0);
 
-// Normal
 var puissances = [new PuissancePersonnage(0.3,0.4),new PuissancePersonnage(0.6,0.7),new PuissancePersonnage(1,1)];
 var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[40,32,25],[10,10,10],puissances);
 
-// Essaie atao mifampicontre ho azy zareo
-// var puissances = [new PuissancePersonnage(1,1)];
-// var niveaux = new NiveauxPersonnage(0,['blue'],[12000],[25],[10],puissances);
-
 var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',0.3,50,1000,animationKamehameha),new PouvoirPersonnage('teleportation','D',-1,10,0,null,'opacity: 0',40)];
 
-// Natao mora maty fa tokony 200
-var Songoku = new Personnage('goku',keyConfigGoku,200,100,position,niveaux,pouvoirs);
+var Songoku = new Personnage('goku',keyConfigPlayer1,200,100,position,niveaux,pouvoirs);
 
-var keyConfigJiren = null;
+var keyConfigPlayer2 = null;
 
-//  keyConfigJiren = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,170);
+keyConfigPlayer2 = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,170);
 
 /*
         Jiren keys:
@@ -235,7 +251,6 @@ puissances = [new PuissancePersonnage(1,1)];
 niveaux = new NiveauxPersonnage(0,['initial'],[-1],[25],[10],puissances);
 pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',0.5,50,0),new PouvoirPersonnage('bouclier','D',-1,10)];
 
-// Natao mora maty fa tokony 200
-var Jiren = new Personnage('jiren',keyConfigJiren,200,100,position,niveaux,pouvoirs);
+var Jiren = new Personnage('jiren',keyConfigPlayer2,200,100,position,niveaux,pouvoirs);
 
 var game = new Game(Songoku,Jiren);

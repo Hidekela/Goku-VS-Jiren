@@ -248,12 +248,33 @@
             <h1>GOKU VS JIREN</h1>
             <div>
                 <ul>
-                    <li><button id="play_button" type="button">PLAY</button></li>
-                    <li><button id="command_button" type="button">COMMAND</button></li>
-                    <li><button id="quit_button" type="button">QUIT</button></li>
+                    <li><button id="play_button">PLAY</button></li>
+                    <li><button id="command_button">COMMAND</button></li>
+                    <li><button id="quit_button">QUIT</button></li>
                 </ul>
                 <p id="synopsis_text"><span class="underlined">Synopsis</span> : After the Tournament of Power, Songoku and Jiren face off again. Both are looking to get stronger and stronger. Their previous fight gives them insight into each other's techniques and weakness. They can both win. However, only one will emerge victorious. So who will it be?</p>
             </div>
+        </section>
+        <section id="setting_game_page">
+            <div>
+                <h2>SELECT THE CHARACTERS YOU WANT TO CONTROL</h2>
+                <ul id="perso_list">
+                    <li><label id="goku_control_label"><input type="checkbox" id="goku_control_check">GOKU</label></li>
+                    <li><label id="jiren_control_label"><input type="checkbox" id="jiren_control_check">JIREN</label></li>
+                </ul>
+                <p><button id="play_game_button">PLAY</button></p>
+                <p id="control_note_text"><span class="underlined">Note</span> : All unchecked characters will be controlled by computer.<br>Goku's special power (kamehameha) must be charged for at least one second (1s)</p>
+            </div>
+            <script>
+                var goku_control_label = document.getElementById('goku_control_label');
+                var jiren_control_label = document.getElementById('jiren_control_label');
+                goku_control_label.addEventListener('click',function(){
+                    goku_control_label.style = document.getElementById('goku_control_check').checked? "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;" : "";
+                },true);
+                jiren_control_label.addEventListener('click',function(){
+                    jiren_control_label.style = document.getElementById('jiren_control_check').checked? "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;" : "";
+                },true);
+            </script>
         </section>
         <section id="ready_game_page">
             <p id="ready_text">READY</p>
@@ -303,14 +324,14 @@
                         <td><span class="key_icon">Escape</span> pause</td>
                     </tr>
                 </table>
-                <p><button id="hide_command_button" type="button">DONE</button></p>
+                <p><button id="hide_command_button">DONE</button></p>
             </div>
         </section>
         <section id="win_page" style="display:none">
             <h2 id="winner"></h2>
             <ul id="restart_menu" style="display: none">
-                <li><button id="restart_button" type="button">RESTART</button></li>
-                <li><button id="menu_button" type="button">MENU</button></li>
+                <li><button id="restart_button">RESTART</button></li>
+                <li><button id="menu_button">MENU</button></li>
             </ul>
         </section>
         <!-- <section id="intro_page">
@@ -374,9 +395,14 @@
         }
         
         document.getElementById('play_button').addEventListener('click',function(e){
+            document.getElementById('setting_game_page').style = "top: 0; transition: top 0.5s";
+        },false);
+        
+        document.getElementById('play_game_button').addEventListener('click',function(e){
+            document.getElementById('setting_game_page').style = "top: -130%; transition: top 0.5s";
             document.getElementById('menu_page').style = "top: -120%; transition: top 0.5s";
             startGame();
-        },false);
+        },true);
 
         document.getElementById('command_button').addEventListener('click',function(e){
             document.getElementById('command_page').style = "left: 0; transition: left 0.5s";
