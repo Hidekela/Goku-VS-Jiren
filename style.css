@@ -226,22 +226,22 @@ body
 
 #intro_1
 {
-    animation: intro 5s;
+    animation: intro 7s;
 }
 
 #intro_2
 {
-    animation: intro 5s 5s;
+    animation: intro 5s 7s;
 }
 
 #intro_3
 {
-    animation: intro 5s 10s;
+    animation: intro 5s 12s;
 }
 
 #intro_4
 {
-    animation: intro 5s 15s;
+    animation: intro 5s 17s;
 }
 
 /* Menu & Win*/
