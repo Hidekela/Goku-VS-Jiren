@@ -2,102 +2,406 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <meta name="google-site-verification" content="xw546myTrpydQoJ6kzIOwKp31fGMBZLYHAWos8VFNk8" />
+        <meta name="google-site-verification" content=""/>
         <meta name="description" content="Un petit jeu de Dragon Ball Super fait avec le language Javascript, sans la balise Canvas mais avec des images! ;)"/>
         <meta name="keywords" content="jeu, jeux, dbs, db, dbz, game, javascript, game online, online game, games, dragon ball, dragon ball super, son goku, jiren, jeu en ligne, jeu javascript, jeu js, sans canvas, jeu dbs, js" />
         <link rel="stylesheet" href="style.css"/>
         <link rel="icon" href="dbs.png"/>
-        <title>Dbs - Game</title>
+        <title>Goku VS Jiren - Game</title>
     </head>
-    <style id="kamehamehatouched">
-    </style>
-    <style id="pouvoir1">
-    </style>
-    <style id="pouvoir2">
-    </style>
-    <style id="pouvoir3">
-    </style>
-    <style id="pouvoir4">
-    </style>
-    <style id="pouvoir5">
-    </style>
-    <style id="pouvoir6">
-    </style>
-    <style id="pouvoir7">
-    </style>
-    <style id="pouvoir8">
-    </style>
-    <style id="pouvoir9">
-    </style>
-    <style id="pouvoir10">
-    </style>
-    <style id="pouvoirjiren1">
-    </style>
-    <style id="pouvoirjiren2">
-    </style>
-    <style id="pouvoirjiren3">
-    </style>
-    <style id="pouvoirjiren4">
-    </style>
-    <style id="pouvoirjiren5">
-    </style>
-    <style id="pouvoirjiren6">
-    </style>
-    <style id="pouvoirjiren7">
-    </style>
-    <style id="pouvoirjiren8">
-    </style>
-    <style id="pouvoirjiren9">
-    </style>
-    <style id="pouvoirjiren10">
-    </style>
-    <style id="kamehamehastyle">
-    </style>
     <body>
-        <p></p>
-        <img id="avatargoku" src="avatar/initialgoku.png" alt=""/>
-        <img id="avatarjiren" src="avatar/jiren.png" alt=""/>
-        <div id="barre_de_vie_goku">
-            <div id="vie_restant_goku"></div>
-        </div>
-        <div id="barre_d_energie_goku">
-            <div id="energie_restant_goku"></div>
-        </div>
-        <div id="barre_de_vie_jiren">
-            <div id="vie_restant_jiren"></div>
-        </div>
-        <div id="barre_d_energie_jiren">
-            <div id="energie_restant_jiren"></div>
-        </div>
-        <img id="goku" src="perso/gauchegoku/initial.png" alt=""/>
-        <img id="jiren" src="perso/droitejiren/initial.png" alt=""/>
-        <img class="p" id="p1" src="pouvoir/pouvoir1gauche.png" alt="" style="animation: pouvoir1 1s;"/>
-        <img class="p" id="p2" src="pouvoir/pouvoir2gauche.png" alt="" style="animation: pouvoir2 1s;"/>
-        <img class="p" id="p3" src="pouvoir/pouvoir3gauche.png" alt="" style="animation: pouvoir3 1s;"/>
-        <img class="p" id="p4" src="pouvoir/pouvoir4gauche.png" alt="" style="animation: pouvoir4 1s;"/>
-        <img class="p" id="p5" src="pouvoir/pouvoir5gauche.png" alt="" style="animation: pouvoir5 1s;"/>
-        <img class="p" id="p6" src="pouvoir/pouvoir6gauche.png" alt="" style="animation: pouvoir6 1s;"/>
-        <img class="p" id="p7" src="pouvoir/pouvoir7gauche.png" alt="" style="animation: pouvoir7 1s;"/>
-        <img class="p" id="p8" src="pouvoir/pouvoir8gauche.png" alt="" style="animation: pouvoir8 1s;"/>
-        <img class="p" id="p9" src="pouvoir/pouvoir9gauche.png" alt="" style="animation: pouvoir9 1s;"/>
-        <img class="p" id="p10" src="pouvoir/pouvoir10gauche.png" alt="" style="animation: pouvoir10 1s;"/>
-        <img class="p" id="pj1" src="pouvoir/pouvoirjiren1.png" alt="" style="animation: pouvoirjiren1 1s;"/>
-        <img class="p" id="pj2" src="pouvoir/pouvoirjiren2.png" alt="" style="animation: pouvoirjiren2 1s;"/>
-        <img class="p" id="pj3" src="pouvoir/pouvoirjiren3.png" alt="" style="animation: pouvoirjiren3 1s;"/>
-        <img class="p" id="pj4" src="pouvoir/pouvoirjiren4.png" alt="" style="animation: pouvoirjiren4 1s;"/>
-        <img class="p" id="pj5" src="pouvoir/pouvoirjiren5.png" alt="" style="animation: pouvoirjiren5 1s;"/>
-        <img class="p" id="pj6" src="pouvoir/pouvoirjiren6.png" alt="" style="animation: pouvoirjiren6 1s;"/>
-        <img class="p" id="pj7" src="pouvoir/pouvoirjiren7.png" alt="" style="animation: pouvoirjiren7 1s;"/>
-        <img class="p" id="pj8" src="pouvoir/pouvoirjiren8.png" alt="" style="animation: pouvoirjiren8 1s;"/>
-        <img class="p" id="pj9" src="pouvoir/pouvoirjiren9.png" alt="" style="animation: pouvoirjiren9 1s;"/>
-        <img class="p" id="pj10" src="pouvoir/pouvoirjiren10.png" alt="" style="animation: pouvoirjiren10 1s;"/>
-        <img class="p" id="kamehamehaanim" src="pouvoir/kamehamehaanimation.png" alt=""/>
-        <img class="p" id="kamehamehacharge" src="pouvoir/kamehamehachargement.png" alt=""/>
-        <img class="p" id="kamehameha" src="pouvoir/kamehamehagauche.png" alt=""/>
-        <div id="tuto" style="display:block"></div>
-        <div id="fin" style="display:none"></div>
-        <div id="fight"></div>
-        <div id="c">fb: Hidekela</div>
+        <section id="game_page">
+            <header>
+                <img id="terrain" src="terrain/terrain.jpg" alt=""/>
+                <img class="avatar" id="avatargoku" src="avatar/initialgoku.png" alt=""/>
+                <img class="avatar" id="avatarjiren" src="avatar/initialjiren.png" alt=""/>
+                <div class="barre_de_vie" id="barre_de_vie_goku">
+                    <div class="vie_restante" id="vie_restante_goku"></div>
+                </div>
+                <div class="barre_d_energie" id="barre_d_energie_goku">
+                    <div class="energie_restante" id="energie_restante_goku"></div>
+                </div>
+                <div class="barre_de_vie" id="barre_de_vie_jiren">
+                    <div class="vie_restante" id="vie_restante_jiren"></div>
+                </div>
+                <div class="barre_d_energie" id="barre_d_energie_jiren">
+                    <div class="energie_restante" id="energie_restante_jiren"></div>
+                </div>
+            </header>
+            <div id="goku">
+                <img style="display: inline;" id="gokugaucheinitial" src="perso/gauchegoku/initial.png" alt=""/>
+                <img id="gokugaucheblue" src="perso/gauchegoku/blue.png" alt=""/>
+                <img id="gokugaucheblueairtransformation" src="perso/gauchegoku/blueairtransformation.png" alt=""/>
+                <img id="gokugaucheblueavance" src="perso/gauchegoku/blueavance.png" alt=""/>
+                <img id="gokugaucheblueblock" src="perso/gauchegoku/blueblock.png" alt=""/>
+                <img id="gokugauchebluedaka1" src="perso/gauchegoku/bluedaka1.png" alt=""/>
+                <img id="gokugauchebluedaka2" src="perso/gauchegoku/bluedaka2.png" alt=""/>
+                <img id="gokugauchebluedaka3" src="perso/gauchegoku/bluedaka3.png" alt=""/>
+                <img id="gokugauchebluedescend" src="perso/gauchegoku/bluedescend.png" alt=""/>
+                <img id="gokugauchebluekamehameha" src="perso/gauchegoku/bluekamehameha.png" alt=""/>
+                <img id="gokugauchebluekamehamehachargement" src="perso/gauchegoku/bluekamehamehachargement.png" alt=""/>
+                <img id="gokugaucheblueair" src="perso/gauchegoku/blueair.png" alt=""/>
+                <img id="gokugauchebluepouvoir" src="perso/gauchegoku/bluepouvoir.png" alt=""/>
+                <img id="gokugaucheblueretour" src="perso/gauchegoku/blueretour.png" alt=""/>
+                <img id="gokugaucheblueteleportation" src="perso/gauchegoku/blueteleportation.png" alt=""/>
+                <img id="gokugauchebluetotondry1" src="perso/gauchegoku/bluetotondry1.png" alt=""/>
+                <img id="gokugauchebluetotondry2" src="perso/gauchegoku/bluetotondry2.png" alt=""/>
+                <img id="gokugauchebluetouchedmiddle" src="perso/gauchegoku/bluetouchedmiddle.png" alt=""/>
+                <img id="gokugauchebluetouchedtop" src="perso/gauchegoku/bluetouchedtop.png" alt=""/>
+                <img id="gokugauchebluetransformation" src="perso/gauchegoku/bluetransformation.png" alt=""/>
+                <img id="gokugauchegod" src="perso/gauchegoku/god.png" alt=""/>
+                <img id="gokugauchegodairtransformation" src="perso/gauchegoku/godairtransformation.png" alt=""/>
+                <img id="gokugauchegodavance" src="perso/gauchegoku/godavance.png" alt=""/>
+                <img id="gokugauchegodblock" src="perso/gauchegoku/godblock.png" alt=""/>
+                <img id="gokugauchegoddaka1" src="perso/gauchegoku/goddaka1.png" alt=""/>
+                <img id="gokugauchegoddaka2" src="perso/gauchegoku/goddaka2.png" alt=""/>
+                <img id="gokugauchegoddaka3" src="perso/gauchegoku/goddaka3.png" alt=""/>
+                <img id="gokugauchegoddescend" src="perso/gauchegoku/goddescend.png" alt=""/>
+                <img id="gokugauchegodkamehameha" src="perso/gauchegoku/godkamehameha.png" alt=""/>
+                <img id="gokugauchegodkamehamehachargement" src="perso/gauchegoku/godkamehamehachargement.png" alt=""/>
+                <img id="gokugauchegodair" src="perso/gauchegoku/godair.png" alt=""/>
+                <img id="gokugauchegodpouvoir" src="perso/gauchegoku/godpouvoir.png" alt=""/>
+                <img id="gokugauchegodretour" src="perso/gauchegoku/godretour.png" alt=""/>
+                <img id="gokugauchegodteleportation" src="perso/gauchegoku/godteleportation.png" alt=""/>
+                <img id="gokugauchegodtotondry1" src="perso/gauchegoku/godtotondry1.png" alt=""/>
+                <img id="gokugauchegodtotondry2" src="perso/gauchegoku/godtotondry2.png" alt=""/>
+                <img id="gokugauchegodtouchedmiddle" src="perso/gauchegoku/godtouchedmiddle.png" alt=""/>
+                <img id="gokugauchegodtouchedtop" src="perso/gauchegoku/godtouchedtop.png" alt=""/>
+                <img id="gokugauchegodtransformation" src="perso/gauchegoku/godtransformation.png" alt=""/>
+                <img id="gokugaucheinitialairtransformation" src="perso/gauchegoku/initialairtransformation.png" alt=""/>
+                <img id="gokugaucheinitialavance" src="perso/gauchegoku/initialavance.png" alt=""/>
+                <img id="gokugaucheinitialblock" src="perso/gauchegoku/initialblock.png" alt=""/>
+                <img id="gokugaucheinitialdaka1" src="perso/gauchegoku/initialdaka1.png" alt=""/>
+                <img id="gokugaucheinitialdaka2" src="perso/gauchegoku/initialdaka2.png" alt=""/>
+                <img id="gokugaucheinitialdaka3" src="perso/gauchegoku/initialdaka3.png" alt=""/>
+                <img id="gokugaucheinitialdescend" src="perso/gauchegoku/initialdescend.png" alt=""/>
+                <img id="gokugaucheinitialkamehameha" src="perso/gauchegoku/initialkamehameha.png" alt=""/>
+                <img id="gokugaucheinitialkamehamehachargement" src="perso/gauchegoku/initialkamehamehachargement.png" alt=""/>
+                <img id="gokugaucheinitialair" src="perso/gauchegoku/initialair.png" alt=""/>
+                <img id="gokugaucheinitialpouvoir" src="perso/gauchegoku/initialpouvoir.png" alt=""/>
+                <img id="gokugaucheinitialretour" src="perso/gauchegoku/initialretour.png" alt=""/>
+                <img id="gokugaucheinitialteleportation" src="perso/gauchegoku/initialteleportation.png" alt=""/>
+                <img id="gokugaucheinitialtotondry1" src="perso/gauchegoku/initialtotondry1.png" alt=""/>
+                <img id="gokugaucheinitialtotondry2" src="perso/gauchegoku/initialtotondry2.png" alt=""/>
+                <img id="gokugaucheinitialtouchedmiddle" src="perso/gauchegoku/initialtouchedmiddle.png" alt=""/>
+                <img id="gokugaucheinitialtouchedtop" src="perso/gauchegoku/initialtouchedtop.png" alt=""/>
+                <img id="gokugaucheinitialtransformation" src="perso/gauchegoku/initialtransformation.png" alt=""/>
+                <img id="gokudroiteinitial" src="perso/droitegoku/initial.png" alt=""/>
+                <img id="gokudroiteblue" src="perso/droitegoku/blue.png" alt=""/>
+                <img id="gokudroiteblueairtransformation" src="perso/droitegoku/blueairtransformation.png" alt=""/>
+                <img id="gokudroiteblueavance" src="perso/droitegoku/blueavance.png" alt=""/>
+                <img id="gokudroiteblueblock" src="perso/droitegoku/blueblock.png" alt=""/>
+                <img id="gokudroitebluedaka1" src="perso/droitegoku/bluedaka1.png" alt=""/>
+                <img id="gokudroitebluedaka2" src="perso/droitegoku/bluedaka2.png" alt=""/>
+                <img id="gokudroitebluedaka3" src="perso/droitegoku/bluedaka3.png" alt=""/>
+                <img id="gokudroitebluedescend" src="perso/droitegoku/bluedescend.png" alt=""/>
+                <img id="gokudroitebluekamehameha" src="perso/droitegoku/bluekamehameha.png" alt=""/>
+                <img id="gokudroitebluekamehamehachargement" src="perso/droitegoku/bluekamehamehachargement.png" alt=""/>
+                <img id="gokudroiteblueair" src="perso/droitegoku/blueair.png" alt=""/>
+                <img id="gokudroitebluepouvoir" src="perso/droitegoku/bluepouvoir.png" alt=""/>
+                <img id="gokudroiteblueretour" src="perso/droitegoku/blueretour.png" alt=""/>
+                <img id="gokudroiteblueteleportation" src="perso/droitegoku/blueteleportation.png" alt=""/>
+                <img id="gokudroitebluetotondry1" src="perso/droitegoku/bluetotondry1.png" alt=""/>
+                <img id="gokudroitebluetotondry2" src="perso/droitegoku/bluetotondry2.png" alt=""/>
+                <img id="gokudroitebluetouchedmiddle" src="perso/droitegoku/bluetouchedmiddle.png" alt=""/>
+                <img id="gokudroitebluetouchedtop" src="perso/droitegoku/bluetouchedtop.png" alt=""/>
+                <img id="gokudroitebluetransformation" src="perso/droitegoku/bluetransformation.png" alt=""/>
+                <img id="gokudroitegod" src="perso/droitegoku/god.png" alt=""/>
+                <img id="gokudroitegodairtransformation" src="perso/droitegoku/godairtransformation.png" alt=""/>
+                <img id="gokudroitegodavance" src="perso/droitegoku/godavance.png" alt=""/>
+                <img id="gokudroitegodblock" src="perso/droitegoku/godblock.png" alt=""/>
+                <img id="gokudroitegoddaka1" src="perso/droitegoku/goddaka1.png" alt=""/>
+                <img id="gokudroitegoddaka2" src="perso/droitegoku/goddaka2.png" alt=""/>
+                <img id="gokudroitegoddaka3" src="perso/droitegoku/goddaka3.png" alt=""/>
+                <img id="gokudroitegoddescend" src="perso/droitegoku/goddescend.png" alt=""/>
+                <img id="gokudroitegodkamehameha" src="perso/droitegoku/godkamehameha.png" alt=""/>
+                <img id="gokudroitegodkamehamehachargement" src="perso/droitegoku/godkamehamehachargement.png" alt=""/>
+                <img id="gokudroitegodair" src="perso/droitegoku/godair.png" alt=""/>
+                <img id="gokudroitegodpouvoir" src="perso/droitegoku/godpouvoir.png" alt=""/>
+                <img id="gokudroitegodretour" src="perso/droitegoku/godretour.png" alt=""/>
+                <img id="gokudroitegodteleportation" src="perso/droitegoku/godteleportation.png" alt=""/>
+                <img id="gokudroitegodtotondry1" src="perso/droitegoku/godtotondry1.png" alt=""/>
+                <img id="gokudroitegodtotondry2" src="perso/droitegoku/godtotondry2.png" alt=""/>
+                <img id="gokudroitegodtouchedmiddle" src="perso/droitegoku/godtouchedmiddle.png" alt=""/>
+                <img id="gokudroitegodtouchedtop" src="perso/droitegoku/godtouchedtop.png" alt=""/>
+                <img id="gokudroitegodtransformation" src="perso/droitegoku/godtransformation.png" alt=""/>
+                <img id="gokudroiteinitialairtransformation" src="perso/droitegoku/initialairtransformation.png" alt=""/>
+                <img id="gokudroiteinitialavance" src="perso/droitegoku/initialavance.png" alt=""/>
+                <img id="gokudroiteinitialblock" src="perso/droitegoku/initialblock.png" alt=""/>
+                <img id="gokudroiteinitialdaka1" src="perso/droitegoku/initialdaka1.png" alt=""/>
+                <img id="gokudroiteinitialdaka2" src="perso/droitegoku/initialdaka2.png" alt=""/>
+                <img id="gokudroiteinitialdaka3" src="perso/droitegoku/initialdaka3.png" alt=""/>
+                <img id="gokudroiteinitialdescend" src="perso/droitegoku/initialdescend.png" alt=""/>
+                <img id="gokudroiteinitialkamehameha" src="perso/droitegoku/initialkamehameha.png" alt=""/>
+                <img id="gokudroiteinitialkamehamehachargement" src="perso/droitegoku/initialkamehamehachargement.png" alt=""/>
+                <img id="gokudroiteinitialair" src="perso/droitegoku/initialair.png" alt=""/>
+                <img id="gokudroiteinitialpouvoir" src="perso/droitegoku/initialpouvoir.png" alt=""/>
+                <img id="gokudroiteinitialretour" src="perso/droitegoku/initialretour.png" alt=""/>
+                <img id="gokudroiteinitialteleportation" src="perso/droitegoku/initialteleportation.png" alt=""/>
+                <img id="gokudroiteinitialtotondry1" src="perso/droitegoku/initialtotondry1.png" alt=""/>
+                <img id="gokudroiteinitialtotondry2" src="perso/droitegoku/initialtotondry2.png" alt=""/>
+                <img id="gokudroiteinitialtouchedmiddle" src="perso/droitegoku/initialtouchedmiddle.png" alt=""/>
+                <img id="gokudroiteinitialtouchedtop" src="perso/droitegoku/initialtouchedtop.png" alt=""/>
+                <img id="gokudroiteinitialtransformation" src="perso/droitegoku/initialtransformation.png" alt=""/>
+            </div>
+            <div id="jiren">
+                <img style="display: inline;" id="jirendroiteinitial" src="perso/droitejiren/initial.png" alt=""/>
+                <img id="jirendroiteinitialairpouvoirjiren" src="perso/droitejiren/initialairpouvoirjiren.png" alt=""/>
+                <img id="jirendroiteinitialairtransformation" src="perso/droitejiren/initialairtransformation.png" alt=""/>
+                <img id="jirendroiteinitialair" src="perso/droitejiren/initialair.png" alt=""/>
+                <img id="jirendroiteinitialavance" src="perso/droitejiren/initialavance.png" alt=""/>
+                <img id="jirendroiteinitialblock" src="perso/droitejiren/initialblock.png" alt=""/>
+                <img id="jirendroiteinitialbouclier" src="perso/droitejiren/initialbouclier.png" alt=""/>
+                <img id="jirendroiteinitialdaka1" src="perso/droitejiren/initialdaka1.png" alt=""/>
+                <img id="jirendroiteinitialdaka2" src="perso/droitejiren/initialdaka2.png" alt=""/>
+                <img id="jirendroiteinitialdaka3" src="perso/droitejiren/initialdaka3.png" alt=""/>
+                <img id="jirendroiteinitialdescend" src="perso/droitejiren/initialdescend.png" alt=""/>
+                <img id="jirendroiteinitialmultiplepunch" src="perso/droitejiren/initialmultiplepunch.png" alt=""/>
+                <img id="jirendroiteinitialmultiplepunchchargement" src="perso/droitejiren/initialmultiplepunchchargement.png" alt=""/>
+                <img id="jirendroiteinitialpouvoirjiren" src="perso/droitejiren/initialpouvoirjiren.png" alt=""/>
+                <img id="jirendroiteinitialretour" src="perso/droitejiren/initialretour.png" alt=""/>
+                <img id="jirendroiteinitialtotondry1" src="perso/droitejiren/initialtotondry1.png" alt=""/>
+                <img id="jirendroiteinitialtotondry2" src="perso/droitejiren/initialtotondry2.png" alt=""/>
+                <img id="jirendroiteinitialtouchedbehind" src="perso/droitejiren/initialtouchedbehind.png" alt=""/>
+                <img id="jirendroiteinitialtouchedmiddle" src="perso/droitejiren/initialtouchedmiddle.png" alt=""/>
+                <img id="jirendroiteinitialtouchedtop" src="perso/droitejiren/initialtouchedtop.png" alt=""/>
+                <img id="jirendroiteinitialtransformation" src="perso/droitejiren/initialtransformation.png" alt=""/>
+                <img id="jirengaucheinitial" src="perso/gauchejiren/initial.png" alt=""/>
+                <img id="jirengaucheinitialairpouvoirjiren" src="perso/gauchejiren/initialairpouvoirjiren.png" alt=""/>
+                <img id="jirengaucheinitialairtransformation" src="perso/gauchejiren/initialairtransformation.png" alt=""/>
+                <img id="jirengaucheinitialair" src="perso/gauchejiren/initialair.png" alt=""/>
+                <img id="jirengaucheinitialavance" src="perso/gauchejiren/initialavance.png" alt=""/>
+                <img id="jirengaucheinitialblock" src="perso/gauchejiren/initialblock.png" alt=""/>
+                <img id="jirengaucheinitialbouclier" src="perso/gauchejiren/initialbouclier.png" alt=""/>
+                <img id="jirengaucheinitialdaka1" src="perso/gauchejiren/initialdaka1.png" alt=""/>
+                <img id="jirengaucheinitialdaka2" src="perso/gauchejiren/initialdaka2.png" alt=""/>
+                <img id="jirengaucheinitialdaka3" src="perso/gauchejiren/initialdaka3.png" alt=""/>
+                <img id="jirengaucheinitialdescend" src="perso/gauchejiren/initialdescend.png" alt=""/>
+                <img id="jirengaucheinitialmultiplepunch" src="perso/gauchejiren/initialmultiplepunch.png" alt=""/>
+                <img id="jirengaucheinitialmultiplepunchchargement" src="perso/gauchejiren/initialmultiplepunchchargement.png" alt=""/>
+                <img id="jirengaucheinitialpouvoirjiren" src="perso/gauchejiren/initialpouvoirjiren.png" alt=""/>
+                <img id="jirengaucheinitialretour" src="perso/gauchejiren/initialretour.png" alt=""/>
+                <img id="jirengaucheinitialtotondry1" src="perso/gauchejiren/initialtotondry1.png" alt=""/>
+                <img id="jirengaucheinitialtotondry2" src="perso/gauchejiren/initialtotondry2.png" alt=""/>
+                <img id="jirengaucheinitialtouchedbehind" src="perso/gauchejiren/initialtouchedbehind.png" alt=""/>
+                <img id="jirengaucheinitialtouchedmiddle" src="perso/gauchejiren/initialtouchedmiddle.png" alt=""/>
+                <img id="jirengaucheinitialtouchedtop" src="perso/gauchejiren/initialtouchedtop.png" alt=""/>
+                <img id="jirengaucheinitialtransformation" src="perso/gauchejiren/initialtransformation.png" alt=""/>
+            </div>
+            <div>
+                <img class="p" id="pouvoirgauche1" src="pouvoir/pouvoirgauche1.png" alt="" style="animation: pouvoir1 1s;"/>
+                <img class="p" id="pouvoirgauche2" src="pouvoir/pouvoirgauche2.png" alt="" style="animation: pouvoir2 1s;"/>
+                <img class="p" id="pouvoirgauche3" src="pouvoir/pouvoirgauche3.png" alt="" style="animation: pouvoir3 1s;"/>
+                <img class="p" id="pouvoirgauche4" src="pouvoir/pouvoirgauche4.png" alt="" style="animation: pouvoir4 1s;"/>
+                <img class="p" id="pouvoirgauche5" src="pouvoir/pouvoirgauche5.png" alt="" style="animation: pouvoir5 1s;"/>
+                <img class="p" id="pouvoirgauche6" src="pouvoir/pouvoirgauche6.png" alt="" style="animation: pouvoir6 1s;"/>
+                <img class="p" id="pouvoirgauche7" src="pouvoir/pouvoirgauche7.png" alt="" style="animation: pouvoir7 1s;"/>
+                <img class="p" id="pouvoirgauche8" src="pouvoir/pouvoirgauche8.png" alt="" style="animation: pouvoir8 1s;"/>
+                <img class="p" id="pouvoirgauche9" src="pouvoir/pouvoirgauche9.png" alt="" style="animation: pouvoir9 1s;"/>
+                <img class="p" id="pouvoirgauche10" src="pouvoir/pouvoirgauche10.png" alt="" style="animation: pouvoir10 1s;"/>
+                <img class="p" id="pouvoirdroite1" src="pouvoir/pouvoirdroite1.png" alt="" style="animation: pouvoir1 1s;"/>
+                <img class="p" id="pouvoirdroite2" src="pouvoir/pouvoirdroite2.png" alt="" style="animation: pouvoir2 1s;"/>
+                <img class="p" id="pouvoirdroite3" src="pouvoir/pouvoirdroite3.png" alt="" style="animation: pouvoir3 1s;"/>
+                <img class="p" id="pouvoirdroite4" src="pouvoir/pouvoirdroite4.png" alt="" style="animation: pouvoir4 1s;"/>
+                <img class="p" id="pouvoirdroite5" src="pouvoir/pouvoirdroite5.png" alt="" style="animation: pouvoir5 1s;"/>
+                <img class="p" id="pouvoirdroite6" src="pouvoir/pouvoirdroite6.png" alt="" style="animation: pouvoir6 1s;"/>
+                <img class="p" id="pouvoirdroite7" src="pouvoir/pouvoirdroite7.png" alt="" style="animation: pouvoir7 1s;"/>
+                <img class="p" id="pouvoirdroite8" src="pouvoir/pouvoirdroite8.png" alt="" style="animation: pouvoir8 1s;"/>
+                <img class="p" id="pouvoirdroite9" src="pouvoir/pouvoirdroite9.png" alt="" style="animation: pouvoir9 1s;"/>
+                <img class="p" id="pouvoirdroite10" src="pouvoir/pouvoirdroite10.png" alt="" style="animation: pouvoir10 1s;"/>
+                <img class="p" id="pouvoirjirendroite1" src="pouvoir/pouvoirjirendroite1.png" alt="" style="animation: pouvoirjiren1 1s;"/>
+                <img class="p" id="pouvoirjirendroite2" src="pouvoir/pouvoirjirendroite2.png" alt="" style="animation: pouvoirjiren2 1s;"/>
+                <img class="p" id="pouvoirjirendroite3" src="pouvoir/pouvoirjirendroite3.png" alt="" style="animation: pouvoirjiren3 1s;"/>
+                <img class="p" id="pouvoirjirendroite4" src="pouvoir/pouvoirjirendroite4.png" alt="" style="animation: pouvoirjiren4 1s;"/>
+                <img class="p" id="pouvoirjirendroite5" src="pouvoir/pouvoirjirendroite5.png" alt="" style="animation: pouvoirjiren5 1s;"/>
+                <img class="p" id="pouvoirjirendroite6" src="pouvoir/pouvoirjirendroite6.png" alt="" style="animation: pouvoirjiren6 1s;"/>
+                <img class="p" id="pouvoirjirendroite7" src="pouvoir/pouvoirjirendroite7.png" alt="" style="animation: pouvoirjiren7 1s;"/>
+                <img class="p" id="pouvoirjirendroite8" src="pouvoir/pouvoirjirendroite8.png" alt="" style="animation: pouvoirjiren8 1s;"/>
+                <img class="p" id="pouvoirjirendroite9" src="pouvoir/pouvoirjirendroite9.png" alt="" style="animation: pouvoirjiren9 1s;"/>
+                <img class="p" id="pouvoirjirendroite10" src="pouvoir/pouvoirjirendroite10.png" alt="" style="animation: pouvoirjiren10 1s;"/>
+                <img class="p" id="pouvoirjirengauche1" src="pouvoir/pouvoirjirengauche1.png" alt="" style="animation: pouvoirjiren1 1s;"/>
+                <img class="p" id="pouvoirjirengauche2" src="pouvoir/pouvoirjirengauche2.png" alt="" style="animation: pouvoirjiren2 1s;"/>
+                <img class="p" id="pouvoirjirengauche3" src="pouvoir/pouvoirjirengauche3.png" alt="" style="animation: pouvoirjiren3 1s;"/>
+                <img class="p" id="pouvoirjirengauche4" src="pouvoir/pouvoirjirengauche4.png" alt="" style="animation: pouvoirjiren4 1s;"/>
+                <img class="p" id="pouvoirjirengauche5" src="pouvoir/pouvoirjirengauche5.png" alt="" style="animation: pouvoirjiren5 1s;"/>
+                <img class="p" id="pouvoirjirengauche6" src="pouvoir/pouvoirjirengauche6.png" alt="" style="animation: pouvoirjiren6 1s;"/>
+                <img class="p" id="pouvoirjirengauche7" src="pouvoir/pouvoirjirengauche7.png" alt="" style="animation: pouvoirjiren7 1s;"/>
+                <img class="p" id="pouvoirjirengauche8" src="pouvoir/pouvoirjirengauche8.png" alt="" style="animation: pouvoirjiren8 1s;"/>
+                <img class="p" id="pouvoirjirengauche9" src="pouvoir/pouvoirjirengauche9.png" alt="" style="animation: pouvoirjiren9 1s;"/>
+                <img class="p" id="pouvoirjirengauche10" src="pouvoir/pouvoirjirengauche10.png" alt="" style="animation: pouvoirjiren10 1s;"/>
+                <img class="a" id="kamehamehaanimation" src="pouvoir/kamehamehaanimation.png" alt=""/>
+                <img class="p" id="kamehamehagauche1" src="pouvoir/kamehamehagauche1.png" alt=""/>
+                <img class="p" id="kamehamehagauche2" src="pouvoir/kamehamehagauche2.png" alt=""/>
+                <img class="p" id="kamehamehagauche3" src="pouvoir/kamehamehagauche3.png" alt=""/>
+                <img class="p" id="kamehamehadroite1" src="pouvoir/kamehamehadroite1.png" alt=""/>
+                <img class="p" id="kamehamehadroite2" src="pouvoir/kamehamehadroite2.png" alt=""/>
+                <img class="p" id="kamehamehadroite3" src="pouvoir/kamehamehadroite3.png" alt=""/>
+                <img class="p" id="multiplepunchgauche1" src="pouvoir/multiplepunchgauche1.png" alt=""/>
+                <img class="p" id="multiplepunchgauche2" src="pouvoir/multiplepunchgauche2.png" alt=""/>
+                <img class="p" id="multiplepunchgauche3" src="pouvoir/multiplepunchgauche3.png" alt=""/>
+                <img class="p" id="multiplepunchdroite1" src="pouvoir/multiplepunchdroite1.png" alt=""/>
+                <img class="p" id="multiplepunchdroite2" src="pouvoir/multiplepunchdroite2.png" alt=""/>
+                <img class="p" id="multiplepunchdroite3" src="pouvoir/multiplepunchdroite3.png" alt=""/>
+            </div>
+        </section>
+        <section id="menu_page" style="display:block">
+            <h1>GOKU VS JIREN</h1>
+            <div>
+                <ul>
+                    <li><button id="play_button" type="button">PLAY</button></li>
+                    <li><button id="command_button" type="button">COMMAND</button></li>
+                    <li><button id="quit_button" type="button">QUIT</button></li>
+                </ul>
+                <p id="synopsis_text"><span class="underlined">Synopsis</span> : After the Tournament of Power, Songoku and Jiren face off again. Both are looking to get stronger and stronger. Their previous fight gives them insight into each other's techniques and weakness. They can both win. However, only one will emerge victorious. So who will it be?</p>
+            </div>
+        </section>
+        <section id="ready_game_page">
+            <p id="ready_text">READY</p>
+            <p id="fight_text">FIGHT</p>
+        </section>
+        <section id="command_page">
+            <div>
+                <h2>GOKU</h2>
+                <table>
+                    <tr>
+                        <td><span class="key_icon">T</span> up</td>
+                        <td><span class="key_icon">G</span> down</td>
+                        <td><span class="key_icon">F</span> left</td>
+                        <td><span class="key_icon">H</span> right</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">Z</span> fireball</td>
+                        <td><span class="key_icon">S</span> special power</td>
+                        <td><span class="key_icon">Q</span> box</td>
+                        <td><span class="key_icon">D</span> kick</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">&</span> transform</td>
+                        <td><span class="key_icon">A</span> block</td>
+                        <td><span class="key_icon">E</span> special defense</td>
+                        <td><span class="key_icon">Escape</span> pause</td>
+                    </tr>
+                </table>
+                <h2>JIREN</h2>
+                <table>
+                    <tr>
+                        <td><span class="key_icon">↑</span> up</td>
+                        <td><span class="key_icon">↓</span> down</td>
+                        <td><span class="key_icon">←</span> left</td>
+                        <td><span class="key_icon">→</span> right</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">O</span> fireball</td>
+                        <td><span class="key_icon">L</span> special power</td>
+                        <td><span class="key_icon">K</span> box</td>
+                        <td><span class="key_icon">M</span> kick</td>
+                    </tr>
+                    <tr>
+                        <td><span class="key_icon">_</span> transform</td>
+                        <td><span class="key_icon">I</span> block</td>
+                        <td><span class="key_icon">P</span> special defense</td>
+                        <td><span class="key_icon">Escape</span> pause</td>
+                    </tr>
+                </table>
+                <p><button id="hide_command_button" type="button">DONE</button></p>
+            </div>
+        </section>
+        <section id="win_page" style="display:none">
+            <h2 id="winner"></h2>
+            <ul id="restart_menu" style="display: none">
+                <li><button id="restart_button" type="button">RESTART</button></li>
+                <li><button id="menu_button" type="button">MENU</button></li>
+            </ul>
+        </section>
+        <!-- <section id="intro_page">
+            <div id="intro_1">
+                <svg viewBox="0 0 452 540">
+                    <text fill="silver" font-family="Arial" font-size="100" x="30" y="300">Hidekela</text>
+                    <text fill="silver" font-family="Arial" font-size="20" x="190" y="330">presents</text>
+                </svg>
+            </div>
+            <div id="intro_2">
+                <svg viewBox="0 0 452 540">
+                    <text fill="silver" font-family="Arial" font-size="20" x="190" y="535">product</text>
+                    <path fill='RGB(229,162,40)' d='M 0,0 L 451,0 410,460 225,512 41,460'/>
+                    <path fill='RGB(241,191,38)' d='M 226,472 L375,431 410,37 226,37'/>
+                    <path fill='RGB(236,237,238)' d='M 226,94 L 113,94 102,265 226,265 226,208 160,208 165,150 226,150 z M 226,355 L 162,338 158,293 102,293 109,382 226,414 z'/>
+                    <path fill='RGB(255,255,255)' d='M 226,265 L 295,265 288,338 226,355 226,414 341,382 357,208 226,208 z M 226,94 L 339,94 357,180 301,180 293,150 226,150 z'/>
+                </svg>
+            </div>
+            <div id="intro_3">
+                <svg viewBox="0 0 452 540">
+                    <text fill="silver" font-family="Arial" font-size="20" x="190" y="535">product</text>
+                    <path fill='RGB(227,79,38)' d='M 41,460 L 0,0 451,0 410,460 225,512'/>
+                    <path fill='RGB(239,101,42)' d='M 226,472 L 375,431 410,37 226,37'/>
+                    <path fill='RGB(236,237,238)' d='M 226,208 L 151,208 146,150 226,150 226,94 84,94 99,265 226,265 z M 226,355 L162,338 158,293 102,293 109,382 226,414 z'/>
+                    <path fill='RGB(255,255,255)' d='M 226,265 L 295,265 288,338 226,355 226,414 341,382 357,208 226,208 z M 226,94 L226,150 362,150 367,94 z'/>
+                </svg>
+            </div>
+            <div id="intro_4">
+                <svg viewBox="0 0 452 540">
+                    <text fill="silver" font-family="Arial" font-size="20" x="190" y="535">product</text>
+                    <path fill='RGB(12,115,184)' d='M 41,460 L 0,0 451,0 410,460 225,512'/>
+                    <path fill='RGB(48,169,220)' d='M 226,472 L 375,431 410,37 226,37'/>
+                    <path fill='RGB(236,237,238)' d='M 226,208 L 94,208 99,265 226,265 z M 226,94 L 84,94 89,150 226,150 z M 226,355 L 102,322 109,382 226,414 z'/>
+                    <path fill='RGB(255,255,255)' d='M 226,265 L 295,265 288,338 226,355 226,414 341,382 367,94 226,94 226,150 306,150 300,208 226,208 z'/>
+                </svg>
+            </div>
+            <script>
+                setTimeout(function(){
+                    document.getElementById('intro_page').style = "display: none";
+                },20000);
+            </script>
+        </section> -->
+        <footer id="c">github & fb: Hidekela</footer>
     </body>
-    <script src="game.js"></script>
+    <script src="functions.js"></script>
+    <script src="animationPouvoir.js"></script>
+    <script src="controller.js"></script>
+    <script src="personnage.js"></script>
+    <script src="index.js"></script>
+    <script>
+        var startGame = function()
+        {
+            game.reinit();
+            document.getElementById('ready_game_page').style = "display: block";
+            document.getElementById('ready_text').style = "animation: ready_text_animation 2.5s;";
+            document.getElementById('fight_text').style = "animation: fight_text_animation 0.5s 2.5s;";
+            setTimeout(function(){
+                document.getElementById('ready_game_page').style = "";
+                game.start();
+            },3000);
+        }
+        
+        document.getElementById('play_button').addEventListener('click',function(e){
+            document.getElementById('menu_page').style = "top: -120%; transition: top 0.5s";
+            startGame();
+        },false);
+
+        document.getElementById('command_button').addEventListener('click',function(e){
+            document.getElementById('command_page').style = "left: 0; transition: left 0.5s";
+        },false);
+
+        document.getElementById('hide_command_button').addEventListener('click',function(e){
+            document.getElementById('command_page').style = "left: -100%; transition: left 0.5s";
+        },false);
+
+        document.getElementById('quit_button').addEventListener('click',function(e){
+            window.close();
+        },false);
+        
+        document.getElementById('restart_button').addEventListener('click',function(e){
+            document.getElementById('win_page').style = "top: -120%; opacity: 0; transition: top 0.5s, opacity 1s";
+            document.getElementById('winner').style = "";
+            document.getElementById('restart_menu').style = "display: none";
+            startGame();
+        },false);
+        
+        document.getElementById('menu_button').addEventListener('click',function(e){
+            document.getElementById('win_page').style = "top: 120%; opacity: 0; transition: top 0.5s, opacity 1s";
+            document.getElementById('winner').style = "";
+            document.getElementById('restart_menu').style = "display: none";
+            document.getElementById('menu_page').style = "top: 0; transition: top 0.5s";
+        },false);
+    </script>
 </html>

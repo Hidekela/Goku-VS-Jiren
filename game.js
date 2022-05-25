@@ -702,8 +702,8 @@ function pouvoir(yj, y, xj, x)
     {
             var pouvoirj = setTimeout(function(){
             
-    if(!boolk && pres && !boolfin)
-    {
+                if(!boolk && pres && !boolfin)
+                {
                     if(yj <= 0)
                     {
                         jiren.src = 'perso/'+positionj+'jiren/initial.png';
@@ -784,7 +784,7 @@ function pouvoir(yj, y, xj, x)
                     document.getElementById('pj'+pj).style = '';
                     }
                 clearTimeout(pouvoirj);
-    }
+                }
             },50);
     touched = false;
     }
