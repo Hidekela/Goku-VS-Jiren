@@ -16,22 +16,26 @@ function Game(player1, player2)
 
     self.reinit = function()
     {
-        if(document.getElementById(self.player1.nom+'_control_check').checked)
+        var control_player1 = document.getElementById(self.player1.nom+'_control_check').checked;
+        var control_player2 = document.getElementById(self.player2.nom+'_control_check').checked;
+        var keyConfig1 = null, keyConfig2 = null;
+
+        if(control_player1 && control_player2)
         {
-            self.player1.majControlleur(keyConfigPlayer1);
+            keyConfig1 = keyConfigPlayer1;
+            keyConfig2 = keyConfigPlayer2;
         }
-        else
+        else if(control_player1)
         {
-            self.player1.majControlleur();
+            keyConfig1 = keyConfigPlayerDefault;
         }
-        if(document.getElementById(self.player2.nom+'_control_check').checked)
+        else if(control_player2)
         {
-            self.player2.majControlleur(keyConfigPlayer2);
+            keyConfig2 = keyConfigPlayerDefault;
         }
-        else
-        {
-            self.player2.majControlleur();
-        }
+
+        self.player1.majControlleur(keyConfig1);
+        self.player2.majControlleur(keyConfig2);
 
         self.player1.reinitialiser(0,self.player2.position,self.player2.handleSprite);
         self.player2.reinitialiser(screen.width-150,self.player1.position,self.player1.handleSprite);
@@ -78,15 +82,15 @@ function Game(player1, player2)
 
         self.reconstitutionEnergie = setInterval(function()
         {
-            if(!player1.enDefenceSpecial && player1.energie < player1.energie_max)
+            if(!self.player1.enDefenceSpecial && self.player1.energie < self.player1.energie_max)
             {
-                player1.energie++;
-                player1.barreEnergieRestant.style = 'width: '+player1.energie+'%';
+                self.player1.energie++;
+                self.player1.barreEnergieRestant.style = 'width: '+self.player1.energie+'%';
             }
-            if(!player2.enDefenceSpecialplayer2.energie < player2.energie_max)
+            if(!self.player2.enDefenceSpecial && self.player2.energie < self.player2.energie_max)
             {
-                player2.energie++;
-                player2.barreEnergieRestant.style = 'width: '+player2.energie+'%';
+                self.player2.energie++;
+                self.player2.barreEnergieRestant.style = 'width: '+self.player2.energie+'%';
             }
         },1000);
     };
@@ -215,9 +219,28 @@ function Game(player1, player2)
     };
 }
 
-var keyConfigPlayer1 = null;
+var keyConfigPlayerDefault = new KeyToCommand();
 
-keyConfigPlayer1 = new KeyToCommand();
+var keyConfigPlayer1 = new KeyToCommand(70,84,72,71,81,68,90,83,49,65,69,27);
+
+/* 
+
+    Goku keys (2 players):
+
+this.left          = 70; // F
+this.up            = 84; // T
+this.right         = 72; // H
+this.down          = 71; // G
+this.box           = 81; // Q
+this.kick          = 68; // D
+this.pouvoir       = 90; // Z
+this.attackSpecial = 83; // S
+this.transform     = 49; // 1 (non numpad)
+this.block         = 65; // A
+this.blockSpecial  = 69; // E 
+this.pause         = 27; // touche Echap 
+
+*/
 
 var kamehamehaStyle = "@keyframes kamehameha {from{transform: rotate(0deg)} to{transform: rotate(360deg)}}";
 var animationKamehameha = new elementdAnimation('kamehamehaanimation',1,-105,1,-22,270,kamehamehaStyle);
@@ -230,12 +253,11 @@ var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage
 
 var Songoku = new Personnage('goku',keyConfigPlayer1,200,100,position,niveaux,pouvoirs);
 
-var keyConfigPlayer2 = null;
-
-keyConfigPlayer2 = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,170);
+var keyConfigPlayer2 = new KeyToCommand(37,38,39,40,75,77,79,76,56,73,80,46);
 
 /*
-        Jiren keys:
+
+    Jiren keys (2 players):
 
 left          = 37;  // touche gauche
 up            = 38;  // touche haut
@@ -248,7 +270,7 @@ attackSpecial = 76;  // L
 transform     = 56;  // 8
 block         = 73;  // I
 blockSpecial  = 80;  // P
-pause         = 170; // touche Echap
+pause         = 46;  // touche Suppr
 
 */
 

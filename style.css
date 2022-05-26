@@ -399,25 +399,37 @@ ul li:hover button
     z-index: 2;
 }
 
-#command_page div
+#all_command
 {
     width: 75%;
     padding: 20px 0;
     margin: auto;
     margin-top: 20px;
-    background: #252525;
+    background: #050505df;
     color: silver;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 17px;
 }
 
-#command_page h2
+#command_page_0
+{
+    margin: 120px 0;
+}
+
+#command_page h1
 {
     font-size: 50px;
     text-align: center;
     text-shadow: 0 0 15px #0ba710;
     width: 100%;
     margin: 20px 0;
+}
+
+#command_page h2
+{
+    font-size: 30px;
+    margin: 10px;
+    text-align: center;
 }
 
 #command_page table
@@ -446,16 +458,17 @@ ul li:hover button
 
 #command_page p
 {
-    width: 50%;
+    width: 100%;
     margin: auto;
     margin-top: 20px;
+    text-align: center;
 }
 
-#hide_command_button
+#hide_command_button, .switch_page_button
 {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
-    width: 100%;
+    width: 50%;
     color: #707070;
     background: #080808;
     border-top: 3px solid #104010;
@@ -466,12 +479,18 @@ ul li:hover button
     margin: 0;
 }
 
-#hide_command_button:hover
+#hide_command_button:hover, .switch_page_button:hover
 {
     cursor: pointer;
     color: silver;
     text-shadow: 0 0 15px #0ba710;
     box-shadow: 0 0 5px #0ba710;
+}
+
+.switch_page_button
+{
+    width: 10%;
+    margin: 0 20px;
 }
 
 /* Ready & Fight texts */
@@ -483,7 +502,7 @@ ul li:hover button
     top: 0;
     min-width: 100%;
     min-height: 120%;
-    background: #101010bb;
+    background: #080808bb;
     display: none;
     z-index: 1;
 }
@@ -561,7 +580,7 @@ ul li:hover button
     padding: 20px 0;
     margin: auto;
     margin-top: 5%;
-    background: #252525;
+    background: #050505df;
     color: silver;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 17px;

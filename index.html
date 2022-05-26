@@ -314,6 +314,9 @@
                 jiren_control_label.addEventListener('click',function(){
                     jiren_control_label.style = document.getElementById('jiren_control_check').checked? "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;" : "";
                 },true);
+
+                // Check Goku control in first time
+                if(!document.getElementById('goku_control_check').checked) goku_control_label.click();
             </script>
         </section>
         <section id="ready_game_page">
@@ -321,51 +324,92 @@
             <p id="fight_text">FIGHT</p>
         </section>
         <section id="command_page">
-            <div>
-                <h2>GOKU</h2>
-                <table>
-                    <tr>
-                        <td><span class="key_icon">T</span> up</td>
-                        <td><span class="key_icon">G</span> down</td>
-                        <td><span class="key_icon">F</span> left</td>
-                        <td><span class="key_icon">H</span> right</td>
-                    </tr>
-                    <tr>
-                        <td><span class="key_icon">Z</span> fireball</td>
-                        <td><span class="key_icon">S</span> special power</td>
-                        <td><span class="key_icon">Q</span> box</td>
-                        <td><span class="key_icon">D</span> kick</td>
-                    </tr>
-                    <tr>
-                        <td><span class="key_icon">&</span> transform</td>
-                        <td><span class="key_icon">A</span> block</td>
-                        <td><span class="key_icon">E</span> special defense</td>
-                        <td><span class="key_icon">Escape</span> pause</td>
-                    </tr>
-                </table>
-                <h2>JIREN</h2>
-                <table>
-                    <tr>
-                        <td><span class="key_icon">↑</span> up</td>
-                        <td><span class="key_icon">↓</span> down</td>
-                        <td><span class="key_icon">←</span> left</td>
-                        <td><span class="key_icon">→</span> right</td>
-                    </tr>
-                    <tr>
-                        <td><span class="key_icon">O</span> fireball</td>
-                        <td><span class="key_icon">L</span> special power</td>
-                        <td><span class="key_icon">K</span> box</td>
-                        <td><span class="key_icon">M</span> kick</td>
-                    </tr>
-                    <tr>
-                        <td><span class="key_icon">_</span> transform</td>
-                        <td><span class="key_icon">I</span> block</td>
-                        <td><span class="key_icon">P</span> special defense</td>
-                        <td><span class="key_icon">Escape</span> pause</td>
-                    </tr>
-                </table>
-                <p><button id="hide_command_button">DONE</button></p>
+            <div id="all_command">
+                <div id="command_page_0" style="display: block;">
+                    <h1>ONE PLAYER</h1>
+                    <h2>GOKU or JIREN</h2>
+                    <table>
+                        <tr>
+                            <td><span class="key_icon">↑</span> up</td>
+                            <td><span class="key_icon">↓</span> down</td>
+                            <td><span class="key_icon">←</span> left</td>
+                            <td><span class="key_icon">→</span> right</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key_icon">Z</span> fireball</td>
+                            <td><span class="key_icon">S</span> special power</td>
+                            <td><span class="key_icon">Q</span> box</td>
+                            <td><span class="key_icon">D</span> kick</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key_icon">&</span> transform</td>
+                            <td><span class="key_icon">A</span> block</td>
+                            <td><span class="key_icon">E</span> special defense</td>
+                            <td><span class="key_icon">Escape</span> pause</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="command_page_1" style="display: none;">
+                    <h1>TWO PLAYERS</h1>
+                    <h2>GOKU</h2>
+                    <table>
+                        <tr>
+                            <td><span class="key_icon">T</span> up</td>
+                            <td><span class="key_icon">G</span> down</td>
+                            <td><span class="key_icon">F</span> left</td>
+                            <td><span class="key_icon">H</span> right</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key_icon">Z</span> fireball</td>
+                            <td><span class="key_icon">S</span> special power</td>
+                            <td><span class="key_icon">Q</span> box</td>
+                            <td><span class="key_icon">D</span> kick</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key_icon">&</span> transform</td>
+                            <td><span class="key_icon">A</span> block</td>
+                            <td><span class="key_icon">E</span> special defense</td>
+                            <td><span class="key_icon">Escape</span> pause</td>
+                        </tr>
+                    </table>
+                    <h2>JIREN</h2>
+                    <table>
+                        <tr>
+                            <td><span class="key_icon">↑</span> up</td>
+                            <td><span class="key_icon">↓</span> down</td>
+                            <td><span class="key_icon">←</span> left</td>
+                            <td><span class="key_icon">→</span> right</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key_icon">O</span> fireball</td>
+                            <td><span class="key_icon">L</span> special power</td>
+                            <td><span class="key_icon">K</span> box</td>
+                            <td><span class="key_icon">M</span> kick</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key_icon">_</span> transform</td>
+                            <td><span class="key_icon">I</span> block</td>
+                            <td><span class="key_icon">P</span> special defense</td>
+                            <td><span class="key_icon">Del</span> pause</td>
+                        </tr>
+                    </table>
+                </div>
+                <p><button class="switch_page_button">❮</button><button id="hide_command_button">DONE</button><button class="switch_page_button">❯</button></p>
             </div>
+            <script>
+                var switch_page_button1 = document.getElementsByClassName('switch_page_button')[0];
+                var switch_page_button2 = document.getElementsByClassName('switch_page_button')[1];
+
+                var current_command_page = 0;
+                function switch_page()
+                {
+                    document.getElementById('command_page_'+current_command_page).style = "display: none";
+                    current_command_page = current_command_page? 0 : 1;
+                    document.getElementById('command_page_'+current_command_page).style = "display: block";
+                }
+                switch_page_button1.addEventListener('click',switch_page,false);
+                switch_page_button2.addEventListener('click',switch_page,false);
+            </script>
         </section>
         <section id="win_page" style="display:none">
             <h2 id="winner"></h2>
