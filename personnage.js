@@ -229,10 +229,8 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.avatar.src = 'avatar/'+self.nom_niveau+self.nom+'.png';
     }
 
-    self.majSprite = function(transformation="")
+    self.majSprite = function(transformation="",positionTouched="")
     {
-        if(self.sprite == null)
-            alert(self.sprite);
         self.sprite.style = "display: none";
         if(self.enDefenceSpecial)
             self.sprite = self.allSprites[self.allSpritesId.indexOf(self.nom+self.position.relative+self.nom_niveau+self.pouvoirs[2].nom)];
@@ -241,7 +239,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             self.sprite = self.allSprites[self.allSpritesId.indexOf(self.nom+self.position.relative+self.nom_niveau+self.pouvoirs[1].nom)];
             // self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+self.pouvoirs[1].nom);
         else if(self.toucheParlAdversaire)
-            self.sprite = self.allSprites[self.allSpritesId.indexOf(self.nom+self.position.relative+self.nom_niveau+'touchedtop')];
+            self.sprite = self.allSprites[self.allSpritesId.indexOf(self.nom+self.position.relative+self.nom_niveau+'touched'+(positionTouched? positionTouched : 'top'))];
         else
             self.sprite = self.allSprites[self.allSpritesId.indexOf(self.nom+self.position.relative+self.nom_niveau+(self.etat? self.etat : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)))];
             // self.sprite = document.getElementById(self.nom+self.position.relative+self.nom_niveau+(self.etat? self.etat : (self.deplacement.relative == 'air' || !self.deplacement.relative? self.position.place+transformation : self.deplacement.relative)));
@@ -257,6 +255,11 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
     {
         self.deplacement.relative = self.position.y > 0 ? 'air' : '';
         self.majSprite();
+    }
+
+    self.majPosition = function()
+    {
+        self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;'+(self.enDefenceSpecial? self.pouvoirs[2].style : '');
     }
 
     self.doitSeDeplacer = function()
@@ -298,7 +301,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.regarderAdversaire(position_x_adversaire);
 
         // Positionner le personnage au bon endroit
-        self.handleSprite.style = 'left: '+self.position.x+'px;bottom: '+self.position.y+'px;'+(self.enDefenceSpecial? self.pouvoirs[2].style : '');
+        self.majPosition();
 
         if(self.action == 'R')
         {
@@ -540,12 +543,13 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         self.majSprite();
 
         self.lancementPouvoirSpecial = setInterval(function(){
-            if(self.position.relative == 'gauche' && position_adversaire.y-sprite_pouvoir_special.clientHeight < pouvoirSpecialPosition.y && pouvoirSpecialPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirSpecialPosition.x+sprite_pouvoir_special.clientWidth > position_adversaire.x && position_adversaire.x+handle_sprite_adversaire.clientWidth >= pouvoirSpecialPosition.x)
+            var half_width_adversaire = handle_sprite_adversaire.clientWidth/2;
+            if(self.position.relative == 'gauche' && position_adversaire.y-sprite_pouvoir_special.clientHeight < pouvoirSpecialPosition.y && pouvoirSpecialPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirSpecialPosition.x+sprite_pouvoir_special.clientWidth > position_adversaire.x + half_width_adversaire && position_adversaire.x+half_width_adversaire >= pouvoirSpecialPosition.x)
             {
                 self.valeurDegat = self.pouvoirs[1].puissance;
                 self.toucherAdversaire = true;
             }
-            else if(self.position.relative == 'droite' && position_adversaire.y-sprite_pouvoir_special.clientHeight < pouvoirSpecialPosition.y && pouvoirSpecialPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirSpecialPosition.x < position_adversaire.x && position_adversaire.x <= pouvoirSpecialPosition.x+sprite_pouvoir_special.clientWidth)
+            else if(self.position.relative == 'droite' && position_adversaire.y-sprite_pouvoir_special.clientHeight < pouvoirSpecialPosition.y && pouvoirSpecialPosition.y < position_adversaire.y+handle_sprite_adversaire.clientHeight && pouvoirSpecialPosition.x < position_adversaire.x+half_width_adversaire && position_adversaire.x+half_width_adversaire <= pouvoirSpecialPosition.x+sprite_pouvoir_special.clientWidth)
             {
                 self.valeurDegat = self.pouvoirs[1].puissance;
                 self.toucherAdversaire = true;
@@ -678,6 +682,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
             default:
                 break;
         }
+        return;
     };
 
     self.keyupToBrain = function(e)
@@ -718,6 +723,7 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         {
             e.keyCode = 0;
         }
+        return;
     };
 
     self.agir = function(position_adversaire,handle_sprite_adversaire)
@@ -818,9 +824,20 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
 
         self.majBarreEnergie();
         
-        self.niveau = 0;
-        self.pas = self.liste_niveaux.pas[0];
-        self.majNiveau(position_adversaire,handle_sprite_adversaire);
+
+        if(self.controlleur == 'computer')// Pour les persos auto
+        {
+            self.actionAuto = rand(0,8);
+            self.niveau = self.liste_niveaux.max;
+            self.majNiveau(position_adversaire,handle_sprite_adversaire);
+        }
+        else
+        {
+            self.niveau = 0;
+            self.majNiveau(position_adversaire,handle_sprite_adversaire);
+        }
+
+        self.pas = self.liste_niveaux.pas[self.niveau];
         
         self.entrainDeSeTransformer = false;
         self.entrainDeBloquer = false;
@@ -852,15 +869,6 @@ function Personnage(nom, keyConfig, vie_max, energie_max, position, niveaux, pou
         }
         self.arretPouvoirSpecial();
         self.seDeplacer(position_adversaire.x);
-        self.handleAction = null;
-
-        // Pour les persos auto
-        if(self.controlleur == 'computer')
-        {
-            self.actionAuto = rand(0,8);
-            self.niveau = self.liste_niveaux.max;
-            self.majNiveau(position_adversaire,handle_sprite_adversaire);
-        }
 
     }
 

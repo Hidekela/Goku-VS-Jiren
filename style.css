@@ -98,10 +98,6 @@ section
     background: #0ba710;
 }
 
-/* #vie_restante_goku
-{
-} */
-
 #vie_restante_jiren
 {
     position: absolute;
@@ -204,8 +200,6 @@ section
 #intro_page div
 {
     position: absolute;
-    left: 0;
-    top: 0;
     opacity: 0;
     width: 100%;
     margin: auto;
@@ -216,7 +210,6 @@ section
 {
     width: 250px;
     margin: auto;
-    margin-top: 15%;
 }
 
 @keyframes intro {

@@ -51,10 +51,8 @@ function Game(player1, player2)
 
     self.start = function()
     {
-        self.handleGame = setInterval(self.logiques,vitesse_logiques,player1,player2);
-        self.player1.handleAction = setInterval(self.player1.agir,self.player1.vitesse,self.player2.position,self.player2.handleSprite);
-        self.player2.handleAction = setInterval(self.player2.agir,self.player2.vitesse,self.player1.position,self.player1.handleSprite);
-        
+        self.handleGame = setInterval(self.logiques,vitesse_logiques,self.player1,self.player2);
+       
         if(self.player1.controlleur == 'user')
         {
             document.addEventListener("keydown",self.player1.keydownToBrain,false);
@@ -132,13 +130,19 @@ function Game(player1, player2)
         clearInterval(self.reconstitutionEnergie);
         clearInterval(self.handleGame);
 
-        var winner = self.player1.vie <= 0? self.player2.nom : self.player1.nom;
+        var looser = self.player1.vie > 0? self.player2 : self.player1;
+        looser.toucheParlAdversaire = true;
+
+        self.player1.majSprite();
+        self.player2.majSprite();
+
+        var winner_name = self.player1.vie <= 0? self.player2.nom : self.player1.nom;
         var winnerShown = document.getElementById("winner");
-        winnerShown.innerHTML = winner.toUpperCase() + ' WINS!';
+        winnerShown.innerHTML = winner_name.toUpperCase() + ' WINS!';
         winnerShown.style = "animation: winning 1s;";
 
         setTimeout(function(){
-            document.getElementById("restart_menu").style = 'tranform: rotateX(0deg); transition: transform 0.7s 1.5s';
+            document.getElementById("restart_menu").style = 'transform: rotateX(0deg); transition: transform 0.7s 1.5s';
         }, 3000);
 
         document.getElementById("win_page").style = 'top: 0; opacity: 1; transition: opacity 1s';
@@ -165,7 +169,9 @@ function Game(player1, player2)
             if(self.player1.lancementPouvoirSpecial)
             {
                 self.player2.peutBouger = false;
-                self.player2.majSprite();
+                self.player2.position.y = self.player1.position.y;
+                self.player2.majPosition();
+                self.player2.majSprite("","middle");
             }
             self.player2.arretPouvoirSpecial();
             if(self.player2.chargementPouvoirSpecial)
@@ -191,7 +197,9 @@ function Game(player1, player2)
             if(self.player2.lancementPouvoirSpecial)
             {
                 self.player1.peutBouger = false;
-                self.player1.majSprite();
+                self.player1.position.y = self.player2.position.y;
+                self.player1.majPosition();
+                self.player1.majSprite("","middle");
             }
             self.player1.arretPouvoirSpecial();
             if(self.player1.chargementPouvoirSpecial)
@@ -247,7 +255,7 @@ var animationKamehameha = new elementdAnimation('kamehamehaanimation',1,-105,1,-
 var position = new PositionPersonnage('gauche','',0,0);
 
 var puissances = [new PuissancePersonnage(0.3,0.4),new PuissancePersonnage(0.6,0.7),new PuissancePersonnage(1,1)];
-var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[40,32,25],[10,10,10],puissances);
+var niveaux = new NiveauxPersonnage(2,['initial','god','blue'],[-1,12000,12000],[30,20,10],[10,10,10],puissances);
 
 var pouvoirs = [new PouvoirPersonnage('pouvoir','A',0.4,5),new PouvoirPersonnage('kamehameha','A',0.3,50,1000,animationKamehameha),new PouvoirPersonnage('teleportation','D',-1,10,0,null,'opacity: 0',40)];
 
@@ -276,7 +284,7 @@ pause         = 46;  // touche Suppr
 
 position = new PositionPersonnage('droite','',screen.width-150,0);
 puissances = [new PuissancePersonnage(1,1)];
-niveaux = new NiveauxPersonnage(0,['initial'],[-1],[25],[10],puissances);
+niveaux = new NiveauxPersonnage(0,['initial'],[-1],[10],[10],puissances);
 pouvoirs = [new PouvoirPersonnage('pouvoirjiren','A',1,5),new PouvoirPersonnage('multiplepunch','A',0.5,50,0),new PouvoirPersonnage('bouclier','D',-1,10)];
 
 var Jiren = new Personnage('jiren',keyConfigPlayer2,200,100,position,niveaux,pouvoirs);

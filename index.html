@@ -10,7 +10,7 @@
         <title>Goku VS Jiren - Game</title>
     </head>
     <body>
-        <!-- <section id="intro_page">
+        <section id="intro_page">
             <div id="intro_1">
                 <svg viewBox="0 0 452 540">
                     <text fill="silver" font-family="Arial" font-size="100" x="30" y="300">Hidekela</text>
@@ -49,7 +49,7 @@
                     document.getElementById('intro_page').style = "display: none";
                 },24000);
             </script>
-        </section> -->
+        </section>
         <section id="game_page">
             <header>
                 <img id="terrain" src="terrain/terrain.jpg" alt=""/>
@@ -316,7 +316,8 @@
                 },true);
 
                 // Goku control is checked in first time
-                goku_control_label.style = "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;";
+                goku_control_label.style = document.getElementById('goku_control_check').checked? "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;" : "";
+                jiren_control_label.style = document.getElementById('jiren_control_check').checked? "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;" : "";
             </script>
         </section>
         <section id="ready_game_page" style="display: none;">
@@ -449,6 +450,7 @@
         },true);
         
         document.getElementById('play_game_button').addEventListener('click',function(e){
+            this.blur();
             document.getElementById('setting_game_page').style = "top: -130%; transition: top 0.5s";
             document.getElementById('menu_page').style = "top: -120%; transition: top 0.5s";
             startGame();
