@@ -5,13 +5,18 @@ body
     position: absolute;
     left: 0;
     top: 0;
-    width: 980px;
-    min-width: 100%;
-    min-height: 92%;
-    height: 590px;
+    width: 100%;
+    height: 92%;
     margin: 0;
     padding: 0;
+    background: #000000;
     overflow: hidden;
+}
+
+section
+{
+    display: flex;
+    align-items: center;
 }
 
 #c
@@ -32,6 +37,11 @@ body
 }
 
 /* Game */
+
+#game_page
+{
+    display: block;
+}
 
 #terrain
 {
@@ -186,7 +196,7 @@ body
     left: 0;
     top: 0;
     min-width: 100%;
-    min-height: 120%;
+    min-height: 110%;
     background: #101010;
     z-index: 2;
 }
@@ -252,7 +262,7 @@ body
     left: 0;
     top: 0;
     min-width: 100%;
-    min-height: 120%;
+    min-height: 110%;
     background: #101010f4;
     z-index: 1;
 }
@@ -277,7 +287,7 @@ ul
     text-shadow: 10px 0 15px #0ba710;
     display: inline-block;
     width: 50%;
-    margin-top: 15%;
+    /* margin-top: 15%; */
     vertical-align: top;
 }
 
@@ -286,7 +296,7 @@ ul
     display: inline-block;
     width: 45%;
     vertical-align: top;
-    margin-top: 15%;
+    /* margin-top: 15%; */
 }
 
 #menu_page ul
@@ -303,8 +313,14 @@ ul
 {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
+    text-align: justify;
     color: silver;
     margin-top: 15%;
+}
+
+#win_page div
+{
+    width: 100%;
 }
 
 #win_page h2
@@ -322,20 +338,11 @@ ul
 @keyframes winning {
     0%
     {
-        margin-top: 25%;
         margin-left: 100%;
-    }
-    35%
-    {
-        margin-left: 0%;
-    }
-    90%
-    {
-        margin-top: 25%;
     }
     100%
     {
-        margin-top: 83px;
+        margin-left: 0%;
     }
 }
 
@@ -394,7 +401,7 @@ ul li:hover button
     left: -100%;
     top: 0;
     min-width: 100%;
-    min-height: 120%;
+    min-height: 110%;
     background: #1010109a;
     z-index: 2;
 }
@@ -404,17 +411,16 @@ ul li:hover button
     width: 75%;
     padding: 20px 0;
     margin: auto;
-    margin-top: 20px;
     background: #050505df;
     color: silver;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 17px;
 }
 
-#command_page_0
+/* #command_page_0
 {
     margin: 120px 0;
-}
+} */
 
 #command_page h1
 {
@@ -501,16 +507,14 @@ ul li:hover button
     left: 0;
     top: 0;
     min-width: 100%;
-    min-height: 120%;
+    min-height: 110%;
     background: #080808bb;
-    display: none;
     z-index: 1;
 }
 
 #ready_text, #fight_text
 {
     position: absolute;
-    top: 30%;
     left: 100%;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 100px;
@@ -568,9 +572,8 @@ ul li:hover button
     left: 0;
     top: -130%;
     min-width: 100%;
-    min-height: 120%;
+    min-height: 110%;
     background: #1010109a;
-    padding: 20px;
     z-index: 2;
 }
 
@@ -579,7 +582,6 @@ ul li:hover button
     width: 75%;
     padding: 20px 0;
     margin: auto;
-    margin-top: 5%;
     background: #050505df;
     color: silver;
     font-family: Arial, Helvetica, sans-serif;
@@ -667,4 +669,114 @@ ul li:hover button
     font-size: 12px;
     color: silver;
     margin-top: 15%;
+}
+
+@media screen and (min-width: 1025px) {
+    #menu_page
+    {
+        display: block;
+    }
+    
+    #menu_page h1
+    {
+        width: 100%;
+    }
+
+    #menu_page div
+    {
+        display: flex;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    #menu_page ul
+    {
+        width: 50%;
+        margin: 0 2% 0 5%;
+    }
+
+    #synopsis_text
+    {
+        margin: 0 20px;
+        padding: 10px;
+        width: 40%;
+        margin: 0 5% 0 2%;
+    }
+
+}
+
+@media screen and (min-width: 1281px) {
+    #c
+    {
+        font-size: 17px;
+    }
+
+    #menu_page h1
+    {
+        font-size: 170px;
+    }
+
+    #menu_page div
+    {
+        display: block;
+        width: 50%;
+        margin: auto;
+    }
+
+    #menu_page ul
+    {
+        width: 100%;
+        margin: 0;
+    }
+
+    #synopsis_text
+    {
+        font-size: 20px;
+        padding: 0;
+        width: 100%;
+        margin: 40px 0;
+    }
+
+}
+
+@media screen and (max-width: 1023px) {
+    section, header, div, footer
+    {
+        display: none;
+    }
+
+    body::after
+    {
+        content: "Sorry! The width of the window must be 1024px or more. Please use a computer, and if it is already, resize the window or decrease the tab zoom.";
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 50px solid transparent;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        color: silver;
+        text-align: justify;
+    }
+
+}
+
+@media screen and (max-height: 511px) {
+    section, header, div, footer, #menu_page
+    {
+        display: none;
+    }
+
+    body::after
+    {
+        content: "Sorry! The height of the window must be 512px or more. Please use a computer, and if it is already, resize the window or decrease the tab zoom.";
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 50px solid transparent;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        color: silver;
+        text-align: justify;
+    }
+
 }

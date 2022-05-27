@@ -3,14 +3,14 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="google-site-verification" content=""/>
-        <meta name="description" content="Un petit jeu de Dragon Ball Super fait avec le language Javascript, sans la balise Canvas mais avec des images! ;)"/>
+        <meta name="description" content="After the Tournament of Power, Songoku and Jiren face off again. Both are looking to get stronger and stronger. Their previous fight gives them insight into each other's techniques and weakness. They can both win. However, only one will emerge victorious. So who will it be? - Browser game with JavaScript using sprites instead of canvas"/>
         <meta name="keywords" content="jeu, jeux, dbs, db, dbz, game, javascript, game online, online game, games, dragon ball, dragon ball super, son goku, jiren, jeu en ligne, jeu javascript, jeu js, sans canvas, jeu dbs, js" />
         <link rel="stylesheet" href="style.css"/>
         <link rel="icon" href="dbs.png"/>
         <title>Goku VS Jiren - Game</title>
     </head>
     <body>
-        <section id="intro_page">
+        <!-- <section id="intro_page">
             <div id="intro_1">
                 <svg viewBox="0 0 452 540">
                     <text fill="silver" font-family="Arial" font-size="100" x="30" y="300">Hidekela</text>
@@ -49,7 +49,7 @@
                     document.getElementById('intro_page').style = "display: none";
                 },24000);
             </script>
-        </section>
+        </section> -->
         <section id="game_page">
             <header>
                 <img id="terrain" src="terrain/terrain.jpg" alt=""/>
@@ -284,7 +284,7 @@
                 <img class="p" id="multiplepunchdroite3" src="pouvoir/multiplepunchdroite3.png" alt=""/>
             </div>
         </section>
-        <section id="menu_page" style="display:block">
+        <section id="menu_page">
             <h1>GOKU VS JIREN</h1>
             <div>
                 <ul>
@@ -299,7 +299,7 @@
             <div>
                 <h2>SELECT THE CHARACTERS YOU WANT TO CONTROL</h2>
                 <ul id="perso_list">
-                    <li><label id="goku_control_label"><input type="checkbox" id="goku_control_check">GOKU</label></li>
+                    <li><label id="goku_control_label"><input type="checkbox" id="goku_control_check" checked>GOKU</label></li>
                     <li><label id="jiren_control_label"><input type="checkbox" id="jiren_control_check">JIREN</label></li>
                 </ul>
                 <p><button id="return_game_button">RETURN</button><button id="play_game_button">PLAY</button></p>
@@ -315,11 +315,11 @@
                     jiren_control_label.style = document.getElementById('jiren_control_check').checked? "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;" : "";
                 },true);
 
-                // Check Goku control in first time
-                if(!document.getElementById('goku_control_check').checked) goku_control_label.click();
+                // Goku control is checked in first time
+                goku_control_label.style = "box-shadow: 0 0 35px #0ba710; text-shadow: 0 0 25px #0ba710;";
             </script>
         </section>
-        <section id="ready_game_page">
+        <section id="ready_game_page" style="display: none;">
             <p id="ready_text">READY</p>
             <p id="fight_text">FIGHT</p>
         </section>
@@ -412,11 +412,13 @@
             </script>
         </section>
         <section id="win_page" style="display:none">
-            <h2 id="winner"></h2>
-            <ul id="restart_menu" style="display: none">
-                <li><button id="restart_button">RESTART</button></li>
-                <li><button id="menu_button">MENU</button></li>
-            </ul>
+            <div>
+                <h2 id="winner"></h2>
+                <ul id="restart_menu" style="transform: rotateX(90deg)">
+                    <li><button id="restart_button">RESTART</button></li>
+                    <li><button id="menu_button">MENU</button></li>
+                </ul>
+            </div>
         </section>
         <footer id="c">github & fb: Hidekela</footer>
     </body>
@@ -429,11 +431,11 @@
         var startGame = function()
         {
             game.reinit();
-            document.getElementById('ready_game_page').style = "display: block";
+            document.getElementById('ready_game_page').style = "";
             document.getElementById('ready_text').style = "animation: ready_text_animation 2.5s;";
             document.getElementById('fight_text').style = "animation: fight_text_animation 0.5s 2.5s;";
             setTimeout(function(){
-                document.getElementById('ready_game_page').style = "";
+                document.getElementById('ready_game_page').style = "display: none;";
                 game.start();
             },3000);
         }
@@ -467,14 +469,14 @@
         document.getElementById('restart_button').addEventListener('click',function(e){
             document.getElementById('win_page').style = "top: -120%; opacity: 0; transition: top 0.5s, opacity 1s";
             document.getElementById('winner').style = "";
-            document.getElementById('restart_menu').style = "display: none";
+            document.getElementById('restart_menu').style = "transform: rotateX(90deg)";
             startGame();
         },false);
         
         document.getElementById('menu_button').addEventListener('click',function(e){
             document.getElementById('win_page').style = "top: 120%; opacity: 0; transition: top 0.5s, opacity 1s";
             document.getElementById('winner').style = "";
-            document.getElementById('restart_menu').style = "display: none";
+            document.getElementById('restart_menu').style = "transform: rotateX(90deg)";
             document.getElementById('menu_page').style = "top: 0; transition: top 0.5s";
         },false);
     </script>

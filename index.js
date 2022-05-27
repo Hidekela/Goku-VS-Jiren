@@ -135,10 +135,10 @@ function Game(player1, player2)
         var winner = self.player1.vie <= 0? self.player2.nom : self.player1.nom;
         var winnerShown = document.getElementById("winner");
         winnerShown.innerHTML = winner.toUpperCase() + ' WINS!';
-        winnerShown.style = "animation: winning 3s;";
+        winnerShown.style = "animation: winning 1s;";
 
         setTimeout(function(){
-            document.getElementById("restart_menu").style = 'display: block';
+            document.getElementById("restart_menu").style = 'tranform: rotateX(0deg); transition: transform 0.7s 1.5s';
         }, 3000);
 
         document.getElementById("win_page").style = 'top: 0; opacity: 1; transition: opacity 1s';
