@@ -12,6 +12,8 @@ Open index.html with a browser
 
 Project under [MIT License](LICENSE-MIT)
 
+Link : [hidekela.github.io/goku-vs-jiren/](hidekela.github.io/goku-vs-jiren/)
+
 
 
 ***Fight!*** :facepunch:
