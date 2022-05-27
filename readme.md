@@ -13,7 +13,8 @@ Second option is to download it and then open index.html with a browser.
 
 Project under [MIT License](LICENSE-MIT)
 
-Link : [https://hidekela.github.io/goku-vs-jiren/](https://hidekela.github.io/goku-vs-jiren/)
+Link : [https://Hidekela.github.io/Goku-VS-Jiren/](https://Hidekela.github.io/Goku-VS-Jiren/)
+
 Download link : [https://github.com/Hidekela/Goku-VS-Jiren/archive/refs/heads/master.zip](https://github.com/Hidekela/Goku-VS-Jiren/archive/refs/heads/master.zip)
 
 
